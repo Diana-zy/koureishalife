@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html>
+  <head {{ HEAD_ATTRS }}>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    {{ HEAD }}
+    <script src="/trackEvent.js"></script>
+    <script src="/linkMarking.js"></script>
+    <script src="/dataMonitor.js"></script>
+    <script>
+      //根据浏览器语言获取国家
+      function getCountyByLanguage() {
+        const lang = window.navigator.language || window.navigator.userLanguage;
+        const langMap = {
+          en: "United States",
+          "en-US": "United States",
+          "en-GB": "United Kingdom",
+          "en-CA": "Canada",
+          "en-AU": "Australia",
+          "en-SG": "Singapore",
+          "en-NZ": "New Zealand",
+          "en-ZA": "South Africa",
+          "en-ZM": "Zambia",
+          "en-ZW": "Zimbabwe",
+          ar: "Algeria",
+          "ar-DZ": "Algeria",
+          "ar-IQ": "Iraq",
+          "ar-EG": "Egypt",
+          "ar-SA": "Saudi Arabia",
+          "ar-AE": "United Arab Emirates",
+          "ar-LB": "Lebanon",
+          "ar-OM": "Oman",
+          es: "Spain",
+          "es-AR": "Argentina",
+          "es-BO": "Bolivia",
+          "es-BR": "Brazil",
+          "es-CL": "Chile",
+          "es-CO": "Colombia",
+          "es-CR": "Costa Rica",
+          "es-CU": "Cuba",
+          "es-DO": "Dominican Republic",
+          "es-EC": "Ecuador",
+          "es-SV": "El Salvador",
+          "es-GT": "Guatemala",
+          "es-HN": "Honduras",
+          "es-MX": "Mexico",
+          "es-NI": "Nicaragua",
+          "es-PA": "Panama",
+          "es-PY": "Paraguay",
+          "es-PE": "Peru",
+          "es-ES": "Spain",
+          "es-VE": "Venezuela",
+          pt: "Portugal",
+          "pt-BR": "Brazil",
+          "pt-PT": "Portugal",
+          zh: "China",
+          "zh-CN": "China",
+          "zh-HK": "Hong Kong",
+          "zh-MO": "Macao",
+          "zh-TW": "Taiwan",
+          fr: "France",
+          "fr-FR": "France",
+          "fr-GF": "French Guiana",
+          "fr-CM": "Cameroon",
+          "fr-CI": "Côte d’Ivoire",
+          "fr-SN": "Senegal",
+          "fr-YT": "Mayotte",
+          de: "Germany",
+          "de-DE": "Germany",
+          "de-CH": "Switzerland",
+          it: "Italy",
+          "it-IT": "Italy",
+          nl: "Netherlands",
+          "nl-NL": "Netherlands",
+          "nl-BE": "Belgium",
+          sv: "Sweden",
+          "sv-SE": "Sweden",
+          da: "Denmark",
+          "da-DK": "Denmark",
+          nb: "Norway",
+          "nb-NO": "Norway",
+          bn: "Bangladesh",
+          "bn-BD": "Bangladesh",
+          be: "Belarus",
+          "be-BY": "Belarus",
+          bg: "Bulgaria",
+          "bg-BG": "Bulgaria",
+          hr: "Croatia",
+          "hr-HR": "Croatia",
+          cs: "Czechia",
+          "cs-CZ": "Czechia",
+          et: "Estonia",
+          "et-EE": "Estonia",
+          fi: "Finland",
+          "fi-FI": "Finland",
+          ka: "Georgia",
+          "ka-GE": "Georgia",
+          el: "Greece",
+          "el-CY": "Cyprus",
+          "el-GR": "Greece",
+          he: "Israel",
+          "he-IL": "Israel",
+          hi: "India",
+          "hi-IN": "India",
+          hu: "Hungary",
+          "hu-HU": "Hungary",
+          id: "Indonesia",
+          "id-ID": "Indonesia",
+          ja: "Japan",
+          "ja-JP": "Japan",
+          kk: "Kazakhstan",
+          "kk-KZ": "Kazakhstan",
+          ko: "South Korea",
+          "ko-KR": "South Korea",
+          lo: "Laos",
+          "lo-LA": "Laos",
+          lv: "Latvia",
+          "lv-LV": "Latvia",
+          lt: "Lithuania",
+          "lt-LT": "Lithuania",
+          lb: "Luxembourg",
+          "lb-LU": "Luxembourg",
+          mk: "North Macedonia",
+          "mk-MK": "North Macedonia",
+          ms: "Malaysia",
+          "ms-MY": "Malaysia",
+          mt: "Malta",
+          "mt-MT": "Malta",
+          mn: "Mongolia",
+          "mn-MN": "Mongolia",
+          pl: "Poland",
+          "pl-PL": "Poland",
+          ro: "Romania",
+          "ro-MD": "Moldova",
+          "ro-RO": "Romania",
+          ru: "Russia",
+          "ru-RU": "Russia",
+          sr: "Serbia",
+          "sr-ME": "Montenegro",
+          "sr-RS": "Serbia",
+          sk: "Slovakia",
+          "sk-SK": "Slovakia",
+          sl: "Slovenia",
+          "sl-SI": "Slovenia",
+          sw: "Tanzania",
+          "sw-TZ": "Tanzania",
+          th: "Thailand",
+          "th-TH": "Thailand",
+          tr: "Türkiye",
+          "tr-TR": "Türkiye",
+          uk: "Ukraine",
+          "uk-UA": "Ukraine",
+          ur: "Pakistan",
+          "ur-PK": "Pakistan",
+          vi: "Vietnam",
+          "vi-VN": "Vietnam"
+        };
+        const country = langMap[lang] || langMap[lang.split("-")[0]];
+        return country || null;
+      }
+
+      //处理渠道号下限制广告请求
+      function handleRequestAdByChannel(key, val, req) {
+        const searchParams = new URLSearchParams(window.location.search);
+        const channel = searchParams.has("channel") ? searchParams.get("channel") : "";
+        if (!window.getCookie("requestAdByChannel")) {
+          if (req) {
+            return false;
+          }
+          let buffer = {};
+          buffer[channel] = {};
+          buffer[channel][key] = val;
+          setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
+        } else {
+          try {
+            let buffer = JSON.parse(window.getCookie("requestAdByChannel"));
+            if (!buffer[channel]) {
+              if (req) {
+                return false;
+              }
+              buffer[channel] = {};
+              buffer[channel][key] = val;
+              setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
+            } else {
+              if (req) {
+                if (
+                  !buffer[channel].first &&
+                  buffer[channel]?.mounted &&
+                  buffer[channel]?.query_ad &&
+                  buffer[channel]?.click_ad
+                ) {
+                  buffer[channel].first = val;
+                  setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
+                  return true;
+                } else if (buffer[channel].first !== "ok" && !key) {
+                  if (Number(buffer[channel].first) > 1) {
+                    buffer[channel].first = Number(buffer[channel].first) - 1;
+                    setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
+                  } else {
+                    buffer[channel].first = "ok";
+                    setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
+                  }
+                  return true;
+                } else {
+                  return false;
+                }
+              } else {
+                buffer[channel][key] = val;
+                setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
+              }
+            }
+          } catch (e) {}
+        }
+      }
+
+      /* Cookie 操作 */
+      function getMainDomain() {
+        const url = window.location.hostname; // 获取当前主机名
+        const parts = url.split("."); // 按点分割
+        if (parts.length > 2) {
+          // 当主机名有子域时，取最后两个部分
+          return parts.slice(-2).join("."); // 返回主域名
+        }
+        return url; // 没有子域时直接返回当前主机名
+      }
+
+      function setCookie(name, value, daysToExpire = 1) {
+        const date = new Date();
+        date.setTime(date.getTime() + daysToExpire * 24 * 60 * 60 * 1000); // 设置过期时间为指定的天数之后
+        const expires = "; expires=" + date.toUTCString(); // 转换为GMT格式的字符串
+        document.cookie =
+          name + "=" + (value || "") + expires + "; path=/; domain=" + getMainDomain(); // 设置cookie
+      }
+
+      function setCookieTomorrow(name, value) {
+        const date = new Date();
+        date.setDate(date.getDate() + 1);
+        date.setHours(0, 0, 0, 0);
+        const expires = "; expires=" + date.toUTCString();
+        document.cookie =
+          name + "=" + (value || "") + expires + "; path=/; domain=" + getMainDomain(); // 设置cookie
+      }
+
+      function getCookie(name) {
+        const nameEQ = name + "=";
+        const ca = document.cookie.split(";");
+        for (let i = 0; i < ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) === " ") c = c.substring(1, c.length);
+          if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+        }
+        return null;
+      }
+      const searchParams = new URLSearchParams(window.location.search);
+      const ttclid = searchParams.get("ttclid");
+      if (ttclid) {
+        window.setCookie("hi_ttclid", ttclid);
+      }
+      (function () {
+        let path_name = window.location.pathname;
+        if (path_name.startsWith("/detail")) {
+          let bufferObj = window.getCookie("pathInfo");
+          if (bufferObj) {
+            let obj = JSON.parse(bufferObj);
+            if (Number(obj[path_name]) < 3) {
+              obj[path_name] = Number(obj[path_name]) + 1;
+              window.setCookie("pathInfo", JSON.stringify(obj));
+            } else if (!obj[path_name]) {
+              obj[path_name] = 1;
+              window.setCookie("pathInfo", JSON.stringify(obj));
+            }
+          } else {
+            let obj = {};
+            obj[path_name] = 1;
+            console.log(JSON.stringify(obj), 2222);
+            window.setCookie("pathInfo", JSON.stringify(obj));
+          }
+        }
+      })();
+      window.isLoadAd = false;
+      const script = document.createElement("script");
+      script.src = "https://wc.bunchthings.com/youknowwho.js?" + Date.now();
+      document.head.appendChild(script);
+      script.onload = function () {
+        window.dataLayer = window.dataLayer || [];
+        // window.dataLayer.push({
+        //   event: "Page_View_Ip",
+        //   hi_ip: window.youknowwho_ip || "unknown",
+        //   hi_country: window.youknowwho_ip_country || "unknown"
+        // });
+        pushEventToGTM("Page_View_Ip", {
+          hi_ip: window.youknowwho_ip || "unknown",
+          hi_country: window.youknowwho_ip_country || "unknown"
+        });
+
+        const pathname = window.location.pathname;
+        if (pathname.startsWith("/detail")) {
+          window.pushEventParamsToGtm("D_PV", ttclid);
+        } else if (pathname.startsWith("/search/")) {
+          window.pushEventParamsToGtm("S_PV", ttclid);
+        }
+        const event = new Event("loadAd"); // 创建标准事件对象
+        let buffer = window.getCookie("city");
+        if (!window.getCookie("changeIp")) {
+          if (!buffer) {
+            window.setCookie("city", window.city || "unknown");
+            window.isLoadAd = true;
+            window.dispatchEvent(event);
+          } else {
+            if (window.city === buffer) {
+              window.isLoadAd = true;
+              window.dispatchEvent(event);
+            } else {
+              window.isLoadAd = false;
+              window.setCookie("changeIp", "yes");
+            }
+          }
+        }
+      };
+
+      //处理向head标签中添加Schema
+      function handleCreatScriptSchema(data) {
+        const script = document.createElement("script");
+        script.type = "application/ld+json";
+        script.innerText = data;
+        document.head.appendChild(script);
+      }
+      //处理向head标签中添加og 和twitter 配置
+      function handleCreatMetaTag(obj = {}) {
+        let keys = Object.keys(obj);
+        if (keys?.length) {
+          keys.forEach((item) => {
+            let tagOg = document.createElement("meta");
+            let tagTw = document.createElement("meta");
+            tagOg.name = "og:" + item;
+            tagTw.name = "twitter:" + item;
+            tagOg.content = obj?.[item];
+            tagTw.content = obj?.[item];
+            document.head.appendChild(tagOg);
+            document.head.appendChild(tagTw);
+          });
+        }
+      }
+    </script>
+    <script async="async" src="https://www.google.com/adsense/search/ads.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      (function (g, o) {
+        (g[o] =
+          g[o] ||
+          function () {
+            (g[o]["q"] = g[o]["q"] || []).push(arguments);
+          }),
+          (g[o]["t"] = 1 * new Date());
+      })(window, "_googCsa");
+    </script>
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Z4SVBX9V4"></script>
+    <script>
+      //获取用户属性
+      function getUserProperty() {
+        const hi_user_source = getValueByURLOrCookie("hi_source");
+        const hi_user_sub_site = getHostname();
+        const hi_user_timezone = Intl.DateTimeFormat().resolvedOptions().timeZone || "unknown";
+        const {
+          hi_source_clid: hi_user_source_clid,
+          hi_source_aid: hi_user_source_aid,
+          hi_source_site: hi_user_source_site,
+          hi_source_site_name: hi_user_source_site_name,
+          hi_section_id: hi_user_section,
+          hi_section_name: hi_user_section_name
+        } = getInfoBySource(hi_user_source);
+        return {
+          hi_user_source,
+          hi_user_sub_site,
+          hi_user_timezone,
+          hi_user_source_clid,
+          hi_user_source_aid,
+          hi_user_source_site,
+          hi_user_source_site_name,
+          hi_user_section,
+          hi_user_section_name
+        };
+      }
+      window.dataLayer = window.dataLayer || [];
+      function legacyUUID() {
+        return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {
+          const r = (Math.random() * 16) | 0;
+          const v = c === "x" ? r : (r & 0x3) | 0x8;
+          return v.toString(16);
+        });
+      }
+      let uuid = window.getCookie("hi_user_id");
+      if (!uuid) {
+        uuid = legacyUUID().replace(/-/g, "");
+        window.setCookie("hi_user_id", uuid);
+      }
+      const userProperties = {
+        ...getUserProperty(),
+        hi_user_id: uuid,
+        hi_channel_user: getValueByURLOrCookie("channel")
+      };
+      gtag("set", "user_properties", {
+        ...userProperties
+      });
+      function gtag() {
+        dataLayer.push(arguments);
+      }
+      gtag("js", new Date());
+
+      gtag("config", "G-9Z4SVBX9V4");
+
+      //拦截fetch
+      (function () {
+        const { fetch: originalFetch } = window;
+        window.fetch = async (...args) => {
+          let [resource, config] = args;
+          // console.log(args,'args');
+          if (resource.includes("https://www.google-analytics.com/g/collect")) {
+            for (let key in userProperties) {
+              if (!resource.includes(`up.${key}=${userProperties[key]}`)) {
+                resource = resource + `&up.${key}=${userProperties[key]}`;
+              }
+            }
+          }
+          // 发送请求
+          return await originalFetch(resource, config);
+        };
+      })();
+    </script>
+    <script>
+      //Detail_pv_user
+      (function () {
+        const { pathname } = window.location;
+        const hi_source = getValueByURLOrCookie("hi_source");
+        const { hi_source_clid } = getInfoBySource(hi_source);
+        if (pathname.includes("/detail")) {
+          window.setCookieTomorrow("detail_time", new Date().getTime());
+          const detailPvUser = window.getCookie("detailPvUser");
+          if (detailPvUser) {
+            let buffer = {};
+            try {
+              buffer = JSON.parse(detailPvUser);
+              if (!buffer[hi_source_clid]) {
+                buffer[hi_source_clid] = {
+                  isPush: true,
+                  time: new Date().getTime()
+                };
+                //两次clid无点击逻辑按子渠道存
+                if (!buffer[getHostname() + "_isPushGtm"]) {
+                  if (buffer[getHostname() + "_first"]) {
+                    if (
+                      !buffer[getHostname() + "_second"] &&
+                      buffer[getHostname() + "_first"] !== hi_source_clid
+                    ) {
+                      buffer[getHostname() + "_second"] = hi_source_clid;
+                    }
+                  } else {
+                    buffer[getHostname() + "_first"] = hi_source_clid;
+                  }
+                }
+                pushEventToGTM("Detail_pv_user");
+                setCookieTomorrow("detailPvUser", JSON.stringify(buffer));
+              }
+            } catch (e) {}
+          } else {
+            let buffer = {};
+            buffer[hi_source_clid] = {
+              isPush: true,
+              time: new Date().getTime()
+            };
+            buffer[getHostname() + "_first"] = hi_source_clid;
+            pushEventToGTM("Detail_pv_user");
+            setCookieTomorrow("detailPvUser", JSON.stringify(buffer));
+          }
+        }
+      })();
+    </script>
+    <!-- Google Tag Manager -->
+    <script>
+      (function (w, d, s, l, i) {
+        w[l] = w[l] || [];
+        w[l].push({ "gtm.start": new Date().getTime(), event: "gtm.js" });
+        var f = d.getElementsByTagName(s)[0],
+          j = d.createElement(s),
+          dl = l != "dataLayer" ? "&l=" + l : "";
+        j.async = true;
+        j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
+        f.parentNode.insertBefore(j, f);
+      })(window, document, "script", "dataLayer", "GTM-TJRGW7MH");
+    </script>
+    <!-- End Google Tag Manager -->
+
+    <script>
+      window.addEventListener("load", function () {
+        if ("serviceWorker" in window.navigator) {
+          window.navigator.serviceWorker
+            .register("/sw.js")
+            .then(() => {})
+            .catch(() => {});
+        }
+        window.addEventListener("beforeinstallprompt", (e) => {
+          e.preventDefault();
+          window.deferredPrompt = e;
+        });
+      });
+    </script>
+  </head>
+  <body {{ BODY_ATTRS }} tabindex="0">
+    <!-- Google Tag Manager (noscript) -->
+    <noscript
+      ><iframe
+        src="https://www.googletagmanager.com/ns.html?id=GTM-TJRGW7MH"
+        height="0"
+        width="0"
+        style="display: none; visibility: hidden"
+      ></iframe
+    ></noscript>
+    <!-- End Google Tag Manager (noscript) -->
+    {{ APP }}
+    <script>
+      /* eslint-disable no-undef */
+      window.done = false;
+      window.done1 = false;
+
+      //上报根据语言获取国家埋点
+      (function () {
+        let country = window.getCountyByLanguage();
+        window.dataLayer.push({
+          event: "country_by_lang",
+          country_and_lang:
+            country + "_" + (window.navigator.language || window.navigator.userLanguage)
+        });
+      })();
+
+      // 监听失去焦点事件
+      window.addEventListener("blur", () => {
+        const activeElement = document.activeElement;
+        const activeSrc = activeElement.getAttribute("src");
+
+        // afs埋点
+        if (activeSrc && activeSrc.includes("afs/ads?")) {
+          if (activeElement.getAttribute("title")) {
+            dataLayer.push({ event: "D_AR" });
+          } else {
+            dataLayer.push({ event: "D_AC" });
+          }
+        }
+      });
+
+      window.addEventListener("beforeunload", () => {
+        if (!window.done) {
+          // 处理 AFS 广告埋点逻辑
+          const activeElement = document.activeElement;
+          const src = activeElement?.getAttribute("src") || "";
+          let eventName = "";
+
+          if (src.includes("afs/ads?")) {
+            if (activeElement.getAttribute("title")) {
+              // eventName = "T_AR";
+              window.trackEventToPixel("T_AR");
+              const searchParams = new URLSearchParams(window.location.search);
+              const ttclid = searchParams.get("ttclid");
+              pushEventToGTM("T_AR", {
+                hi_country: window.youknowwho_ip_country || "unknown",
+                hi_ip: window.youknowwho_ip || "unknown",
+                hi_ttclid: ttclid || window.getCookie("hi_ttclid") || "unknown"
+              });
+              handleDataMonitor();
+            } else {
+              eventName = "T_AC";
+              TACChangeCookie();
+              if (window.location.pathname.startsWith("/detail")) {
+                window.handleRequestAdByChannel("click_ad", 1);
+                let bufferObj = window.getCookie("pathInfo");
+                if (bufferObj) {
+                  let obj = JSON.parse(bufferObj);
+                  obj[window.location.pathname] = 0;
+                  window.setCookie("pathInfo", JSON.stringify(obj));
+                }
+              }
+            }
+          } else if (src.includes("afs/ads/i/")) {
+            eventName = "T_AG";
+          }
+
+          if (eventName) {
+            window.pushEventParamsToGtm(eventName);
+            window.done = true;
+          }
+        }
+      });
+
+      window.addEventListener("visibilitychange", () => {
+        if (document.visibilityState === "visible") {
+          setTimeout(() => {
+            window.done = false;
+            window.done1 = false;
+            document.body.focus();
+          }, 0);
+        }
+      });
+
+      function HandleMessageTACANDTAR(e) {
+        if (window.done1) {
+          return;
+        }
+        const activeElement = document.activeElement;
+        const src = activeElement?.getAttribute("src") || "";
+        if (src.includes("afs/ads?")) {
+          if (!activeElement.getAttribute("title")) {
+            window.trackEventToPixel("T_AC_MSG");
+            dataLayer.push({ event: "T_AC_MSG", hi_time: handleTACMSGToLoad() });
+            window.done1 = true;
+          }
+        }
+      }
+      //TAC和TAR埋点监听消息
+      window.addEventListener("message", (e) => {
+        if (typeof e?.data === "string" && e?.data?.startsWith("FSXDC,.aCS:")) {
+          HandleMessageTACANDTAR();
+        }
+      });
+    </script>
+  </body>
+</html>
