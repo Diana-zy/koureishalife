@@ -11,11 +11,15 @@ main {
   gap: 30px;
   max-width: 1200px;
 }
-.layout-right{
+.layout-right {
   flex: 1;
   max-width: 795px;
 }
-.layout-left{
+.content-box {
+  flex: 1;
+}
+.layout-left,
+.aside-box {
   width: 300px;
   flex-shrink: 0;
 }
@@ -109,13 +113,22 @@ $class-names: ("block", "flex", "grid");
     margin-bottom: 4px;
   }
 }
-@media screen and (min-width: 751px) and (max-width: 1100px) {
-  .layout-left{
+@media screen and (max-width: 1100px) {
+  .layout-left {
     display: none !important;
+  }
+  main {
+    width: 710px;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+  .aside-box {
+    width: 100%;
   }
 }
 @media screen and (max-width: 750px) {
   main {
+    width: 100%;
     overflow: unset;
     min-height: calc(100vh - vw(700));
   }

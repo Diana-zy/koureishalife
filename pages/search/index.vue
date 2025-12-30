@@ -1,26 +1,69 @@
 <template>
   <div class="page">
     <Header />
-    <main class="main">
-      <div id="afscontainer1"> </div>
-      <div id="relatedsearches1"> </div>
-      <h3 class="title-h3">ウェブ結果</h3>
-      <section class="news-box-3">
-        <news-item-3 v-for="(item, i) in news" :key="i" :item="item"> </news-item-3>
-      </section>
+    <main>
+      <div class="content-box">
+        <common-page-label :title="`「${input}」の検索結果`" />
+        <div id="afscontainer1"> </div>
+        <div id="relatedsearches1"> </div>
+        <h3 class="title-h3">{{ searchTitle }}</h3>
+        <section>
+          <item-search-result v-for="(item, i) in searchResultNews" :key="i" :item="item">
+          </item-search-result>
+        </section>
+      </div>
+      <div class="aside-box">
+        <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
+      </div>
     </main>
-    <Footer />
+    <FooterSeo />
   </div>
 </template>
 
 <script>
 export default {
+  async asyncData({ $axios, env }) {
+    try {
+      // 并行处理多个异步请求
+      const [recNewsResponse, trendingNewsResponse] = await Promise.all([
+        $axios.$get("/api/article/menu", {
+          params: {
+            site_id: env.SITE_ID,
+            mod_id: "rec"
+          }
+        }),
+        $axios.$get("/api/article/menu", {
+          params: {
+            site_id: env.SITE_ID,
+            mod_id: "trending",
+            size: 30
+          }
+        })
+      ]);
+      // 返回多个接口的数据
+      return {
+        recNews: recNewsResponse,
+        trendingNews: trendingNewsResponse
+      };
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  },
   data() {
     return {
-      news: [], // 新闻列表
+      searchResultNews: [], // 新闻列表
       input: "", // 搜索输入
-      channelId: "" // 频道 ID
+      channelId: "", // 频道 ID
+      isShowResults: false // 是否显示搜索结果
     };
+  },
+  computed: {
+    searchTitle() {
+      const title = this.isShowResults
+        ? `"${this.input}"について${this.searchResultNews.length}件見つかりました`
+        : "検索情報を取得しています...";
+      return title;
+    }
   },
   mounted() {
     window.handleRequestAdByChannel("first", 5, true);
@@ -61,8 +104,10 @@ export default {
           key: this.input
         });
 
-        this.news = response.list;
+        this.searchResultNews = response.list;
+        this.isShowResults = true;
       } catch (error) {
+        this.isShowResults = true;
         console.error("Error fetching data:", error);
       }
     },
@@ -151,15 +196,15 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.main {
+main {
   padding-bottom: 32px;
   border-bottom: 1px solid #ececee;
 }
 .title-h3 {
-  color: rgba($font3, 0.6);
+  color: $font4;
 }
 @media screen and (max-width: 750px) {
-  .main {
+  main {
     padding-bottom: vw(32);
     border-bottom: vw(2) solid #ececee;
   }
