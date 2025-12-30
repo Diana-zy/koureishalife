@@ -134,7 +134,7 @@ export default {
     align-items: center;
     .logo {
       display: block;
-      width: 135px;
+      width: 288px;
       height: 40px;
       @include bg("logo.png");
       margin-right: 56px;
@@ -226,7 +226,7 @@ export default {
 }
 
 .dropdown li:hover {
-  background: rgba($color1, 0.2);
+ /* background: rgba($color1, 0.2);*/
   color: $color1;
 }
 .contact {
@@ -265,17 +265,17 @@ export default {
     justify-content: space-between;
     .header-top {
       height: 100%;
+      .logo {
+        width: vw(431);
+        height: vw(60);
+        @include bg("logo.png");
+        margin-right: 0;
+      }
     }
   }
   .contact,
   .category {
     display: none;
-  }
-  .logo {
-    width: vw(202);
-    height: vw(60);
-    @include bg("logo.png");
-    margin-right: 0;
   }
   .icon-sidebar {
     @include icon(vw(48), vw(48), "icon-sidebar.png");

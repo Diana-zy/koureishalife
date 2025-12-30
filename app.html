@@ -341,6 +341,15 @@
           });
         }
       }
+      //处理规范化
+      (function handleCanonical() {
+        const href=`https://${window.getMainDomain()+window.location.pathname}`
+        const link = document.createElement("link");
+        link.rel = "canonical"
+        link.href = href
+        document.head.appendChild(link);
+      })()
+
     </script>
     <script async="async" src="https://www.google.com/adsense/search/ads.js"></script>
     <script type="text/javascript" charset="utf-8">
@@ -355,7 +364,7 @@
     </script>
 
     <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-9Z4SVBX9V4"></script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z2NV94794K"></script>
     <script>
       //获取用户属性
       function getUserProperty() {
@@ -408,7 +417,7 @@
       }
       gtag("js", new Date());
 
-      gtag("config", "G-9Z4SVBX9V4");
+      gtag("config", "G-Z2NV94794K");
 
       //拦截fetch
       (function () {
@@ -487,7 +496,7 @@
         j.async = true;
         j.src = "https://www.googletagmanager.com/gtm.js?id=" + i + dl;
         f.parentNode.insertBefore(j, f);
-      })(window, document, "script", "dataLayer", "GTM-TJRGW7MH");
+      })(window, document, "script", "dataLayer", "GTM-THMTW95J");
     </script>
     <!-- End Google Tag Manager -->
 
@@ -510,7 +519,7 @@
     <!-- Google Tag Manager (noscript) -->
     <noscript
       ><iframe
-        src="https://www.googletagmanager.com/ns.html?id=GTM-TJRGW7MH"
+        src="https://www.googletagmanager.com/ns.html?id=GTM-THMTW95J"
         height="0"
         width="0"
         style="display: none; visibility: hidden"

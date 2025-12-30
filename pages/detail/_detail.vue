@@ -26,6 +26,7 @@
 <script>
 import { shuffleArray } from "../../utils/utils";
 import Breadcrumb from "../../components/Breadcrumb";
+import {processHtmlWithToc,generateNestedToc} from '../../utils/cheerio-toc.js'
 export default {
   components: {Breadcrumb},
   async asyncData({ $axios, params, env }) {
@@ -54,9 +55,12 @@ export default {
       return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
     });
 
+    const { toc: flatToc, htmlWithAnchor } = processHtmlWithToc(data.content, [2]);
+    const toc = generateNestedToc(flatToc);
+
     const mixArray = allResponse.list.slice();
 
-    return { newInfo: data, all: allResponse, floatArray: shuffleArray(mixArray) };
+    return { newInfo: data, all: allResponse, floatArray: shuffleArray(mixArray),toc, htmlWithAnchor };
   },
   data() {
     return {
