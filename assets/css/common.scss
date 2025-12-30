@@ -5,8 +5,20 @@ body {
 main {
   overflow: hidden;
   min-height: calc(100vh - 390px);
+  display: flex;
+  flex-wrap: nowrap;
+  justify-content: space-between;
+  gap: 30px;
+  max-width: 1200px;
 }
-
+.layout-right{
+  flex: 1;
+  max-width: 795px;
+}
+.layout-left{
+  width: 300px;
+  flex-shrink: 0;
+}
 $class-names: ("block", "flex", "grid");
 @each $class-name in $class-names {
   .pc-hidden-#{$class-name} {
@@ -95,6 +107,11 @@ $class-names: ("block", "flex", "grid");
   }
   .google-ad {
     margin-bottom: 4px;
+  }
+}
+@media screen and (min-width: 751px) and (max-width: 1100px) {
+  .layout-left{
+    display: none !important;
   }
 }
 @media screen and (max-width: 750px) {

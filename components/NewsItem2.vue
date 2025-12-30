@@ -35,11 +35,10 @@ export default {
 .news-style-2 {
   padding-right: 16px;
   .img {
-    width: 240px;
-    height: 160px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
     border-radius: 8px 8px 8px 8px;
-    float: right;
-    margin-left: 16px;
   }
   .category {
     display: inline-block;
@@ -75,7 +74,7 @@ export default {
   .news-style-2 {
     padding-right: 0;
     border-bottom: vw(2) solid #ececee;
-    height: vw(182);
+    width: 100%;
     // position: relative;
     // &::after {
     //   content: "";
@@ -87,14 +86,14 @@ export default {
     //   background: #ececee;
     // }
     .img {
-      width: vw(236);
-      height: vw(156);
+      width: 100%;
+      height: auto;
+      object-fit: cover;
       border-radius: vw(16);
       margin-right: 0;
-      margin-left: 10px;
     }
     .category {
-      display: none;
+      /*display: none;*/
     }
     .title {
       margin: 0 0 vw(32);

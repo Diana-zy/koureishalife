@@ -2,35 +2,45 @@
   <div class="page home-page">
     <Header />
     <main class="main">
-      <section v-swiper:mySwiper="swiperOption" class="swiper-box">
-        <div class="swiper-wrapper">
-          <news-item-1 v-for="(item, i) in recNews.list" :key="i" class="swiper-slide" :item="item">
-          </news-item-1>
-        </div>
-        <div class="swiper-button-prev"></div>
-        <div class="swiper-button-next"></div>
-      </section>
+      <div class="layout-right">
+        <section v-swiper:mySwiper="swiperOption" class="swiper-box">
+          <div class="swiper-wrapper">
+            <news-item-1
+              v-for="(item, i) in recNews.list"
+              :key="i"
+              class="swiper-slide"
+              :item="item"
+            >
+            </news-item-1>
+          </div>
+          <div class="swiper-button-prev"></div>
+          <div class="swiper-button-next"></div>
+        </section>
 
-      <h2 class="title-h2">トレンド</h2>
-      <section class="news-box-2">
-        <news-item-2 v-for="(item, i) in trendingNews.list" :key="i" :item="item"> </news-item-2>
-      </section>
+        <h2 class="title-h2">トレンド</h2>
+        <section class="news-box-2">
+          <news-item-2 v-for="(item, i) in trendingNews.list" :key="i" :item="item"> </news-item-2>
+        </section>
 
-      <h2 class="title-h2">すべての記事</h2>
-      <section>
-        <InfiniteScrollList
-          api-endpoint="/api/article/menu"
-          :initial-page="2"
-          :page-size="8"
-          mod-id="all"
-          :initial-items="allNews.list"
-          class="news-box-2"
-        >
-          <template #default="{ items }">
-            <news-item-2 v-for="(item, i) in items" :key="i" :item="item"> </news-item-2>
-          </template>
-        </InfiniteScrollList>
-      </section>
+        <h2 class="title-h2">すべての記事</h2>
+        <section>
+          <InfiniteScrollList
+            api-endpoint="/api/article/menu"
+            :initial-page="2"
+            :page-size="8"
+            mod-id="all"
+            :initial-items="allNews.list"
+            class="news-box-2"
+          >
+            <template #default="{ items }">
+              <news-item-2 v-for="(item, i) in items" :key="i" :item="item"> </news-item-2>
+            </template>
+          </InfiniteScrollList>
+        </section>
+      </div>
+      <div class="layout-left m-hidden-block">
+        <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
+      </div>
     </main>
     <FooterSeo />
   </div>
@@ -40,8 +50,10 @@
 import { directive } from "vue-awesome-swiper";
 import "swiper/css/swiper.min.css";
 import { simulateAFSSearch } from "~/utils/utils";
+import RightSideBox from "../components/RightSideBox";
 
 export default {
+  components: { RightSideBox },
   directives: {
     swiper: directive
   },
@@ -302,8 +314,8 @@ export default {
 }
 @media screen and (max-width: 1100px) {
   .news-box-2 {
-    display: flex;
-    flex-wrap: wrap;
+    /*display: flex;*/
+    /*flex-wrap: wrap;*/
   }
 }
 @media screen and (max-width: 750px) {

@@ -2,18 +2,6 @@
   <header class="header">
     <div class="header-top">
       <CustomLink to="/" class="logo"></CustomLink>
-    </div>
-    <div class="menu">
-      <div class="category">
-        <ul class="dropdown">
-          <li v-for="(item, i) in navData.list.slice(0, 5)" :key="i"
-            ><CustomLink :to="`/category/${item.path}/`">{{
-              capitalizeFirstLetter(item.locale_name.ja)
-            }}</CustomLink></li
-          >
-        </ul>
-      </div>
-
       <div class="search-box m-hidden-block">
         <!-- <transition name="slide"> -->
         <input v-model="input" placeholder="ウェブ検索" class="search" @keyup.enter="search" />
@@ -21,11 +9,32 @@
         <i v-show="input != ''" class="icon-clear" @click="clear"></i>
         <i class="icon-search" @click="search"></i>
       </div>
+    </div>
+    <div class="menu">
+      <div class="category">
+        <ul class="dropdown">
+          <li v-for="(item, i) in navData.list" :key="i"
+            ><CustomLink :to="`/category/${item.path}/`">{{
+              capitalizeFirstLetter(item.locale_name.ja)
+            }}</CustomLink></li
+          >
+        </ul>
+      </div>
+
       <div class="search-m-box pc-hidden-flex">
         <i class="icon-search" @click="search"></i>
         <div class="pc-hidden">
           <div class="icon-sidebar" @click="toggleSidebar"> </div>
-          <Sidebar :is-open="isSidebarOpen" :nav-data="navData" @close="closeSidebar" />
+          <div class="menu-nav-list">
+            <ul>
+              <li v-for="(item) in navData.list">
+                <CustomLink :to="`/category/${item.path}/`">{{
+                  capitalizeFirstLetter(item.locale_name.ja)
+                  }}</CustomLink>
+              </li>
+            </ul>
+          </div>
+          <!--          <Sidebar :is-open="isSidebarOpen" :nav-data="navData" @close="closeSidebar" />-->
         </div>
       </div>
     </div>
@@ -129,9 +138,11 @@ export default {
   height: 147px;
   margin-bottom: 0px;
   .header-top {
+    width: 100%;
     height: 66px;
     display: flex;
     align-items: center;
+    /*justify-content: center;*/
     .logo {
       display: block;
       width: 288px;
@@ -168,20 +179,10 @@ export default {
     }
   }
 }
-.pwa-download {
-  width: 32px;
-  height: 32px;
-  background: rgba($color1, 0.2);
-  border-radius: 850%;
-  @include center;
-  font-family: "hem";
-  color: $font2;
-}
-/*.icon-pwa {
-  @include icon(20px, 20px, "icon-pwa.png");
-}*/
 .search-box {
-  position: relative;
+  position: absolute;
+  top: 9px;
+  right: 0;
   width: 380px;
   height: 48px;
   box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0);
@@ -226,7 +227,7 @@ export default {
 }
 
 .dropdown li:hover {
- /* background: rgba($color1, 0.2);*/
+  /* background: rgba($color1, 0.2);*/
   color: $color1;
 }
 .contact {
@@ -259,10 +260,11 @@ export default {
     width: 100%;
     padding: 0;
     max-width: 100vw;
-    height: vw(160);
+    height: vw(114);
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: vw(40);
     .header-top {
       height: 100%;
       .logo {
@@ -272,6 +274,13 @@ export default {
         margin-right: 0;
       }
     }
+  }
+  .menu-nav-list {
+    position: absolute;
+    top: vw(114);
+    left: 0;
+    height: vw(0);
+    transition: height 0.6s;
   }
   .contact,
   .category {
@@ -319,8 +328,9 @@ export default {
     position: relative;
     display: block;
     border-radius: vw(8);
-    @include btn-img(vw(80), vw(64), "icon-search.png");
+    @include btn-img(vw(80), vw(64), "icon-search4.png");
     background-size: vw(48) vw(48);
+    background-color: transparent;
   }
 }
 </style>
