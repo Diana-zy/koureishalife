@@ -13,7 +13,7 @@
     <div class="menu">
       <div class="category">
         <ul class="dropdown">
-          <li v-for="(item, i) in navData.list" :key="i"
+          <li v-for="(item, i) in navData.list.slice(0, 6)" :key="i"
             ><CustomLink :to="`/category/${item.path}/`">{{
               capitalizeFirstLetter(item.locale_name.ja)
             }}</CustomLink></li
@@ -22,20 +22,40 @@
       </div>
 
       <div class="search-m-box pc-hidden-flex">
-        <i class="icon-search" @click="search"></i>
-        <div class="pc-hidden">
-          <div class="icon-sidebar" @click="toggleSidebar"> </div>
-          <div class="menu-nav-list">
-            <ul>
-              <li v-for="(item) in navData.list">
-                <CustomLink :to="`/category/${item.path}/`">{{
-                  capitalizeFirstLetter(item.locale_name.ja)
-                  }}</CustomLink>
-              </li>
-            </ul>
+        <i class="icon-search" :class="{ 'show-close': showSearch }" @click="handleOpenSearch"></i>
+        <div class="pc-hidden-block">
+          <div class="icon-sidebar" :class="{ 'show-close': isSidebarOpen }" @click="toggleSidebar">
           </div>
           <!--          <Sidebar :is-open="isSidebarOpen" :nav-data="navData" @close="closeSidebar" />-->
         </div>
+        <transition name="opacity">
+          <div class="mask" v-show="isSidebarOpen || showSearch">
+            <transition name="slide">
+              <div class="menu-nav-list" v-show="isSidebarOpen">
+                <ul>
+                  <li v-for="item in navData.list">
+                    <CustomLink :to="`/category/${item.path}/`">{{
+                      capitalizeFirstLetter(item.locale_name.ja)
+                    }}</CustomLink>
+                  </li>
+                </ul>
+              </div>
+            </transition>
+            <transition name="slide">
+              <div class="menu-nav-list" v-show="showSearch">
+                <div class="search-box-nav">
+                  <input
+                    v-model="input"
+                    placeholder="ウェブ検索"
+                    class="search-nav"
+                    @keyup.enter="search"
+                  />
+                  <i v-show="input != ''" class="icon-clear-nav" @click="clear"></i>
+                  <i class="icon-search-nav" @click="search"></i>
+                </div>
+              </div> </transition
+          ></div>
+        </transition>
       </div>
     </div>
   </header>
@@ -60,6 +80,7 @@ export default {
       deferredPrompt: null,
       showInstallButton: false,
       isSidebarOpen: false,
+      showSearch: false,
       navData: this.$root.$options.navData || this.$navData,
       recKeywords: this.$recKeywords // 站点推荐关键字
     };
@@ -89,6 +110,15 @@ export default {
   },
   methods: {
     capitalizeFirstLetter,
+    handleOpenSearch() {
+      this.isSidebarOpen = false;
+      this.showSearch = !this.showSearch;
+      if (this.showSearch) {
+        document.body.classList.add("no-scroll");
+      } else {
+        document.body.classList.remove("no-scroll");
+      }
+    },
     search() {
       if (this.input.length < 1) {
         this.$globalMethod.showNotification({
@@ -108,7 +138,13 @@ export default {
       }
     },
     toggleSidebar() {
+      this.showSearch = false;
       this.isSidebarOpen = !this.isSidebarOpen;
+      if (this.isSidebarOpen) {
+        document.body.classList.add("no-scroll");
+      } else {
+        document.body.classList.remove("no-scroll");
+      }
     },
     closeSidebar() {
       this.isSidebarOpen = false;
@@ -137,6 +173,7 @@ export default {
   max-width: 1200px;
   height: 147px;
   margin-bottom: 0px;
+  z-index: 11;
   .header-top {
     width: 100%;
     height: 66px;
@@ -157,7 +194,8 @@ export default {
   align-items: center;
   justify-content: space-between;
   .category {
-    width: auto;
+    width: 100%;
+    overflow: hidden;
     font-size: 16px;
     line-height: 72px;
     cursor: pointer;
@@ -168,6 +206,8 @@ export default {
       align-items: center;
       flex-wrap: nowrap;
       gap: 40px;
+      overflow-x: auto;
+      justify-content: space-around;
     }
     li {
       white-space: nowrap;
@@ -241,30 +281,18 @@ export default {
   cursor: pointer;
 }
 
-.slide-enter-active,
-.slide-leave-active {
-  transition: all 0.5s ease;
-}
-
-.slide-enter {
-  opacity: 0;
-  transform: translateY(40%);
-}
-
-.slide-leave-to {
-  transform: translateY(-40%);
-  opacity: 0;
-}
 @media screen and (max-width: 750px) {
   .header {
     width: 100%;
-    padding: 0;
+    padding: 0 vw(46);
     max-width: 100vw;
     height: vw(114);
     display: flex;
     align-items: center;
     justify-content: space-between;
     margin-bottom: vw(40);
+    border-bottom: vw(2) solid rgba($font3, 0.35);
+    z-index: 11;
     .header-top {
       height: 100%;
       .logo {
@@ -277,10 +305,25 @@ export default {
   }
   .menu-nav-list {
     position: absolute;
-    top: vw(114);
+    top: 0;
     left: 0;
-    height: vw(0);
-    transition: height 0.6s;
+    padding: vw(40) vw(46);
+    height: auto;
+    width: 100vw;
+    transition: all 0.6s;
+    overflow: hidden;
+    background-color: #fff;
+    z-index: 12;
+    font-family: Helvetica Neue, Helvetica Neue;
+    font-size: vw(32);
+    li {
+      padding: vw(16) 0;
+      line-height: vw(48);
+      border-bottom: vw(2) solid rgba($font3, 0.2);
+    }
+  }
+  .show-menu {
+    height: fit-content;
   }
   .contact,
   .category {
@@ -305,7 +348,8 @@ export default {
     gap: vw(20);
   }
   .search {
-    width: 46%;
+    position: relative;
+    width: 100%;
     height: 100%;
     font-family: "hem";
     &::placeholder {
@@ -331,6 +375,52 @@ export default {
     @include btn-img(vw(80), vw(64), "icon-search4.png");
     background-size: vw(48) vw(48);
     background-color: transparent;
+  }
+  .search-box-nav {
+    position: relative;
+    width: 100%;
+    height: vw(80);
+    display: flex;
+    flex-wrap: nowrap;
+    .search-nav {
+      width: 100%;
+      border: vw(2) solid $font3;
+      border-radius: vw(12);
+      padding-left: vw(32);
+    }
+    .icon-clear-nav {
+      position: absolute;
+      right: vw(100);
+      top: 50%;
+      transform: translateY(-50%);
+      cursor: pointer;
+      background-image: url("~/assets/images/icon-clear.png");
+      width: vw(28);
+      height: vw(28);
+      background-size: cover;
+    }
+    .icon-search-nav {
+      position: absolute;
+      right: vw(32);
+      top: 50%;
+      transform: translateY(-50%);
+      display: block;
+      @include btn-img(vw(48), vw(48), "icon-search4.png");
+    }
+  }
+  .show-close {
+    @include icon(vw(48), vw(48), "icon-close.png");
+  }
+  .mask {
+    position: absolute;
+    top: vw(114);
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    z-index: 10;
+    background: rgba(#111, 0.7);
+    overflow: hidden;
+    pointer-events: all;
   }
 }
 </style>

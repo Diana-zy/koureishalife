@@ -2,32 +2,33 @@
   <div class="page home-page">
     <Header />
     <main class="main">
-      <div class="layout-right">
+      <div class="layout-left">
         <section v-swiper:mySwiper="swiperOption" class="swiper-box">
           <div class="swiper-wrapper">
-            <news-item-1
+            <item-swiper-rec
               v-for="(item, i) in recNews.list"
               :key="i"
               class="swiper-slide"
               :item="item"
             >
-            </news-item-1>
+            </item-swiper-rec>
           </div>
           <div class="swiper-button-prev"></div>
           <div class="swiper-button-next"></div>
         </section>
 
-        <h2 class="title-h2">トレンド</h2>
-        <section class="news-box-2">
-          <news-item-2 v-for="(item, i) in trendingNews.list" :key="i" :item="item"> </news-item-2>
+        <h2 class="title-new-tag">新着記事</h2>
+        <section class="news-box-new">
+          <item-text-new v-for="(item, i) in trendingNews.list" :key="i" :item="item">
+          </item-text-new>
         </section>
 
-        <h2 class="title-h2">すべての記事</h2>
+        <h2 class="title-h2">相続税・贈与税</h2>
         <section>
-          <InfiniteScrollList
+          <InfiniteLoadList
             api-endpoint="/api/article/menu"
             :initial-page="2"
-            :page-size="8"
+            :page-size="4"
             mod-id="all"
             :initial-items="allNews.list"
             class="news-box-2"
@@ -35,10 +36,10 @@
             <template #default="{ items }">
               <news-item-2 v-for="(item, i) in items" :key="i" :item="item"> </news-item-2>
             </template>
-          </InfiniteScrollList>
+          </InfiniteLoadList>
         </section>
       </div>
-      <div class="layout-left m-hidden-block">
+      <div class="layout-right">
         <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
       </div>
     </main>
@@ -71,7 +72,7 @@ export default {
           params: {
             site_id: env.SITE_ID,
             mod_id: "trending",
-            size: 30
+            size: 6
           }
         }),
         $axios.$get("/api/article/menu", {
@@ -79,7 +80,7 @@ export default {
             site_id: env.SITE_ID,
             mod_id: "all",
             page: 1,
-            size: 8
+            size: 4
           }
         })
       ]);
@@ -97,9 +98,9 @@ export default {
     return {
       swiperOption: {
         slidesPerView: "auto",
-        autoplay: {
-          delay: 3000
-        },
+        // autoplay: {
+        //   delay: 3000
+        // },
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev"
@@ -193,7 +194,22 @@ export default {
   padding-bottom: 32px;
   border-bottom: 1px solid #ececee;
 }
-
+.swiper-box {
+  .swiper-button-prev {
+    top: 209px;
+    @include icon(36px, 36px, "icon-left.png");
+    &:after {
+      content: "";
+    }
+  }
+  .swiper-button-next {
+    top: 209px;
+    @include icon(36px, 36px, "icon-right.png");
+    &:after {
+      content: "";
+    }
+  }
+}
 .home-search {
   width: 100%;
   height: 315px;
@@ -288,13 +304,13 @@ export default {
 }
 
 .swiper-slide {
-  width: 282px;
-  border-radius: 16px 16px 16px 16px;
-  border: 1px solid rgba(23, 23, 23, 0.1);
-  margin-right: 24px;
+  /*width: 282px;*/
+  /*border-radius: 16px 16px 16px 16px;*/
+  /*border: 1px solid rgba(23, 23, 23, 0.1);*/
+  /*margin-right: 24px;*/
   overflow: hidden;
 }
-.news-box-2 {
+.news-box-new {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 24px;
@@ -368,18 +384,34 @@ export default {
     color: #ffffff;
   }
   .swiper-box {
-    width: 100vw;
-    margin-left: vw(-46);
-    padding-left: vw(32);
+    width: vw(658);
+    .swiper-button-prev {
+      top: vw(186);
+      @include icon(vw(64), vw(64), "icon-left.png");
+      &:after {
+        content: "";
+      }
+    }
+    .swiper-button-next {
+      top: vw(186);
+      @include icon(vw(64), vw(64), "icon-right.png");
+      &:after {
+        content: "";
+      }
+    }
   }
   .swiper-slide {
-    width: vw(614);
-    border-radius: vw(16);
-    border: vw(2) solid #ececee;
-    margin-right: vw(32);
+    width: vw(658);
+    height: vw(764);
+
+    /*margin-right: vw(32);*/
   }
   .news-box-2 {
-    gap: vw(32);
+    gap: vw(14);
+  }
+  .news-box-new {
+    grid-template-columns: repeat(1, 1fr);
+    gap: vw(20);
   }
 }
 </style>

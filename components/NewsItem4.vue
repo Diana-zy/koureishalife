@@ -1,10 +1,10 @@
 <template>
-  <CustomLink class="news-style-4" :to="`/detail/${item.path}/`">
+  <CustomLink class="news-style-2" :to="`/detail/${item.path}/`">
     <NuxtImg
       format="auto"
       fit="cover"
-      width="328"
-      height="218"
+      width="658"
+      height="440"
       :src="item.cover"
       :alt="item.name"
       loading="lazy"
@@ -12,15 +12,15 @@
     />
     <p class="category">{{ capitalizeFirstLetter(item.category_locale_name) }}</p>
     <p class="title">{{ item.name }}</p>
-    <!-- <p class="desc">
-      {{ item.first_paragraph }}
-    </p> -->
+    <div class="news-author">
+      <div>Gライフリンク編集部</div>
+      <div>2025年12月26日</div>
+    </div>
   </CustomLink>
 </template>
 
 <script>
 import { capitalizeFirstLetter } from "~/utils/utils";
-
 export default {
   props: {
     item: {
@@ -36,98 +36,97 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-.news-style-4 {
-  position: relative;
-  padding-right: 344px;
-  margin-bottom: 24px;
-  height: 243px;
-  &::after {
-    content: "";
-    position: absolute;
-    right: left;
-    bottom: 0;
-    // width: calc(100% - 344px);
-    width: 100%;
-    height: 1px;
-    background: rgba($font1, 0.1);
-  }
+.news-style-2 {
+  padding-right: 16px;
   .img {
-    position: absolute;
-    right: 0;
-    top: 0;
-    width: 328px;
-    height: 218px;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
     border-radius: 8px 8px 8px 8px;
-    float: right;
   }
   .category {
     display: inline-block;
-    padding: 1px 4px;
-    line-height: 16px;
-    font-size: 12px;
+    padding: 4px 8px;
+    line-height: 18px;
+    font-size: 13px;
     font-family: "hem";
-    color: $color1;
-    background: rgba($color1, 0.2);
+    color: $font5;
+    background: $tagColor3;
     border-radius: 4px 4px 4px 4px;
-    margin: 16px 0 12px;
+    margin: 16px 0 10px;
   }
   .title {
-    width: 846px;
-    font-size: 24px;
-    font-family: "se3";
-    line-height: 32px;
-    @include ellipsis(2);
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: bold;
+    @include ellipsis(3);
     transition: color 0.2s;
   }
-  // .desc {
-  //   color: rgba($font1, 0.6);
-  //   line-height: 19px;
-  //   font-family: "hem";
-  //   @include ellipsis(5);
-  // }
   &:hover {
     .title {
       color: $color1;
       text-decoration: underline;
     }
   }
+  .news-author {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 13px;
+    font-size: 14px;
+    padding-bottom: 16px;
+    @include author-icon(25px, 25px);
+  }
+}
+@media screen and (max-width: 1100px) {
+  .news-style-2 {
+    width: 100%;
+  }
 }
 @media screen and (max-width: 750px) {
-  .news-style-4 {
-    padding-right: vw(258);
-    margin-bottom: vw(32);
-    height: vw(194);
-    &::after {
-      width: 100%;
-      height: vw(2);
-    }
+  .news-style-2 {
+    padding-right: 0;
+    /*border-bottom: vw(2) solid #ececee;*/
+    width: 100%;
+    // position: relative;
+    // &::after {
+    //   content: "";
+    //   position: absolute;
+    //   right: left;
+    //   bottom: 0;
+    //   width: calc(100% - vw(236));
+    //   height: vw(2);
+    //   background: #ececee;
+    // }
     .img {
-      width: vw(242);
-      height: vw(160);
-      border-radius: vw(16);
+      width: 100%;
+      height: auto;
+      object-fit: cover;
+      border-radius: 0;
+      margin-right: 0;
     }
     .category {
-      padding: 0 vw(8);
-      height: vw(40);
-      line-height: vw(40);
+      /*display: none;*/
       font-size: vw(24);
-      border-radius: vw(8);
-      margin: 0 0 vw(6);
+      line-height: vw(44);
+      padding: vw(8) vw(16);
+      border-radius: 0;
+      margin: vw(24) 0 vw(32);
     }
     .title {
-      width: vw(396);
-      font-size: vw(28);
-      line-height: vw(38);
-      margin-bottom: 0;
-      @include ellipsis(3);
+      /*margin: vw(16) 0;*/
+      font-size: vw(32);
+      line-height: vw(48);
+      min-height: vw(96);
+      margin-bottom: vw(26);
+      @include ellipsis(2);
     }
-    // .desc {
-    //   display: none;
-    // }
-    &:hover {
-      .title {
-        color: $color1;
-      }
+    .m-news-author {
+      display: flex;
+      justify-content: space-between;
+      margin-top: vw(8);
+      font-size: vw(24);
+      padding-bottom: vw(24);
+      @include author-icon(vw(50), vw(50));
     }
   }
 }

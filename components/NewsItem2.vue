@@ -12,6 +12,10 @@
     />
     <p class="category">{{ capitalizeFirstLetter(item.category_locale_name) }}</p>
     <p class="title">{{ item.name }}</p>
+    <div class="m-news-author pc-hidden-flex">
+      <div>Gライフリンク編集部</div>
+      <div>2025年12月26日</div>
+    </div>
   </CustomLink>
 </template>
 
@@ -42,12 +46,12 @@ export default {
   }
   .category {
     display: inline-block;
-    padding: 1px 4px;
-    line-height: 16px;
-    font-size: 12px;
+    padding: 4px 8px;
+    line-height: 18px;
+    font-size: 13px;
     font-family: "hem";
-    color: $color1;
-    background: rgba($color1, 0.2);
+    color: #000;
+    background: $tagColor2;
     border-radius: 4px 4px 4px 4px;
     margin: 16px 0 10px;
   }
@@ -73,7 +77,7 @@ export default {
 @media screen and (max-width: 750px) {
   .news-style-2 {
     padding-right: 0;
-    border-bottom: vw(2) solid #ececee;
+    /*border-bottom: vw(2) solid #ececee;*/
     width: 100%;
     // position: relative;
     // &::after {
@@ -94,11 +98,34 @@ export default {
     }
     .category {
       /*display: none;*/
+      font-size: vw(24);
+      line-height: vw(44);
+      padding: vw(8) vw(16);
+      border-radius: 0;
+      margin: vw(20) 0 vw(16);
     }
     .title {
-      margin: 0 0 vw(32);
-      font-size: vw(30);
-      line-height: vw(44);
+      /*margin: vw(16) 0;*/
+      font-size: vw(26);
+      line-height: vw(36);
+      min-height: vw(106);
+    }
+    .m-news-author {
+      display: flex;
+      justify-content: space-between;
+      margin-top: vw(8);
+      font-size: vw(16);
+      padding-bottom: vw(10);
+      @include author-icon(vw(16), vw(16));
+      div:first-child {
+        max-width: vw(156);
+        @include ellipsis();
+      }
+      div:last-child {
+        max-width: vw(120);
+        font-size: vw(16);
+        @include ellipsis();
+      }
     }
   }
 }
