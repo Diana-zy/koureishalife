@@ -68,12 +68,11 @@ export default {
         if (this.query) {
           Object.assign(params, this.query);
         }
-        console.log(params, "params");
+        // console.log(params, "params");
         const response = await this.$axios["$" + this.type](
           this.apiEndpoint,
           this.type === "get" ? { params } : params
         );
-        console.log(response, "response");
         const newData = response[this.responseListKey];
         this.items = this.items.concat(newData);
         if (newData.length === 0 || newData.length < this.pageSize) {
@@ -125,13 +124,20 @@ export default {
     margin: 20px auto;
     width: 272px;
     height: 48px;
-    color: #fff;
-    background: $color1;
+    color: $color1;
+    cursor: pointer;
+    border: 2px solid $color2;
     border-radius: 24px;
     line-height: 48px;
     text-align: center;
     font-weight: 600;
     font-size: 14px;
+    transition: 0.6s;
+    &:hover {
+      color: #fff;
+      background: $color1;
+      border: none;
+    }
   }
 }
 @media screen and (max-width: 750px) {

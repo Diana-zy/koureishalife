@@ -72,7 +72,7 @@ export default {
           params: {
             site_id: env.SITE_ID,
             mod_id: "trending",
-            size: 6
+            size: 4
           }
         }),
         $axios.$get("/api/article/menu", {
@@ -197,14 +197,14 @@ export default {
 .swiper-box {
   .swiper-button-prev {
     top: 209px;
-    @include icon(36px, 36px, "icon-left.png");
+    @include icon(50px, 50px, "icon-left.png");
     &:after {
       content: "";
     }
   }
   .swiper-button-next {
     top: 209px;
-    @include icon(36px, 36px, "icon-right.png");
+    @include icon(50px, 50px, "icon-right.png");
     &:after {
       content: "";
     }

@@ -64,19 +64,21 @@ export default {
     width: 100%;
     display: flex;
     gap: 8px;
-    margin: 16px 0 10px;
+    margin: 24px 0 16px;
     .rec-tag {
-      line-height: 18px;
-      font-size: 13px;
-      padding: 4px 8px;
+      line-height: 19px;
+      font-size: 16px;
+      padding: 6px 8px;
       background: $tagColor1;
       color: #000;
     }
   }
   .swiper-rec-title {
-    min-height: 72px;
+    min-height: 60px;
     font-size: 24px;
+    line-height: 30px;
     font-weight: 700;
+    margin-bottom: 16px;
     @include ellipsis(2);
   }
   .swiper-rec-author {

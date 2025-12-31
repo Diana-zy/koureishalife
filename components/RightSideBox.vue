@@ -14,13 +14,13 @@
       </div>
     </div>
     <div class="new-box">
-      <div class="right-title"> 新着記事 </div>
+      <h2 class="title-h2"> 新着記事 </h2>
       <div class="new-content">
         <item-mode-new v-for="(item, i) in recNews" :key="i" :item="item"></item-mode-new>
       </div>
     </div>
     <div class="rec-box">
-      <div class="right-title"> イチオシ記事</div>
+      <h2 class="title-h2"> イチオシ記事 </h2>
       <div class="rec-content">
         <item-mode-new v-for="(item, i) in trendingNews" :key="i" :item="item"></item-mode-new
       ></div>
@@ -60,12 +60,13 @@ export default {
 .right-sider {
   .right-title {
     background: $color1;
-    line-height: 1;
+    line-height: 45px;
     margin-bottom: 20px;
     font-weight: normal;
+    font-size: 20px;
     display: block;
     color: #ffffff;
-    padding: 1em;
+    padding-left: 16px;
   }
   .category-box {
     width: 100%;
@@ -73,10 +74,12 @@ export default {
     .category-content {
       display: flex;
       flex-wrap: wrap;
-      gap: 20px;
+      gap: 10px;
       .category-item {
-        border: 1px solid $font1;
-        padding: 0.4em 0.8em;
+        border: 1px solid rgba(#000, 0.65);
+        padding: 6px 10px;
+        font-size: 12px;
+        color: #000;
         border-radius: 20px;
       }
     }

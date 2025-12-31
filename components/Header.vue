@@ -179,7 +179,7 @@ export default {
     height: 66px;
     display: flex;
     align-items: center;
-    /*justify-content: center;*/
+    justify-content: center;
     .logo {
       display: block;
       width: 288px;
@@ -257,12 +257,13 @@ export default {
 }
 .icon-search {
   position: absolute;
-  right: -1px;
-  top: -1px;
+  right: 13px;
+  top: 8px;
   display: block;
+  cursor: pointer;
   border-radius: 0 8px 8px 0;
-  background-color: $color1;
-  @include btn-img(64px, 48px, "icon-search.png");
+  //background-color: $color1;
+  @include icon(32px, 32px, "icon-search4.png");
   background-size: 32px 32px;
 }
 
@@ -295,6 +296,7 @@ export default {
     z-index: 11;
     .header-top {
       height: 100%;
+      justify-content: start;
       .logo {
         width: vw(431);
         height: vw(60);
@@ -369,10 +371,12 @@ export default {
     background-size: cover;
   }
   .icon-search {
+    top: 0;
+    right: 0;
     position: relative;
     display: block;
     border-radius: vw(8);
-    @include btn-img(vw(80), vw(64), "icon-search4.png");
+    @include icon(vw(48), vw(48), "icon-search4.png");
     background-size: vw(48) vw(48);
     background-color: transparent;
   }

@@ -13,7 +13,7 @@ main {
   display: flex;
   flex-wrap: nowrap;
   justify-content: space-between;
-  gap: 30px;
+  gap: 54px;
   max-width: 1200px;
   //padding: 0 20px;
 }
@@ -26,7 +26,7 @@ main {
 }
 .layout-right,
 .aside-box {
-  width: 300px;
+  width: 329px;
   flex-shrink: 0;
 }
 $class-names: ("block", "flex", "grid");
@@ -50,15 +50,15 @@ $class-names: ("block", "flex", "grid");
 .title-h2 {
   position: relative;
   font-family: "hem";
-  font-size: 16px;
-  line-height: 22px;
+  font-size: 20px;
+  line-height: 30px;
   margin-top: 32px;
   margin-bottom: 24px;
-  padding-left: 12px;
+  padding-left: 13px;
   &::before {
     content: "";
     display: block;
-    width: 4px;
+    width: 5px;
     height: 100%;
     background-color: $color1;
     position: absolute;
@@ -69,19 +69,19 @@ $class-names: ("block", "flex", "grid");
 .title-new-tag {
 
   position: relative;
-  font-family: "hem",Helvetica Neue, Helvetica Neue;
-  font-size: 16px;
-  line-height: 32px;
-  margin-top: 32px;
-  margin-bottom: 24px;
-  padding-left: 40px;
+  font-family: Helvetica Neue, Helvetica Neue;
+  font-size: 24px;
+  line-height: 52px;
+  margin-top: 40px;
+  margin-bottom: 16px;
+  padding-left: 64px;
   &::before {
     content: "";
     height: 100%;
     position: absolute;
     left: 0;
     top: 0;
-    @include icon(32px,32px,'icon-new-tag.png')
+    @include icon(52px,52px,'icon-new-tag.png')
   }
 }
 .title-h3 {

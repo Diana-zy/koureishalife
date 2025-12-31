@@ -21,6 +21,11 @@
           <li class="link-item">
             <CustomLink :to="`/eula-jp.html`" target="_blank">利用規約: </CustomLink>
           </li>
+        </ul>
+      </div>
+      <div class="link-info">
+        <div>関連サービス：</div>
+        <ul>
           <li class="link-item">
             <CustomLink :to="``" target="_blank">X (Twitter) </CustomLink>
           </li>
@@ -95,9 +100,11 @@ export default {
 .footer {
   position: relative;
   margin-top: 32px;
+  color: rgba(#000, 0.65);
   .icon-logo {
-    width: 285px;
-    margin-bottom: 24px;
+    width: 230px;
+    height: 32px;
+    margin-bottom: 20px;
     img {
       object-fit: cover;
       width: 100%;
@@ -106,17 +113,23 @@ export default {
   }
   .website-info {
     font-size: 16px;
-    line-height: 22px;
+    line-height: 21px;
+    margin-bottom: 10px;
   }
   .link-info {
+    display: flex;
+    align-items: center;
     li {
-      padding: 20px 0;
+      padding: 8px 0;
       display: inline-block;
-      margin-right: 30px;
+      margin-right: 20px;
     }
   }
   .bottom-info {
-    width: 100%;
+    margin-top: 72px;
+    transform: translateX(calc((1200px - 100vw) / 2));
+    left: 0;
+    width: 100vw;
     height: 44px;
     font-size: 14px;
     text-align: center;
@@ -155,6 +168,7 @@ export default {
       }
     }
     .bottom-info {
+      transform: none;
       width: 100%;
       height: vw(70);
       font-size: vw(28);

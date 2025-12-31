@@ -28,91 +28,91 @@
 </template>
 
 <script>
-  import { capitalizeFirstLetter } from "~/utils/utils";
-  export default {
-    props: {
-      item: {
-        type: Object,
-        required: true
-      }
-    },
-
-    methods: {
-      capitalizeFirstLetter
+import { capitalizeFirstLetter } from "~/utils/utils";
+export default {
+  props: {
+    item: {
+      type: Object,
+      required: true
     }
-  };
+  },
+
+  methods: {
+    capitalizeFirstLetter
+  }
+};
 </script>
 
 <style lang="scss" scoped>
-  .news-style-2 {
-    padding-right: 16px;
-    .img {
-      width: 100%;
-      height: auto;
-      object-fit: cover;
-      border-radius: 8px 8px 8px 8px;
-    }
-    .category {
-      display: inline-block;
-      padding: 4px 8px;
-      line-height: 18px;
-      font-size: 13px;
-      font-family: "hem";
-      color: $color1;
-      background: rgba($color1, 0.2);
-      border-radius: 4px 4px 4px 4px;
-      margin: 16px 0 10px;
-    }
+.news-style-2 {
+  padding-right: 16px;
+  .img {
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+    border-radius: 8px 8px 8px 8px;
+  }
+  .category {
+    display: inline-block;
+    padding: 4px 8px;
+    line-height: 18px;
+    font-size: 13px;
+    font-family: "hem";
+    color: #000;
+    background: $tagColor2;
+    border-radius: 4px 4px 4px 4px;
+    margin: 16px 0 10px;
+  }
+  .title {
+    font-size: 16px;
+    font-family: "se3";
+    line-height: 22px;
+    @include ellipsis(3);
+    transition: color 0.2s;
+  }
+  &:hover {
     .title {
-      font-size: 16px;
-      font-family: "se3";
-      line-height: 22px;
-      @include ellipsis(3);
-      transition: color 0.2s;
-    }
-    &:hover {
-      .title {
-        color: $color1;
-        text-decoration: underline;
-      }
+      color: $color1;
+      text-decoration: underline;
     }
   }
-  @media screen and (max-width: 1100px) {
-    .news-style-2 {
-      width: 100%;
-    }
+}
+@media screen and (max-width: 1100px) {
+  .news-style-2 {
+    width: 100%;
   }
-  @media screen and (max-width: 750px) {
-    .m-news-style {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      flex-wrap: nowrap;
-      width: 100%;
-      overflow: hidden;
-      border-bottom: vw(2) solid rgba($font3, 0.2);
-      .m-news-left {
-        flex: 1;
-        max-width: vw(528);
-        .m-news-title {
-          width: 100%;
-          line-height: vw(36);
-          @include ellipsis();
-        }
-        .m-news-author {
-          display: flex;
-          gap: vw(26);
-          margin-top: vw(8);
-          font-size: vw(20);
-          padding-bottom: vw(10);
-          @include author-icon(vw(20), vw(20));
-        }
+}
+@media screen and (max-width: 750px) {
+  .m-news-style {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: nowrap;
+    width: 100%;
+    overflow: hidden;
+    border-bottom: vw(2) solid rgba($font3, 0.2);
+    .m-news-left {
+      flex: 1;
+      max-width: vw(528);
+      .m-news-title {
+        width: 100%;
+        line-height: vw(36);
+        @include ellipsis();
       }
-      .m-news-right {
-        flex-shrink: 0;
+      .m-news-author {
+        display: flex;
+        gap: vw(26);
+        margin-top: vw(8);
         font-size: vw(20);
-        color: $color1;
+        padding-bottom: vw(10);
+        @include author-icon(vw(20), vw(20));
       }
     }
+    .m-news-right {
+      flex-shrink: 0;
+      font-size: vw(20);
+      color: $color1;
+    }
   }
+}
 </style>
