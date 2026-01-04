@@ -23,8 +23,8 @@
           </li>
         </ul>
       </div>
-      <div class="link-info">
-        <div>関連サービス：</div>
+      <div class="link-info link-info-social">
+        <div class="m-hidden-block">関連サービス：</div>
         <ul>
           <li class="link-item">
             <CustomLink :to="``" target="_blank">X (Twitter) </CustomLink>
@@ -155,6 +155,10 @@ export default {
     }
     .link-info {
       padding: vw(48) vw(46) 0;
+      ul,
+      .link-item {
+        width: 100%;
+      }
       li {
         padding: 0;
         display: block;
@@ -163,6 +167,9 @@ export default {
         color: rgba(#000, 0.65);
         border-top: vw(1) solid rgba($font3, 0.35);
       }
+    }
+    .link-info-social {
+      padding-top: 0;
       li:last-child {
         border-bottom: vw(1) solid rgba($font3, 0.35);
       }

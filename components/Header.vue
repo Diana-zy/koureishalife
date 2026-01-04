@@ -281,7 +281,11 @@ export default {
   text-align: right;
   cursor: pointer;
 }
-
+@media screen and (max-width: 1100px) {
+  .search-box {
+    width: 240px;
+  }
+}
 @media screen and (max-width: 750px) {
   .header {
     width: 100%;
@@ -291,7 +295,7 @@ export default {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: vw(40);
+    margin-bottom: vw(32);
     border-bottom: vw(2) solid rgba($font3, 0.35);
     z-index: 11;
     .header-top {

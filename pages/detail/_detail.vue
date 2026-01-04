@@ -1,26 +1,50 @@
 <template>
   <div class="page">
     <Header />
-    <div class="page-layout">
-      <breadcrumb></breadcrumb>
-      <article class="article">
-        <h1 class="article-title" style="">{{ newInfo.name }}</h1>
-        <div class="news-detail first_paragraph">{{ newInfo.first_paragraph }}</div>
-        <div id="relatedsearches1"> </div>
-        <NuxtImg
-          format="auto"
-          fit="cover"
-          width="600"
-          :src="newInfo.cover"
-          :alt="newInfo.name"
-          class="article-img"
-          preload
-        />
-        <!-- eslint-disable vue/no-v-html -->
-        <div class="news-detail" v-html="newInfo.content"></div>
-        <!--eslint-enable-->
-      </article>
-    </div>
+    <main class="main">
+      <div class="layout-left">
+        <!--        <div class="page-layout">-->
+        <breadcrumb :info="newInfo"></breadcrumb>
+        <article class="article">
+          <h1 class="article-title" style="">{{ newInfo.name }}</h1>
+          <div class="news-detail first_paragraph">{{ newInfo.first_paragraph }}</div>
+          <div id="relatedsearches1"> </div>
+          <aside class="toc-container" v-if="toc.length">
+            <h3 class="toc-title">文章目录</h3>
+            <nav class="toc-nav">
+              <ul class="toc-list">
+                <!-- 两种方式都行 -->
+                <!--                <a v-for="item in toc" :key="item.id" :href="`#${item.id}`">{{ item.text }}</a>-->
+                <li
+                  v-for="item in toc"
+                  :key="item.id"
+                  :class="['toc-item', `toc-level-${item.level}`]"
+                  @click="scrollToAnchor(item.id)"
+                >
+                  {{ item.text }}
+                </li>
+              </ul>
+            </nav>
+          </aside>
+          <NuxtImg
+            format="auto"
+            fit="cover"
+            width="600"
+            :src="newInfo.cover"
+            :alt="newInfo.name"
+            class="article-img"
+            preload
+          />
+          <!-- eslint-disable vue/no-v-html -->
+          <div class="news-detail" v-html="htmlWithAnchor"></div>
+          <!--eslint-enable-->
+        </article>
+        <!--        </div>-->
+      </div>
+      <div class="layout-right">
+        <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
+      </div>
+    </main>
     <footer-seo />
   </div>
 </template>
@@ -36,7 +60,20 @@ export default {
     const lastDashIndex = path.lastIndexOf("-");
     const id = path.substring(lastDashIndex + 1, path.length);
 
-    const [data, allResponse] = await Promise.all([
+    const [recNewsResponse, trendingNewsResponse, data, allResponse] = await Promise.all([
+      $axios.$get("/api/article/menu", {
+        params: {
+          site_id: env.SITE_ID,
+          mod_id: "rec"
+        }
+      }),
+      $axios.$get("/api/article/menu", {
+        params: {
+          site_id: env.SITE_ID,
+          mod_id: "trending",
+          size: 4
+        }
+      }),
       $axios.$get("/api/article/detail", {
         params: {
           site_id: env.SITE_ID,
@@ -67,7 +104,9 @@ export default {
       all: allResponse,
       floatArray: shuffleArray(mixArray),
       toc,
-      htmlWithAnchor
+      htmlWithAnchor,
+      recNews: recNewsResponse,
+      trendingNews: trendingNewsResponse
     };
   },
   data() {
@@ -256,6 +295,21 @@ export default {
       };
       window.handleCreatScriptSchema(JSON.stringify(data1));
     },
+    scrollToAnchor(anchorId) {
+      const target = document.getElementById(anchorId);
+      if (!target) return;
+      // 考虑导航栏高度，避免锚点被遮挡
+      const navbarHeight = 60;
+      const targetTop = target.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
+
+      window.scrollTo({
+        top: targetTop,
+        behavior: "smooth" // 平滑滚动
+      });
+
+      // 更新URL锚点（可选，优化体验）
+      window.history.pushState({}, "", `#${anchorId}`);
+    },
     handleAdsScript() {
       const buffer = window.getCookie("pathInfo");
       if (!buffer || Number(JSON.parse(buffer)[window.location.pathname]) < 3) {
@@ -350,6 +404,17 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+::v-deep .table-container {
+  position: relative;
+  tr {
+    text-align: center;
+    padding: 10px;
+  }
+  tr:first-child {
+    position: sticky;
+    top: 0px;
+  }
+}
 .page-layout {
   padding: 0 20px;
 }
@@ -398,6 +463,24 @@ export default {
   gap: 24px;
 }
 
+.toc-container {
+  margin: 20px 0;
+  cursor: pointer;
+  .toc-title {
+    font-size: 20px;
+    font-weight: bold;
+    margin-bottom: 12px;
+  }
+  .toc-list {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    li {
+      width: 100%;
+      @include ellipsis();
+    }
+  }
+}
 @media screen and (max-width: 1100px) {
   .news-box-2 {
     display: flex;
