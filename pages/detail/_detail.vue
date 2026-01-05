@@ -10,7 +10,7 @@
           <div class="news-detail first_paragraph">{{ newInfo.first_paragraph }}</div>
           <div id="relatedsearches1"> </div>
           <aside class="toc-container" v-if="toc.length">
-            <h3 class="toc-title">文章目录</h3>
+            <h3 class="toc-title">この記事の内容</h3>
             <nav class="toc-nav">
               <ul class="toc-list">
                 <!-- 两种方式都行 -->
@@ -41,9 +41,9 @@
         </article>
         <!--        </div>-->
       </div>
-      <div class="layout-right">
-        <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
-      </div>
+      <!--      <div class="layout-right">-->
+      <!--        <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />-->
+      <!--      </div>-->
     </main>
     <footer-seo />
   </div>
@@ -168,6 +168,7 @@ export default {
 
   mounted: function () {
     window.handleRequestAdByChannel("mounted", 1);
+    this.handleCreateTableParentDom();
     // 获取 URL 查询参数
     const searchParams = new URLSearchParams(window.location.search);
     // AdSense 配置参数
@@ -317,9 +318,9 @@ export default {
       }
     },
     addAdSenseScript() {
-      if (window.getCountyByLanguage() !== "Japan") {
-        return;
-      }
+      // if (window.getCountyByLanguage() !== "Japan") {
+      //   return;
+      // }
       // 获取 URL 查询参数
       const searchParams = new URLSearchParams(window.location.search);
       // 获取Url携带的terms参数
@@ -398,21 +399,56 @@ export default {
           }
         }
       });
+    },
+    //处理表格
+    handleCreateTableParentDom() {
+      let dom = document.getElementsByClassName("table-container")?.[0];
+      if (dom) {
+        let newParent = document.createElement("div"); // 创建一个新的div元素作为父级元素
+        newParent.setAttribute("class", "table-container-parent"); // 设置新元素的class属性
+        let parent = dom.parentNode; // 获取现有元素的父级元素
+        parent.insertBefore(newParent, dom); // 将新父级元素插入到现有元素之前
+        newParent.appendChild(dom); // 将现有元素移动到新父级元素中
+      }
     }
   }
 };
 </script>
 
 <style lang="scss" scoped>
+::v-deep .table-container-parent {
+  width: 100%;
+  overflow-x: auto;
+}
 ::v-deep .table-container {
   position: relative;
+  width: 100%;
+  margin: 24px 0;
+  border-top: 3px solid rgba($font3, 0.65);
+  border-collapse: collapse;
   tr {
     text-align: center;
     padding: 10px;
+    height: 68px;
+    td {
+      background: rgba(#fd9a25, 0.1);
+      border: 2px solid #fff;
+      font-size: 20px;
+      color: rgba(#000, 0.45);
+    }
+    td:first-child {
+      font-weight: bold;
+      font-size: 26px;
+      color: $font1;
+    }
   }
   tr:first-child {
-    position: sticky;
-    top: 0px;
+    th {
+      font-weight: bold;
+      color: $font1;
+      font-size: 26px;
+      border-bottom: 3px solid rgba($font3, 0.35);
+    }
   }
 }
 .page-layout {
@@ -465,10 +501,13 @@ export default {
 
 .toc-container {
   margin: 20px 0;
-  cursor: pointer;
+  padding: 12px 0;
+  width: 100%;
+  color: $font1;
+  background: rgba(#fd9a25, 0.1);
   .toc-title {
-    font-size: 20px;
-    font-weight: bold;
+    font-size: 24px;
+    font-weight: 600;
     margin-bottom: 12px;
   }
   .toc-list {
@@ -476,6 +515,9 @@ export default {
     flex-direction: column;
     gap: 12px;
     li {
+      cursor: pointer;
+      line-height: 26px;
+      font-size: 20px;
       width: 100%;
       @include ellipsis();
     }
@@ -489,6 +531,41 @@ export default {
 }
 
 @media screen and (max-width: 750px) {
+  ::v-deep .table-container {
+    margin: vw(30) 0;
+    max-width: vw(658);
+    width: vw(658);
+    border-top: vw(4) solid rgba($font3, 0.65);
+    tr {
+      text-align: center;
+      padding: vw(20);
+      min-height: vw(122);
+      td {
+        background: rgba(#fd9a25, 0.1);
+        border: vw(4) solid #fff;
+        font-size: vw(28);
+        padding: vw(12) vw(32);
+        /*min-width: vw(300);*/
+      }
+      td:first-child {
+        font-weight: normal;
+        font-size: vw(32);
+      }
+    }
+    tr:first-child {
+      border-collapse: collapse;
+      /*border-bottom: vw(2) solid rgba($font3, 0.35);*/
+      th {
+        border-bottom: vw(4) solid rgba($font3, 0.35);
+        min-width: vw(200);
+        padding: vw(12) vw(32);
+        background: rgba(#fd9a25, 0.1);
+        font-weight: normal;
+        font-size: vw(32);
+      }
+    }
+  }
+
   .page-layout {
     padding: 0 vw(46);
   }
@@ -520,6 +597,21 @@ export default {
   }
   .news-box-2 {
     gap: vw(32);
+  }
+  .toc-container {
+    margin: vw(34) 0;
+    padding: vw(24) 0;
+    .toc-title {
+      font-size: vw(40);
+      margin-bottom: vw(24);
+    }
+    .toc-list {
+      gap: vw(24);
+      li {
+        line-height: vw(50);
+        font-size: vw(32);
+      }
+    }
   }
 }
 </style>

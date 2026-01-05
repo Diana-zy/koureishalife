@@ -207,10 +207,11 @@ export default {
       flex-wrap: nowrap;
       gap: 40px;
       overflow-x: auto;
-      justify-content: space-around;
+      /*justify-content: space-around;*/
     }
     li {
       white-space: nowrap;
+      flex: 1;
       a {
         display: block;
         width: 100%;

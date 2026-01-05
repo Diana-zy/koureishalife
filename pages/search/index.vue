@@ -76,25 +76,25 @@ export default {
     }
 
     this.input = this.$route.query.query || "";
-    if (window.isLoadAd === true) {
-      this.input && this.addAdSense();
-    } else {
-      window.addEventListener("loadAd", () => {
-        this.input && this.addAdSense();
-      });
-    }
+    // if (window.isLoadAd === true) {
+    //   this.input && this.addAdSense();
+    // } else {
+    //   window.addEventListener("loadAd", () => {
+    this.input && this.addAdSense();
+    //   });
+    // }
     this.input && this.searchNews();
   },
   methods: {
     addAdSense() {
       setTimeout(() => {
-        if (this.$route.query.from.includes("detail")) {
-          if (window.handleRequestAdByChannel("", "", true)) {
-            window.pushEventParamsToGtm("Q_AR");
-            window.trackEventToPixel("Q_AR");
-            this.addAdSenseScript();
-          }
-        }
+        // if (this.$route.query.from.includes("detail")) {
+        //   if (window.handleRequestAdByChannel("", "", true)) {
+        window.pushEventParamsToGtm("Q_AR");
+        window.trackEventToPixel("Q_AR");
+        this.addAdSenseScript();
+        //   }
+        // }
       }, 0);
     },
     async searchNews() {
