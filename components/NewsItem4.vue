@@ -1,5 +1,5 @@
 <template>
-  <CustomLink class="news-style-2" :to="`/detail/${item.path}/`">
+  <CustomLink class="news-style-2" :to="`/detail/${item.path_v2}/`">
     <NuxtImg
       format="auto"
       fit="cover"
@@ -13,8 +13,8 @@
     <p class="category">{{ capitalizeFirstLetter(item.category_locale_name) }}</p>
     <p class="title">{{ item.name }}</p>
     <div class="news-author">
-      <div>Gライフリンク編集部</div>
-      <div>2025年12月26日</div>
+      <div>{{ item.author.name }}</div>
+      <div>{{ item.updated_at }}</div>
     </div>
   </CustomLink>
 </template>

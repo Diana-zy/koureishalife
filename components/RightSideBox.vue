@@ -7,9 +7,9 @@
         <custom-link
           v-for="(item, i) in navData.list"
           :key="i"
-          :to="`/category/${item.path}/`"
+          :to="`/category/${item.path_v2}/`"
           class="category-item"
-          >{{ capitalizeFirstLetter(item.locale_name.ja) }}</custom-link
+          >{{ capitalizeFirstLetter(item.name) }}</custom-link
         >
       </div>
     </div>

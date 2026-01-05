@@ -15,7 +15,7 @@
         <ul class="dropdown">
           <li v-for="(item, i) in navData.list.slice(0, 6)" :key="i"
             ><CustomLink :to="`/category/${item.path}/`">{{
-              capitalizeFirstLetter(item.locale_name.ja)
+              capitalizeFirstLetter(item.name)
             }}</CustomLink></li
           >
         </ul>
@@ -35,7 +35,7 @@
                 <ul>
                   <li v-for="item in navData.list">
                     <CustomLink :to="`/category/${item.path}/`">{{
-                      capitalizeFirstLetter(item.locale_name.ja)
+                      capitalizeFirstLetter(item.name)
                     }}</CustomLink>
                   </li>
                 </ul>

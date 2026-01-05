@@ -27,16 +27,16 @@
         <div class="m-hidden-block">関連サービス：</div>
         <ul>
           <li class="link-item">
-            <CustomLink :to="``" target="_blank">X (Twitter) </CustomLink>
+            <a @click="handleClick('twitter')">X (Twitter) </a>
           </li>
           <li class="link-item">
-            <CustomLink :to="``" target="_blank">Instagram </CustomLink>
+            <a data-name="instagram">Instagram </a>
           </li>
           <li class="link-item">
-            <CustomLink :to="``" target="_blank">Facebook </CustomLink>
+            <a data-name="facebook" @click="handleClick('facebook')">Facebook </a>
           </li>
           <li class="link-item">
-            <CustomLink :to="``" target="_blank">LINE公式アカウント </CustomLink>
+            <a>LINE公式アカウント </a>
           </li>
         </ul>
       </div>
@@ -58,6 +58,9 @@ export default {
     channelId: {
       type: String,
       default: ""
+    },
+    info: {
+      type: Object
     }
   },
   data() {
@@ -90,6 +93,27 @@ export default {
           message: "Please enter a valid email address",
           type: "warning"
         });
+      }
+    },
+    handleClick(type) {
+      if (window.location.pathname.includes("/detail")) {
+        let url;
+        switch (type) {
+          case "facebook":
+            url = `https://www.facebook.com/sharer/sharer.php?u=${
+              window.location.origin + window.location.pathname
+            }&t=Lung%20Cancer:%20Symptoms,%20Treatments,%20and%20Support%20Resources&picture=https://bunchthings.com/cdn-cgi/image/w=600,f=auto,fit=cover/${
+              this.info.cover
+            }&v=3`;
+            window.open(url);
+            break;
+          case "twitter":
+            url = `https://twitter.com/intent/tweet?url=${
+              window.location.origin + window.location.pathname
+            }&text=${this.info.name}`;
+            window.open(url);
+            break;
+        }
       }
     }
   }

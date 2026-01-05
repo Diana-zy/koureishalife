@@ -1,5 +1,5 @@
 <template>
-  <CustomLink :to="`/detail/${item.path}/`">
+  <CustomLink :to="`/detail/${item.path_v2}/`">
     <div class="mode-new">
       <div>
         <div class="img-box">
@@ -15,13 +15,13 @@
           />
         </div>
         <div class="news-author">
-          <div>Gライフリンク編集部</div>
+          <div>{{ item.author.name }}</div>
         </div>
       </div>
       <div class="right-info">
         <p class="title">{{ item.name }}</p>
         <div class="tag">{{ capitalizeFirstLetter(item.category_locale_name) }}</div>
-        <div class="date">2025年12月26日</div>
+        <div class="date"> {{ item.updated_at }}</div>
       </div>
     </div>
   </CustomLink>

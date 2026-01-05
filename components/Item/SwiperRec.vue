@@ -1,5 +1,5 @@
 <template>
-  <CustomLink class="swiper-rec" :to="`/detail/${item.path}/`">
+  <CustomLink class="swiper-rec" :to="`/detail/${item.path_v2}/`">
     <div class="swiper-rec-img">
       <NuxtImg
         format="auto"
@@ -31,9 +31,9 @@
     <div class="swiper-rec-author">
       <div class="author-org">
         <div class="author-icon"></div>
-        <div>Gライフリンク編集部</div>
+        <div>{{ item.author.name }}</div>
       </div>
-      <div class="edit-date">2025年12月26日</div>
+      <div class="edit-date">{{ item.updated_at }}</div>
     </div>
   </CustomLink>
 </template>

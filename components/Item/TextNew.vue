@@ -1,5 +1,5 @@
 <template>
-  <CustomLink class="news-style-2" :to="`/detail/${item.path}/`">
+  <CustomLink class="news-style-2" :to="`/detail/${item.path_v2}/`">
     <div class="m-hidden-block">
       <NuxtImg
         format="auto"
@@ -18,8 +18,8 @@
       <div class="m-news-left">
         <div class="m-news-title">{{ item.name }}</div>
         <div class="m-news-author">
-          <div>Gライフリンク編集部</div>
-          <div>2025年12月26日</div>
+          <div>{{ item.author.name }}</div>
+          <div>{{ item.updated_at }}</div>
         </div>
       </div>
       <div class="m-news-right"> 見る </div>

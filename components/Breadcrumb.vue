@@ -1,10 +1,18 @@
 <template>
   <div class="bread-crumb">
-    <CustomLink to="/" class="type">home</CustomLink>
+    <CustomLink to="/" class="type">Home</CustomLink>
     <span> / </span>
-    <CustomLink to="/" class="type">{{ info?.name }}</CustomLink>
-    <span> / </span>
-    <CustomLink to="/" class="type">{{ info?.name }}</CustomLink>
+    <span>
+      <CustomLink
+        v-if="info?.is_seo_category_on_site"
+        :to="`/category/${info.seo_category_path}/`"
+        class="type"
+        >{{ info?.category_locale_name || info?.seo_category_name }}</CustomLink
+      >
+      <span v-else class="type">{{ info?.category_locale_name || info?.seo_category_name }}</span>
+    </span>
+    <span v-if="!isCategory"> / </span>
+    <span v-if="!isCategory" class="type">{{ info?.name }}</span>
   </div>
 </template>
 
@@ -15,6 +23,10 @@ export default {
     info: {
       type: Object,
       default: () => {}
+    },
+    isCategory: {
+      type: Boolean,
+      default: false
     }
   }
 };

@@ -6,7 +6,7 @@ $font3: #171717;
 $font4: rgba(#171717, 0.4);
 $font5: #1A1A1A;
 $tagColor1:#C6F3E2;
-$tagColor2:#FDF0BA;
+$tagColor2:#F0DFBA;
 $tagColor3:#C0E8B2;
 @function vw($size) {
   @return calc($size/750) * 100vw;

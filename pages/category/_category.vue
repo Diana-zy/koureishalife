@@ -3,18 +3,22 @@
     <Header />
     <main class="main">
       <div class="layout-left">
+        <breadcrumb :info="{
+          category_id: id,
+          category_locale_name: categoryInfo?.seo_category.name
+        }" isCategory></breadcrumb>
         <common-page-label
-          :title="`「${capitalizeFirstLetter(categoryInfo.category.locale_name.ja)}」の記事一覧`"
+          :title="`「${capitalizeFirstLetter(categoryInfo?.seo_category.name)}」の記事一覧`"
         />
         <section>
           <InfiniteLoadList
             api-endpoint="/api/article/get_category_article"
-            :initial-page="2"
-            :page-size="10"
+            :initial-page="3"
+            :page-size="20"
             :query="{
               category_id: id
             }"
-            :initial-items="categoryInfo.list"
+            :initial-items="categoryInfo?.list"
             class="news-box-4"
           >
             <template #default="{ items }">
@@ -59,11 +63,12 @@ export default {
             size: 6
           }
         }),
-        $axios.$get("/api/article/get_category_article", {
+        $axios.$get("/api/article/get_seo_category_page", {
           params: {
             site_id: env.SITE_ID,
-            category_id: id,
-            size: 10
+            seo_category_id: id,
+            size: 20,
+            page:1
           }
         })
       ]);
@@ -77,6 +82,52 @@ export default {
       };
     } catch (error) {
       console.error("Error fetching data:", error);
+    }
+  },
+  head() {
+    return {
+      script: [
+        {
+          type: "application/ld+json",
+          innerHTML: JSON.stringify({
+            "@context": "https:\/\/schema.org",
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              {
+                "@type": "ListItem",
+                "position": 1,
+                "item": {
+                  "@id": "https:\/\/www.koureishalife.com\/",
+                  "name": "Home"
+                }
+              },
+              {
+                "@type": "ListItem",
+                "position": 2,
+                "item": {
+                  "@id": `https://www.koureishalife.com/category/${this.id}/`,
+                  "name": this.categoryInfo.seo_category.name
+                }
+              }
+            ]
+          })
+        },
+        {
+          type: "application/ld+json",
+          innerHTML: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "ItemList",
+            itemListElement: [
+              ...this.categoryInfo.list.map((item, index) => ({
+                "@type": "ListItem",
+                position: index + 1,
+                url:`https://www.koureishalife.com/detail/${item.path_v2}/`})
+              )
+            ]
+          })
+        }
+      ],
+      __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
     }
   },
   methods: {

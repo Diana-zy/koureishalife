@@ -16,7 +16,7 @@ export default {
     interval: 100,
     async routes() {
       const pathData = await fetch(
-        `${process.env.PROD_API_URL}/api/article/get_all_path?site_id=${process.env.SITE_ID}`
+        `${process.env.PROD_API_URL}/api/article/get_all_path_v2?site_id=${process.env.SITE_ID}`
       );
       const path = await pathData.json();
       const categoryPaths = path.data.category.map((item) => `/category/${item}/`);
@@ -33,7 +33,7 @@ export default {
     trailingSlash: true
   },
   head: {
-    title: "Koureishalife - 世界のニュースが手のひらで！",
+    title: "高齢者ライフ｜シニアの経済と暮らしを支える情報サイト！",
     meta: [
       {
         name: "version",
@@ -56,13 +56,7 @@ export default {
         hid: "description",
         name: "description",
         content:
-          "私たちは、政治、経済、技術、文化、スポーツなど、さまざまな分野における最新の発展をお届けすることにコミットしています!"
-      },
-      {
-        hid: "keywords",
-        name: "keywords",
-        content:
-          "ニュース,フロンティアニュース,最新ニュース,ITニュース,スポーツニュース,ファッションニュース,車ニュース,健康ニュース"
+          "老後のお金や暮らしの不安を解消！保険、年金、相続の最新情報を専門家が解説します。後悔しないための準備を今すぐ始めましょう。"
       },
       {
         hid: "og:site_name",
@@ -77,8 +71,21 @@ export default {
         hid: "twitter:description",
         name: "twitter:description",
         content:
-          "私たちは、政治、経済、技術、文化、スポーツなど、さまざまな分野における最新の発展をお届けすることにコミットしています!"
-      },
+          "老後のお金や暮らしの不安を解消！保険、年金、相続の最新情報を専門家が解説します。後悔しないための準備を今すぐ始めましょう。"
+      }
+    ],
+    script: [
+      {
+        type: "application/ld+json",
+        innerHTML: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebPage", //组织
+          name: "Koureisha Life", //站点名称
+          url: "https://www.koureishalife.com/", //站点的网址
+          //站点logo，不低于112*112像素
+          logo: "https://bunchthings.com/site-logo/koureishalife/koureishalife-logo-144.png"
+        })
+      }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },

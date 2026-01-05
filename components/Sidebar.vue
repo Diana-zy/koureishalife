@@ -27,7 +27,7 @@
       <h2 class="title-h2">カテゴリー</h2>
       <ul class="categories">
         <li v-for="(item, i) in navData.list" :key="i">
-          <CustomLink :to="`/category/${item.path}/`">{{
+          <CustomLink :to="`/category/${item.path_v2}/`">{{
             capitalizeFirstLetter(item.locale_name.ja)
           }}</CustomLink>
         </li>

@@ -23,21 +23,15 @@
           </item-text-new>
         </section>
 
-        <h2 class="title-h2">相続税・贈与税</h2>
-        <section>
-          <InfiniteLoadList
-            api-endpoint="/api/article/menu"
-            :initial-page="2"
-            :page-size="4"
-            mod-id="all"
-            :initial-items="allNews.list"
-            class="news-box-2"
-          >
-            <template #default="{ items }">
-              <news-item-2 v-for="(item, i) in items" :key="i" :item="item"> </news-item-2>
-            </template>
-          </InfiniteLoadList>
-        </section>
+        <div v-for="(items, index) in categoryList" class="category-box" :key="items.id">
+          <h2 class="title-h2">{{ items.seo_category.name }}</h2>
+          <section>
+            <div class="news-box-2">
+              <news-item-2 v-for="(item, i) in items.list" :key="i" :item="item" :index="index">
+              </news-item-2>
+            </div>
+          </section>
+        </div>
       </div>
       <div class="layout-right">
         <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
@@ -61,34 +55,55 @@ export default {
   async asyncData({ $axios, env }) {
     try {
       // 并行处理多个异步请求
-      const [recNewsResponse, trendingNewsResponse, allNewsResponse] = await Promise.all([
-        $axios.$get("/api/article/menu", {
-          params: {
-            site_id: env.SITE_ID,
-            mod_id: "rec"
-          }
-        }),
-        $axios.$get("/api/article/menu", {
-          params: {
-            site_id: env.SITE_ID,
-            mod_id: "trending",
-            size: 4
-          }
-        }),
-        $axios.$get("/api/article/menu", {
-          params: {
-            site_id: env.SITE_ID,
-            mod_id: "all",
-            page: 1,
-            size: 4
-          }
-        })
-      ]);
+      const [recNewsResponse, trendingNewsResponse, allNewsResponse, categoryResponse] =
+        await Promise.all([
+          $axios.$get("/api/article/menu", {
+            params: {
+              site_id: env.SITE_ID,
+              mod_id: "rec"
+            }
+          }),
+          $axios.$get("/api/article/menu", {
+            params: {
+              site_id: env.SITE_ID,
+              mod_id: "trending",
+              size: 4
+            }
+          }),
+          $axios.$get("/api/article/menu", {
+            params: {
+              site_id: env.SITE_ID,
+              mod_id: "all",
+              page: 1,
+              size: 4
+            }
+          }),
+          $axios.$get("/api/article/get_all_seo_category", {
+            params: {
+              site_id: env.SITE_ID
+            }
+          })
+        ]);
+      let category = [];
+      await categoryResponse.list.map(async (item) => {
+        category.push(
+          $axios.$get("/api/article/get_seo_category_page", {
+            params: {
+              site_id: env.SITE_ID,
+              seo_category_id: item.id,
+              size: 4,
+              page: 1
+            }
+          })
+        );
+      });
+      let list = await Promise.all(category);
       // 返回多个接口的数据
       return {
         recNews: recNewsResponse,
         trendingNews: trendingNewsResponse,
-        allNews: allNewsResponse
+        allNews: allNewsResponse,
+        categoryList: list.filter((item) => item != null)
       };
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -110,18 +125,18 @@ export default {
     };
   },
   mounted() {
-    this.handleInitSchema();
+    // this.handleInitSchema();
   },
   methods: {
     //处理Schema
     handleInitSchema() {
       const data = {
         "@context": "https:\\/\\/schema.org",
-        "@type": "Organization", //组织
-        name: "Family Handyman", //站点名称
-        url: "https:\\/\\/www.familyhandyman.com\\/", //站点的网址
+        "@type": "WebPage", //组织
+        name: "Koureisha Life", //站点名称
+        url: "https:\\/\\/www.koureishalife.com\\/", //站点的网址
         //站点logo，不低于112*112像素
-        logo: "https:\\/\\/www.familyhandyman.com\\/wp-content\\/uploads\\/2020\\/06\\/c126dd4f-fhm-header-logo.png",
+        logo: "https://bunchthings.com/site-logo/koureishalife/koureishalife-logo-144.png",
         //其他三方网站中的个人资料页
         sameAs: [
           "https:\\/\\/www.wikidata.org\\/wiki\\/Q7733312",
@@ -194,6 +209,11 @@ export default {
   padding-bottom: 32px;
   border-bottom: 1px solid #ececee;
 }
+.category-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0px;
+}
 .swiper-box {
   .swiper-button-prev {
     top: 209px;
@@ -209,6 +229,12 @@ export default {
       content: "";
     }
   }
+}
+.news-box-2 {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 24px;
 }
 .home-search {
   width: 100%;

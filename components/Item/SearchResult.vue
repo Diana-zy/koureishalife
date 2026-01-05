@@ -1,5 +1,5 @@
 <template>
-  <CustomLink class="item" :to="`/detail/${item.path}/`">
+  <CustomLink class="item" :to="`/detail/${item.path_v2}/`">
     <p class="title">{{ item.name }}</p>
     <p class="path">{{ formattedPath }}</p>
     <p class="desc">{{ item.first_paragraph }}</p>

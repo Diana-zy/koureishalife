@@ -5,17 +5,17 @@
       fit="cover"
       width="658"
       height="440"
-      :src="item?.cover || ''"
-      :alt="item?.name"
+      :src="item.cover"
+      :alt="item.name"
       loading="lazy"
       class="img"
     />
     <p class="category" v-if="item.category_locale_name || item.category_name">{{
       capitalizeFirstLetter(item.category_locale_name || item.category_name)
     }}</p>
-    <p class="title">{{ item?.name }}</p>
+    <p class="title">{{ item.name }}</p>
     <div class="m-news-author pc-hidden-flex">
-      <div>{{ item.author?.name }}</div>
+      <div>{{ item.author.name }}</div>
       <div>{{ item.updated_at }}</div>
     </div>
   </CustomLink>
@@ -28,16 +28,7 @@ export default {
     item: {
       type: Object,
       required: true
-    },
-    index: {
-      type: Number,
-      default: 0
     }
-  },
-  data() {
-    return {
-      colorList: ["#C6F3E2", "#F0DFBA", "#C0E8B2"]
-    };
   },
 
   methods: {
@@ -127,16 +118,16 @@ export default {
       display: flex;
       justify-content: space-between;
       margin-top: vw(8);
-      font-size: vw(16);
+      font-size: vw(24);
       padding-bottom: vw(10);
-      @include author-icon(vw(16), vw(16));
+      @include author-icon(vw(24), vw(24));
       div:first-child {
-        max-width: vw(156);
+        max-width: vw(256);
         @include ellipsis();
       }
       div:last-child {
-        max-width: vw(120);
-        font-size: vw(16);
+        max-width: vw(220);
+        font-size: vw(24);
         @include ellipsis();
       }
     }
