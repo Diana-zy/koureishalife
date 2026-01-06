@@ -11,6 +11,40 @@ export default {
       maxScrollPercentage: 0
     };
   },
+  head() {
+    return {
+      script: [
+        {
+          type: "application/ld+json",
+          innerHTML: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Koureisha Life",
+            url: "https://www.koureishalife.com/",
+            logo: "https://bunchthings.com/site-logo/koureishalife/koureishalife-logo-144.png",
+            sameAs: this.$sameAs,
+            ContactPoint: [],
+            parentOrganization: {}
+          })
+        },
+        {
+          type: "application/ld+json",
+          innerHTML: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "WebSite",
+            name: "Koureisha Life",
+            url: "https://www.koureishalife.com/",
+            potentialAction: {
+              "@type": "SearchAction",
+              target: "https://www.koureishalife.com/search/?query={search_term_string}",
+              "query-input": "required name=search_term_string"
+            }
+          })
+        }
+      ],
+      __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
+    };
+  },
   mounted() {
     this.handleListenerScroll();
   },

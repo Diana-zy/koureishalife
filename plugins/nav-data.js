@@ -14,6 +14,16 @@ export default async function ({ $axios, env, isServer }, inject) {
     //   }
     // });
     inject("navData", data);
+    inject("sameAs", [
+      "https:\\/\\/www.wikidata.org\\/wiki\\/Q7733312",
+      "https:\\/\\/www.freebase.com\\/m\\/0bmcfp1",
+      "https:\\/\\/en.wikipedia.org\\/wiki\\/The_Family_Handyman",
+      "https:\\/\\/www.facebook.com\\/TheFamilyHandyman",
+      "https:\\/\\/www.instagram.com\\/familyhandyman\\/",
+      "https:\\/\\/www.youtube.com\\/user\\/thefamilyhandyman",
+      "https:\\/\\/www.pinterest.com\\/family_handyman\\/",
+      "https:\\/\\/twitter.com\\/Family_Handyman"
+    ]);
     // inject("recKeywords", recKeywordsData.list);
   } catch (error) {
     console.error("Failed to fetch navigation data:", error);

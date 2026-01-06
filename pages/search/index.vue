@@ -66,7 +66,7 @@ export default {
     }
   },
   mounted() {
-    window.handleRequestAdByChannel("first", 5, true);
+    // window.handleRequestAdByChannel("first", 5, true);
     const searchParams = new URLSearchParams(window.location.search);
     this.channelId = searchParams.has("channel") ? searchParams.get("channel") : "";
     if (window.getDetailIsClickAc()) {

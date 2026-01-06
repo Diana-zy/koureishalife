@@ -9,18 +9,18 @@
         :src="item.cover"
         :alt="item.name"
         loading="lazy"
-        class="img m-hidden"
+        class="img"
       />
-      <NuxtImg
-        format="auto"
-        fit="cover"
-        width="658"
-        height="346"
-        :src="item.cover"
-        :alt="item.name"
-        loading="lazy"
-        class="img pc-hidden"
-      />
+      <!--      <NuxtImg-->
+      <!--        format="auto"-->
+      <!--        fit="cover"-->
+      <!--        width="658"-->
+      <!--        height="346"-->
+      <!--        :src="item.cover"-->
+      <!--        :alt="item.name"-->
+      <!--        loading="lazy"-->
+      <!--        class="img pc-hidden"-->
+      <!--      />-->
     </div>
     <div class="swiper-rec-tag">
       <div class="rec-tag">相続税・贈与税</div>

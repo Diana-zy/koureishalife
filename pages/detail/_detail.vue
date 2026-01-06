@@ -223,16 +223,7 @@ export default {
               name: "Koureisha Life",
               url: "https://www.koureishalife.com",
               publishingPrinciples: "https://www.koureishalife.com/us/",
-              sameAs: [
-                // "https://www.wikidata.org/wiki/Q7733312",
-                // "https://www.freebase.com/m/0bmcfp1",
-                // "https://en.wikipedia.org/wiki/The_Family_Handyman",
-                // "https://www.facebook.com/TheFamilyHandyman",
-                // "https://www.instagram.com/familyhandyman/",
-                // "https://www.youtube.com/user/thefamilyhandyman",
-                // "https://www.pinterest.com/family_handyman/",
-                // "https://twitter.com/Family_Handyman"
-              ]
+              sameAs: this.$sameAs
             },
             image: [
               `https://bunchthings.com/cdn-cgi/image/f=auto,fit=cover/${this.newInfo?.cover}`,
@@ -279,7 +270,7 @@ export default {
   },
 
   mounted: function () {
-    window.handleRequestAdByChannel("mounted", 1);
+    // window.handleRequestAdByChannel("mounted", 1);
     this.handleCreateTableParentDom();
     // 获取 URL 查询参数
     const searchParams = new URLSearchParams(window.location.search);
@@ -377,7 +368,7 @@ export default {
             "@type": "ListItem",
             position: 2,
             item: {
-              "@id": `https:\/\/www.koureishalife.com\/category\/${this.newInfo.category_id}\/`,
+              "@id": `https:\/\/www.koureishalife.com\/category\/${this.newInfo.seo_category_path}\/`,
               name: this.newInfo.category_name
             }
           },
@@ -468,7 +459,7 @@ export default {
           if (response) {
             window.trackEventToPixel("D_C_AC");
             window.pushEventParamsToGtm("C_AC");
-            window.handleRequestAdByChannel("query_ad", 1);
+            // window.handleRequestAdByChannel("query_ad", 1);
             try {
               let numberOfKeys = 0;
               let concatenatedKeys = "miss";

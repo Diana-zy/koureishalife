@@ -19,7 +19,7 @@ export default {
         `${process.env.PROD_API_URL}/api/article/get_all_path_v2?site_id=${process.env.SITE_ID}`
       );
       const path = await pathData.json();
-      const categoryPaths = path.data.category.map((item) => `/category/${item}/`);
+      const categoryPaths = path.data.seo_category.map((item) => `/category/${item}/`);
       const detailPaths = path.data.detail.map((item) => `/detail/${item}/`);
       const urls = [...categoryPaths, ...detailPaths];
       return urls;
@@ -72,19 +72,6 @@ export default {
         name: "twitter:description",
         content:
           "老後のお金や暮らしの不安を解消！保険、年金、相続の最新情報を専門家が解説します。後悔しないための準備を今すぐ始めましょう。"
-      }
-    ],
-    script: [
-      {
-        type: "application/ld+json",
-        innerHTML: JSON.stringify({
-          "@context": "https://schema.org",
-          "@type": "WebPage", //组织
-          name: "Koureisha Life", //站点名称
-          url: "https://www.koureishalife.com/", //站点的网址
-          //站点logo，不低于112*112像素
-          logo: "https://bunchthings.com/site-logo/koureishalife/koureishalife-logo-144.png"
-        })
       }
     ],
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]

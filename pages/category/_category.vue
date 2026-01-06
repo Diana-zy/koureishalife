@@ -3,10 +3,13 @@
     <Header />
     <main class="main">
       <div class="layout-left">
-        <breadcrumb :info="{
-          category_id: id,
-          category_locale_name: categoryInfo?.seo_category.name
-        }" isCategory></breadcrumb>
+        <breadcrumb
+          :info="{
+            category_id: id,
+            category_locale_name: categoryInfo?.seo_category?.name
+          }"
+          isCategory
+        ></breadcrumb>
         <common-page-label
           :title="`「${capitalizeFirstLetter(categoryInfo?.seo_category.name)}」の記事一覧`"
         />
@@ -68,11 +71,11 @@ export default {
             site_id: env.SITE_ID,
             seo_category_id: id,
             size: 20,
-            page:1
+            page: 1
           }
         })
       ]);
-      console.log(categoryInfoResponse, "categoryInfoResponse");
+      // console.log(categoryInfoResponse, "categoryInfoResponse");
       // 返回多个接口的数据
       return {
         recNews: recNewsResponse,
@@ -92,21 +95,21 @@ export default {
           innerHTML: JSON.stringify({
             "@context": "https:\/\/schema.org",
             "@type": "BreadcrumbList",
-            "itemListElement": [
+            itemListElement: [
               {
                 "@type": "ListItem",
-                "position": 1,
-                "item": {
+                position: 1,
+                item: {
                   "@id": "https:\/\/www.koureishalife.com\/",
-                  "name": "Home"
+                  name: "Home"
                 }
               },
               {
                 "@type": "ListItem",
-                "position": 2,
-                "item": {
+                position: 2,
+                item: {
                   "@id": `https://www.koureishalife.com/category/${this.id}/`,
-                  "name": this.categoryInfo.seo_category.name
+                  name: this.categoryInfo?.seo_category.name
                 }
               }
             ]
@@ -118,17 +121,17 @@ export default {
             "@context": "https://schema.org",
             "@type": "ItemList",
             itemListElement: [
-              ...this.categoryInfo.list.map((item, index) => ({
+              ...this.categoryInfo?.list.map((item, index) => ({
                 "@type": "ListItem",
                 position: index + 1,
-                url:`https://www.koureishalife.com/detail/${item.path_v2}/`})
-              )
+                url: `https://www.koureishalife.com/detail/${item.path_v2}/`
+              }))
             ]
           })
         }
       ],
       __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
-    }
+    };
   },
   methods: {
     capitalizeFirstLetter

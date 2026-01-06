@@ -8,211 +8,6 @@
     <script src="/linkMarking.js"></script>
     <script src="/dataMonitor.js"></script>
     <script>
-      //根据浏览器语言获取国家
-      function getCountyByLanguage() {
-        const lang = window.navigator.language || window.navigator.userLanguage;
-        const langMap = {
-          en: "United States",
-          "en-US": "United States",
-          "en-GB": "United Kingdom",
-          "en-CA": "Canada",
-          "en-AU": "Australia",
-          "en-SG": "Singapore",
-          "en-NZ": "New Zealand",
-          "en-ZA": "South Africa",
-          "en-ZM": "Zambia",
-          "en-ZW": "Zimbabwe",
-          ar: "Algeria",
-          "ar-DZ": "Algeria",
-          "ar-IQ": "Iraq",
-          "ar-EG": "Egypt",
-          "ar-SA": "Saudi Arabia",
-          "ar-AE": "United Arab Emirates",
-          "ar-LB": "Lebanon",
-          "ar-OM": "Oman",
-          es: "Spain",
-          "es-AR": "Argentina",
-          "es-BO": "Bolivia",
-          "es-BR": "Brazil",
-          "es-CL": "Chile",
-          "es-CO": "Colombia",
-          "es-CR": "Costa Rica",
-          "es-CU": "Cuba",
-          "es-DO": "Dominican Republic",
-          "es-EC": "Ecuador",
-          "es-SV": "El Salvador",
-          "es-GT": "Guatemala",
-          "es-HN": "Honduras",
-          "es-MX": "Mexico",
-          "es-NI": "Nicaragua",
-          "es-PA": "Panama",
-          "es-PY": "Paraguay",
-          "es-PE": "Peru",
-          "es-ES": "Spain",
-          "es-VE": "Venezuela",
-          pt: "Portugal",
-          "pt-BR": "Brazil",
-          "pt-PT": "Portugal",
-          zh: "China",
-          "zh-CN": "China",
-          "zh-HK": "Hong Kong",
-          "zh-MO": "Macao",
-          "zh-TW": "Taiwan",
-          fr: "France",
-          "fr-FR": "France",
-          "fr-GF": "French Guiana",
-          "fr-CM": "Cameroon",
-          "fr-CI": "Côte d’Ivoire",
-          "fr-SN": "Senegal",
-          "fr-YT": "Mayotte",
-          de: "Germany",
-          "de-DE": "Germany",
-          "de-CH": "Switzerland",
-          it: "Italy",
-          "it-IT": "Italy",
-          nl: "Netherlands",
-          "nl-NL": "Netherlands",
-          "nl-BE": "Belgium",
-          sv: "Sweden",
-          "sv-SE": "Sweden",
-          da: "Denmark",
-          "da-DK": "Denmark",
-          nb: "Norway",
-          "nb-NO": "Norway",
-          bn: "Bangladesh",
-          "bn-BD": "Bangladesh",
-          be: "Belarus",
-          "be-BY": "Belarus",
-          bg: "Bulgaria",
-          "bg-BG": "Bulgaria",
-          hr: "Croatia",
-          "hr-HR": "Croatia",
-          cs: "Czechia",
-          "cs-CZ": "Czechia",
-          et: "Estonia",
-          "et-EE": "Estonia",
-          fi: "Finland",
-          "fi-FI": "Finland",
-          ka: "Georgia",
-          "ka-GE": "Georgia",
-          el: "Greece",
-          "el-CY": "Cyprus",
-          "el-GR": "Greece",
-          he: "Israel",
-          "he-IL": "Israel",
-          hi: "India",
-          "hi-IN": "India",
-          hu: "Hungary",
-          "hu-HU": "Hungary",
-          id: "Indonesia",
-          "id-ID": "Indonesia",
-          ja: "Japan",
-          "ja-JP": "Japan",
-          kk: "Kazakhstan",
-          "kk-KZ": "Kazakhstan",
-          ko: "South Korea",
-          "ko-KR": "South Korea",
-          lo: "Laos",
-          "lo-LA": "Laos",
-          lv: "Latvia",
-          "lv-LV": "Latvia",
-          lt: "Lithuania",
-          "lt-LT": "Lithuania",
-          lb: "Luxembourg",
-          "lb-LU": "Luxembourg",
-          mk: "North Macedonia",
-          "mk-MK": "North Macedonia",
-          ms: "Malaysia",
-          "ms-MY": "Malaysia",
-          mt: "Malta",
-          "mt-MT": "Malta",
-          mn: "Mongolia",
-          "mn-MN": "Mongolia",
-          pl: "Poland",
-          "pl-PL": "Poland",
-          ro: "Romania",
-          "ro-MD": "Moldova",
-          "ro-RO": "Romania",
-          ru: "Russia",
-          "ru-RU": "Russia",
-          sr: "Serbia",
-          "sr-ME": "Montenegro",
-          "sr-RS": "Serbia",
-          sk: "Slovakia",
-          "sk-SK": "Slovakia",
-          sl: "Slovenia",
-          "sl-SI": "Slovenia",
-          sw: "Tanzania",
-          "sw-TZ": "Tanzania",
-          th: "Thailand",
-          "th-TH": "Thailand",
-          tr: "Türkiye",
-          "tr-TR": "Türkiye",
-          uk: "Ukraine",
-          "uk-UA": "Ukraine",
-          ur: "Pakistan",
-          "ur-PK": "Pakistan",
-          vi: "Vietnam",
-          "vi-VN": "Vietnam"
-        };
-        const country = langMap[lang] || langMap[lang.split("-")[0]];
-        return country || null;
-      }
-
-      //处理渠道号下限制广告请求
-      function handleRequestAdByChannel(key, val, req) {
-        const searchParams = new URLSearchParams(window.location.search);
-        const channel = searchParams.has("channel") ? searchParams.get("channel") : "";
-        if (!window.getCookie("requestAdByChannel")) {
-          if (req) {
-            return false;
-          }
-          let buffer = {};
-          buffer[channel] = {};
-          buffer[channel][key] = val;
-          setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
-        } else {
-          try {
-            let buffer = JSON.parse(window.getCookie("requestAdByChannel"));
-            if (!buffer[channel]) {
-              if (req) {
-                return false;
-              }
-              buffer[channel] = {};
-              buffer[channel][key] = val;
-              setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
-            } else {
-              if (req) {
-                if (
-                  !buffer[channel].first &&
-                  buffer[channel]?.mounted &&
-                  buffer[channel]?.query_ad &&
-                  buffer[channel]?.click_ad
-                ) {
-                  buffer[channel].first = val;
-                  setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
-                  return true;
-                } else if (buffer[channel].first !== "ok" && !key) {
-                  if (Number(buffer[channel].first) > 1) {
-                    buffer[channel].first = Number(buffer[channel].first) - 1;
-                    setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
-                  } else {
-                    buffer[channel].first = "ok";
-                    setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
-                  }
-                  return true;
-                } else {
-                  return false;
-                }
-              } else {
-                buffer[channel][key] = val;
-                setCookieTomorrow("requestAdByChannel", JSON.stringify(buffer));
-              }
-            }
-          } catch (e) {}
-        }
-      }
-
       /* Cookie 操作 */
       function getMainDomain() {
         const url = window.location.hostname; // 获取当前主机名
@@ -256,27 +51,7 @@
       if (ttclid) {
         window.setCookie("hi_ttclid", ttclid);
       }
-      (function () {
-        let path_name = window.location.pathname;
-        if (path_name.startsWith("/detail")) {
-          let bufferObj = window.getCookie("pathInfo");
-          if (bufferObj) {
-            let obj = JSON.parse(bufferObj);
-            if (Number(obj[path_name]) < 3) {
-              obj[path_name] = Number(obj[path_name]) + 1;
-              window.setCookie("pathInfo", JSON.stringify(obj));
-            } else if (!obj[path_name]) {
-              obj[path_name] = 1;
-              window.setCookie("pathInfo", JSON.stringify(obj));
-            }
-          } else {
-            let obj = {};
-            obj[path_name] = 1;
-            console.log(JSON.stringify(obj), 2222);
-            window.setCookie("pathInfo", JSON.stringify(obj));
-          }
-        }
-      })();
+
       window.isLoadAd = false;
       const script = document.createElement("script");
       script.src = "https://wc.bunchthings.com/youknowwho.js?" + Date.now();
@@ -298,23 +73,6 @@
           window.pushEventParamsToGtm("D_PV", ttclid);
         } else if (pathname.startsWith("/search/")) {
           window.pushEventParamsToGtm("S_PV", ttclid);
-        }
-        const event = new Event("loadAd"); // 创建标准事件对象
-        let buffer = window.getCookie("city");
-        if (!window.getCookie("changeIp")) {
-          if (!buffer) {
-            window.setCookie("city", window.city || "unknown");
-            window.isLoadAd = true;
-            window.dispatchEvent(event);
-          } else {
-            if (window.city === buffer) {
-              window.isLoadAd = true;
-              window.dispatchEvent(event);
-            } else {
-              window.isLoadAd = false;
-              window.setCookie("changeIp", "yes");
-            }
-          }
         }
       };
 
@@ -343,13 +101,12 @@
       }
       //处理规范化
       (function handleCanonical() {
-        const href=`https://${window.getMainDomain()+window.location.pathname}`
+        const href = `https://${window.getMainDomain() + window.location.pathname}`;
         const link = document.createElement("link");
-        link.rel = "canonical"
-        link.href = href
+        link.rel = "canonical";
+        link.href = href;
         document.head.appendChild(link);
-      })()
-
+      })();
     </script>
     <script async="async" src="https://www.google.com/adsense/search/ads.js"></script>
     <script type="text/javascript" charset="utf-8">
@@ -532,16 +289,6 @@
       window.done = false;
       window.done1 = false;
 
-      //上报根据语言获取国家埋点
-      (function () {
-        let country = window.getCountyByLanguage();
-        window.dataLayer.push({
-          event: "country_by_lang",
-          country_and_lang:
-            country + "_" + (window.navigator.language || window.navigator.userLanguage)
-        });
-      })();
-
       // 监听失去焦点事件
       window.addEventListener("blur", () => {
         const activeElement = document.activeElement;
@@ -580,7 +327,7 @@
               eventName = "T_AC";
               TACChangeCookie();
               if (window.location.pathname.startsWith("/detail")) {
-                window.handleRequestAdByChannel("click_ad", 1);
+                // window.handleRequestAdByChannel("click_ad", 1);
                 let bufferObj = window.getCookie("pathInfo");
                 if (bufferObj) {
                   let obj = JSON.parse(bufferObj);
