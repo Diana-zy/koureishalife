@@ -7,7 +7,7 @@
         <custom-link
           v-for="(item, i) in navData.list"
           :key="i"
-          :to="`/category/${item.path_v2}/`"
+          :to="`/category/${item.path}/`"
           class="category-item"
           >{{ capitalizeFirstLetter(item.name) }}</custom-link
         >
@@ -48,7 +48,7 @@ export default {
     };
   },
   mounted() {
-    console.log(this.navData);
+    console.log(this.navData,1111);
   },
   methods: {
     capitalizeFirstLetter

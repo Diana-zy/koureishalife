@@ -16,7 +16,7 @@ export default {
   },
   computed: {
     formattedPath() {
-      return `${window.location.origin}/detail/${this.item.path}/`;
+      return `${window.location.origin}/detail/${this.item.path_v2}/`;
     }
   }
 };

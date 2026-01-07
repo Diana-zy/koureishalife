@@ -2,7 +2,7 @@
   <div class="page">
     <Header />
     <main>
-      <div class="content-box">
+      <div class="layout-left">
         <common-page-label :title="`「${input}」の検索結果`" />
         <div id="afscontainer1"> </div>
         <div id="relatedsearches1"> </div>
@@ -12,7 +12,7 @@
           </item-search-result>
         </section>
       </div>
-      <div class="aside-box">
+      <div class="layout-right">
         <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
       </div>
     </main>
@@ -54,7 +54,7 @@ export default {
       searchResultNews: [], // 新闻列表
       input: "", // 搜索输入
       channelId: "", // 频道 ID
-      isShowResults: false // 是否显示搜索结果
+      isShowResults: false, // 是否显示搜索结果
     };
   },
   computed: {
@@ -74,6 +74,10 @@ export default {
         event: "S_PL"
       });
     }
+    if(searchParams.has("from") && searchParams.get("from") === 'detail'){
+      window.fromDetailId= window.getCookie('SEO_detail')
+    }
+    window.setCookie('SEO_detail',"")
 
     this.input = this.$route.query.query || "";
     // if (window.isLoadAd === true) {
@@ -112,9 +116,6 @@ export default {
       }
     },
     addAdSenseScript() {
-      if (window.getCountyByLanguage() !== "Japan") {
-        return;
-      }
       const queryString = this.input;
 
       const channelId = window.getParam("channel");
@@ -132,7 +133,7 @@ export default {
         channel: channelId,
         pubId: "partner-pub-6612490456597819",
         query: queryString,
-        styleId: "7223178098",
+        styleId: "9867803701",
         adsafe: "low",
         ivt: false,
         resultsPageBaseUrl,
@@ -156,6 +157,13 @@ export default {
           if (e) {
             window.trackEventToPixel("C_AR");
             window.pushEventParamsToGtm("C_AR");
+            const hi_user_source = getValueByURLOrCookie("hi_source");
+            if (hi_user_source === "unknown") {
+              window.dataLayer.push({
+                event: "Detail_C_AR_C_SEO",
+                SEO_detail: window.fromDetailId || ''
+              });
+            }
             if (window.getDetailIsClickAc()) {
               window.dataLayer.push({
                 event: "C_AR_C"

@@ -215,6 +215,7 @@ export default {
   gap: 0px;
 }
 .swiper-box {
+  overflow: hidden;
   .swiper-button-prev {
     top: 209px;
     @include icon(50px, 50px, "icon-left.png");

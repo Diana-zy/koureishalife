@@ -5,21 +5,23 @@
         <img :src="icon" alt="" />
       </div>
       <div class="website-info">
-        中高年(40代・50代・60代)の暮らしとキャリアを、いくつになっても満ち足りたものにするための情報サイトです。日々の生活に役立つ情報から「これからの働き方」を考えるヒントとなる情報まで、様々なコンテンツを配信しています。</div
+      <div>「高齢者ライフ」は、シニア世代の皆様が直面するお金や暮らしの不安を解消し、より豊かで安心なセカンドライフを送るための総合情報サイトです</div>
+      <div> 保険の見直し、相続対策、年金の仕組みといった専門的な経済知識から、日々の生活を彩るライフスタイルや再就職のヒントまで、シニアライフに役立つ最新资讯を分かりやすくお届けします</div>
+      </div
       >
       <div class="link-info">
         <ul>
-          <li class="link-item">
-            <a href=""> 会社概要 </a>
-          </li>
-          <li class="link-item">
-            <a href="mailto:service@koureishalife.com"> お問い合わせ </a>
-          </li>
+<!--          <li class="link-item">-->
+<!--            <a href=""> 会社概要 </a>-->
+<!--          </li>-->
           <li class="link-item">
             <CustomLink :to="'/cookies-jp.html'" target="_blank">プライバシーポリシー </CustomLink>
           </li>
           <li class="link-item">
-            <CustomLink :to="`/eula-jp.html`" target="_blank">利用規約: </CustomLink>
+            <CustomLink :to="`/eula-jp.html`" target="_blank">利用規約 </CustomLink>
+          </li>
+          <li class="link-item">
+            <a href="mailto:service@koureishalife.com"> お問い合わせ </a>
           </li>
         </ul>
       </div>
@@ -27,20 +29,20 @@
         <div class="m-hidden-block">関連サービス：</div>
         <ul>
           <li class="link-item">
-            <a @click="handleClick('twitter')">X (Twitter) </a>
+            <span @click="handleClick('twitter')">X (Twitter) </span>
           </li>
+<!--          <li class="link-item">-->
+<!--            <span data-name="instagram">Instagram </span>-->
+<!--          </li>-->
           <li class="link-item">
-            <a data-name="instagram">Instagram </a>
+            <span data-name="facebook" @click="handleClick('facebook')">Facebook </span>
           </li>
-          <li class="link-item">
-            <a data-name="facebook" @click="handleClick('facebook')">Facebook </a>
-          </li>
-          <li class="link-item">
-            <a>LINE公式アカウント </a>
-          </li>
+<!--          <li class="link-item">-->
+<!--            <span>LINE公式アカウント </span>-->
+<!--          </li>-->
         </ul>
       </div>
-      <div class="bottom-info">© G-PLAN , Inc.</div>
+      <div class="bottom-info">Koureishalife.com</div>
     </div>
     <Notification v-if="showNotification" :message="notificationMessage" />
   </footer>
@@ -139,6 +141,12 @@ export default {
     font-size: 16px;
     line-height: 21px;
     margin-bottom: 10px;
+    div:first-child{
+      margin-bottom: 28px;
+    }
+  }
+  .link-item{
+    cursor: pointer;
   }
   .link-info {
     display: flex;
@@ -174,8 +182,11 @@ export default {
     }
     .website-info {
       padding: 0 vw(46);
-      line-height: vw(36);
-      font-size: vw(24);
+      line-height: 1.5;
+      font-size: vw(28);
+      div:first-child{
+        margin-bottom: vw(32)
+      }
     }
     .link-info {
       padding: vw(48) vw(46) 0;
@@ -189,14 +200,14 @@ export default {
         line-height: vw(66);
         font-size: vw(24);
         color: rgba(#000, 0.65);
-        border-top: vw(1) solid rgba($font3, 0.35);
+        border-bottom: vw(1) solid rgba($font3, 0.35);
       }
     }
     .link-info-social {
       padding-top: 0;
-      li:last-child {
+     /* li:last-child {
         border-bottom: vw(1) solid rgba($font3, 0.35);
-      }
+      }*/
     }
     .bottom-info {
       transform: none;

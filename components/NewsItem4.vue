@@ -10,7 +10,7 @@
       loading="lazy"
       class="img"
     />
-    <p class="category">{{ capitalizeFirstLetter(item.category_locale_name) }}</p>
+    <p class="category" v-if="item.seo_category_name || item.category_locale_name">{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name) }}</p>
     <p class="title">{{ item.name }}</p>
     <div class="news-author">
       <div>{{ item.author.name }}</div>
@@ -120,7 +120,7 @@ export default {
       margin-bottom: vw(26);
       @include ellipsis(2);
     }
-    .m-news-author {
+    .news-author {
       display: flex;
       justify-content: space-between;
       margin-top: vw(8);

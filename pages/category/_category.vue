@@ -11,7 +11,7 @@
           isCategory
         ></breadcrumb>
         <common-page-label
-          :title="`「${capitalizeFirstLetter(categoryInfo?.seo_category.name)}」の記事一覧`"
+          :title="`「${capitalizeFirstLetter(categoryInfo?.seo_category?.name)}」の記事一覧`"
         />
         <section>
           <InfiniteLoadList

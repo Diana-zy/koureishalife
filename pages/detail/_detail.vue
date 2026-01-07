@@ -7,6 +7,10 @@
           <breadcrumb :info="newInfo"></breadcrumb>
           <article class="article">
             <h1 class="article-title" style="">{{ newInfo.name }}</h1>
+            <div class="news-author">
+              <div>{{ newInfo.author.name }}</div>
+              <div>{{ newInfo.updated_at }}</div>
+            </div>
             <div class="news-detail first_paragraph">{{ newInfo.first_paragraph }}</div>
             <div id="relatedsearches1"> </div>
             <aside class="toc-container" v-if="toc.length">
@@ -111,6 +115,7 @@ export default {
       all: allResponse,
       floatArray: shuffleArray(mixArray),
       toc,
+      id,
       htmlWithAnchor,
       recNews: recNewsResponse,
       trendingNews: trendingNewsResponse
@@ -400,10 +405,10 @@ export default {
       window.history.pushState({}, "", `#${anchorId}`);
     },
     handleAdsScript() {
-      const buffer = window.getCookie("pathInfo");
-      if (!buffer || Number(JSON.parse(buffer)[window.location.pathname]) < 3) {
+      if(this.newInfo.no_entry !== 1){
         this.addAdSenseScript();
       }
+
     },
     addAdSenseScript() {
       // if (window.getCountyByLanguage() !== "Japan") {
@@ -439,7 +444,7 @@ export default {
       const adSenseConfig = {
         channel: this.channelId,
         pubId: "partner-pub-6612490456597819",
-        styleId: "5492246976",
+        styleId: "9867803701",
         adsafe: "low",
         ignoredPageParams,
         relatedSearchTargeting: "content",
@@ -459,7 +464,13 @@ export default {
           if (response) {
             window.trackEventToPixel("D_C_AC");
             window.pushEventParamsToGtm("C_AC");
-            // window.handleRequestAdByChannel("query_ad", 1);
+            const hi_user_source = window.getValueByURLOrCookie("hi_source");
+            if(hi_user_source === "unknown"){
+              window.dataLayer.push({
+                event: 'Detail_D_C_AC_SEO',
+                SEO_detail:"detail_"+this.id
+              })
+            }
             try {
               let numberOfKeys = 0;
               let concatenatedKeys = "miss";
@@ -508,6 +519,14 @@ export default {
   width: 100%;
   overflow-x: auto;
 }
+.news-author {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 13px;
+  font-size: 14px;
+  padding-bottom: 16px;
+  @include author-icon(25px, 25px);
+}
 ::v-deep .table-container {
   position: relative;
   width: 100%;
@@ -522,21 +541,29 @@ export default {
       background: rgba(#fd9a25, 0.1);
       border: 2px solid #fff;
       font-size: 20px;
-      color: rgba(#000, 0.45);
+      color: $font5;
     }
     td:first-child {
       font-weight: bold;
       font-size: 26px;
-      color: $font1;
+      color: $font5;
     }
   }
   tr:first-child {
     th {
       font-weight: bold;
-      color: $font1;
+      color: $font5;
       font-size: 26px;
       border-bottom: 3px solid rgba($font3, 0.35);
     }
+  }
+}
+::v-deep .iframe-video-style {
+  width: 100%;
+  aspect-ratio: 16/9;
+  iframe {
+    width: 100%;
+    height: 100%;
   }
 }
 .page-layout {
@@ -546,22 +573,45 @@ export default {
   width: 100%;
   margin-bottom: 1em;
 }
-.article {
-  line-height: 19px;
+::v-deep .article {
+  line-height: 1.5;
   font-family: "hem";
+  font-size: 16px;
   padding-bottom: 32px;
   border-bottom: 1px solid #ececee;
   min-height: calc(100vh - 72px - 56px - 64px);
+  menu,
+  ul {
+    list-style: disc;
+    padding-left: 40px;
+  }
+  menu,
+  ol{
+    list-style: decimal;
+    padding-left: 40px;
+  }
+  a{
+    text-decoration: underline;
+    color: $color1;
+  }
+  p{
+    margin-bottom: 28px;
+  }
+  h2
+  {
+    font-size: 1.2em !important;
+  }
 }
 .article-title {
   font-size: 26px;
-  font-family: "hem";
+  font-weight: bold;
   line-height: 30px;
   margin-bottom: 24px;
 }
 .news-detail {
+  color: $font5;
   p {
-    text-indent: 1em;
+    /*text-indent: 1em;*/
   }
 }
 .read-more {
@@ -574,9 +624,10 @@ export default {
   }
 }
 .first_paragraph {
-  text-indent: 1em;
+  /*text-indent: 1em;*/
   font-size: 14px;
-  line-height: 19px;
+  /*line-height: 19px;*/
+  margin-bottom: 28px;
 }
 .google-ad-preload {
   margin-bottom: 4px;
@@ -588,11 +639,14 @@ export default {
 }
 
 .toc-container {
-  margin: 20px 0;
+  margin: 0px 0 20px;
   padding: 12px 0;
   width: 100%;
   color: $font1;
   background: rgba(#fd9a25, 0.1);
+  ul{
+    padding-left: 0;
+  }
   .toc-title {
     font-size: 24px;
     font-weight: 600;
@@ -659,15 +713,31 @@ export default {
       }
     }
   }
-
+  .news-author {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 0;
+    font-size: vw(28);
+    padding-bottom: vw(24);
+    @include author-icon(vw(50), vw(50));
+  }
   .page-layout {
     padding: 0 0;
   }
-  .article {
+  ::v-deep .article {
     line-height: vw(38);
+    font-size: vw(36);
     padding-bottom: vw(32);
     border-bottom: vw(2) solid #ececee;
     min-height: calc(100vh - vw(304));
+    menu,
+    ol,
+    ul {
+      padding-left: vw(32);
+    }
+    p{
+      margin-bottom: vw(32);
+    }
   }
   .article-title {
     font-size: vw(40);
@@ -678,9 +748,10 @@ export default {
     margin-bottom: vw(48);
   }
   .first_paragraph {
-    font-size: vw(32);
+    font-size: vw(36);
     color: rgba(23, 23, 23, 0.8);
     line-height: vw(44);
+    margin-bottom: vw(32);
   }
   .google-ad-preload {
     margin-bottom: vw(10);
@@ -693,14 +764,17 @@ export default {
     gap: vw(32);
   }
   .toc-container {
-    margin: vw(34) 0;
+    margin: 0 0 vw(32);
     padding: vw(24) 0;
     .toc-title {
       font-size: vw(40);
       margin-bottom: vw(24);
     }
+    ul{
+      padding-left: 0;
+    }
     .toc-list {
-      gap: vw(24);
+      gap: vw(10);
       li {
         line-height: vw(50);
         font-size: vw(32);

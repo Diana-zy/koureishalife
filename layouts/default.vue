@@ -72,6 +72,10 @@ export default {
         //   event: "scroll_depth" + "_" + this.handleFormat(this.maxScrollPercentage),
         //   hi_depth: this.handleFormat(this.maxScrollPercentage)
         // });
+        const hi_user_source = window.getValueByURLOrCookie("hi_source");
+        if (hi_user_source === "unknown") {
+          this.handleFormatSEO(this.maxScrollPercentage);
+        }
         window.dataLayer.push({
           event: "scroll_depth",
           hi_depth: this.handleFormat(this.maxScrollPercentage)
@@ -87,6 +91,25 @@ export default {
         return "81_100%";
       } else {
         return `${Math.floor(val / 20) * 2}1_${Math.floor(val / 20) * 2 + 2}0%`;
+      }
+    },
+    handleFormatSEO(val) {
+      if (val < 25) {
+        window.dataLayer.push({
+          event: "Scroll_Depth_Less_25%_SEO"
+        });
+      } else if (val >= 25 && val < 50) {
+        window.dataLayer.push({
+          event: "Scroll_Depth_25%_SEO"
+        });
+      } else if (val >= 50 && val < 75) {
+        window.dataLayer.push({
+          event: "Scroll_Depth_50%_SEO"
+        });
+      } else {
+        window.dataLayer.push({
+          event: "Scroll_Depth_75%_SEO"
+        });
       }
     }
   }
