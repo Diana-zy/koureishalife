@@ -116,6 +116,18 @@ export default {
             window.open(url);
             break;
         }
+      } else{
+        let url;
+        switch (type) {
+          case "facebook":
+            url = `https://www.facebook.com/people/Seniorsbetter/61586174372459/`;
+            window.open(url);
+            break;
+          // case "twitter":
+          //   url = ``;
+          //   window.open(url);
+          //   break;
+        }
       }
     }
   }
