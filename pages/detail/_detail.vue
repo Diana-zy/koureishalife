@@ -35,25 +35,25 @@
               fit="cover"
               width="600"
               :src="newInfo.cover"
-              :alt="newInfo.name"
+              :alt="newInfo.cover_seo_alt"
               class="article-img"
               preload
             />
             <!-- eslint-disable vue/no-v-html -->
             <div class="news-detail" v-html="htmlWithAnchor"></div>
             <!--eslint-enable-->
-            <section v-if="newInfo?.related_articles?.length">
-              <h3 class="title-h2">関連記事</h3>
-              <div class="related-articles">
-                <news-item-5 v-for="(item, i) in newInfo.related_articles" :key="i" :item="item">
-                </news-item-5>
-              </div>
-            </section>
           </article>
+          <section v-if="newInfo?.related_articles?.length">
+            <h3 class="title-h2">関連記事</h3>
+            <div class="related-articles">
+              <news-item-5 v-for="(item, i) in newInfo.related_articles" :key="i" :item="item">
+              </news-item-5>
+            </div>
+          </section>
         </div>
       </div>
       <div class="layout-right">
-        <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
+        <right-side-box :rec-news="trendingNews?.list" :trending-news="recNews?.list" />
       </div>
     </main>
     <footer-seo :info="newInfo" />
@@ -78,11 +78,11 @@ export default {
           mod_id: "rec"
         }
       }),
-      $axios.$get("/api/article/menu", {
+      $axios.$get("/api/article/get_all_articles", {
         params: {
           site_id: env.SITE_ID,
-          mod_id: "trending",
-          size: 4
+          size: 4,
+          page:1
         }
       }),
       $axios.$get("/api/article/detail", {
@@ -109,7 +109,7 @@ export default {
     const { toc: flatToc, htmlWithAnchor } = processHtmlWithToc(data.content, [2]);
     const toc = generateNestedToc(flatToc);
 
-    const mixArray = allResponse.list.slice();
+    const mixArray = allResponse?.list?.slice();
 
     return {
       newInfo: data,
@@ -207,7 +207,7 @@ export default {
             "@context": "https://schema.org",
             "@type": "NewsArticle",
             articleBody: this.newInfo.content_text,
-            articleSection: `Home, ${this.newInfo.category_locale_name}, ${this.newInfo.name}`,
+            articleSection: `Home, ${this.newInfo.seo_category_name || this.newInfo.category_locale_name}, ${this.newInfo.name}`,
             headline: this.newInfo.seo_title,
             description: this.newInfo.seo_desc,
             datePublished: this.newInfo.updated_at,
@@ -306,7 +306,7 @@ export default {
         "@type": "NewsArticle",
         //文章主体的所有内容（正文部分）
         articleBody: this.newInfo.content_text, //文章归属的板块（参考站是填写的面包屑层级）
-        articleSection: `Home, ${this.newInfo.category_locale_name}, ${this.newInfo.name}`,
+        articleSection: `Home, ${this.newInfo.seo_category_name || this.newInfo.category_locale_name}, ${this.newInfo.name}`,
         //文章标题
         headline: this.newInfo.seo_title,
         //文章描述（参考站是填写的正文上方的一段文本）
@@ -445,7 +445,7 @@ export default {
       const adSenseConfig = {
         channel: this.channelId,
         pubId: "partner-pub-6612490456597819",
-        styleId: "9867803701",
+        styleId: "6462282781",
         adsafe: "low",
         ignoredPageParams,
         relatedSearchTargeting: "content",
@@ -714,14 +714,14 @@ export default {
       }
     }
   }
-  .news-author {
+  /*.news-author {
     display: flex;
     justify-content: space-between;
     margin-top: 0;
     font-size: vw(28);
     padding-bottom: vw(24);
     @include author-icon(vw(50), vw(50));
-  }
+  }*/
   .page-layout {
     padding: 0 0;
   }
@@ -749,7 +749,7 @@ export default {
     margin-bottom: vw(48);
   }
   .first_paragraph {
-    font-size: vw(36);
+    font-size: vw(32);
     color: rgba(23, 23, 23, 0.8);
     line-height: vw(44);
     margin-bottom: vw(32);

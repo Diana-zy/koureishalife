@@ -6,11 +6,11 @@
       width="658"
       height="440"
       :src="item.cover"
-      :alt="item.name"
+      :alt="item.cover_seo_alt"
       loading="lazy"
       class="img"
     />
-    <p class="category" v-if="item.seo_category_name || item.category_locale_name || item.category_name">{{
+    <p class="category btn-tag" v-if="item.seo_category_name || item.category_locale_name || item.category_name">{{
       capitalizeFirstLetter(item.seo_category_name || item.category_locale_name || item.category_name)
     }}</p>
     <p class="title">{{ item.name }}</p>
@@ -113,21 +113,23 @@ export default {
       font-size: vw(26);
       line-height: vw(36);
       min-height: vw(106);
+      @include ellipsis(2)
     }
     .m-news-author {
       display: flex;
       justify-content: space-between;
-      margin-top: vw(8);
-      font-size: vw(24);
+      margin-top: vw(12);
+      font-weight: 300;
+      font-size: vw(26);
       padding-bottom: vw(10);
-      @include author-icon(vw(24), vw(24));
+      @include author-icon(vw(26), vw(26));
       div:first-child {
         max-width: vw(256);
         @include ellipsis();
       }
       div:last-child {
         max-width: vw(220);
-        font-size: vw(24);
+        font-size: vw(26);
         @include ellipsis();
       }
     }

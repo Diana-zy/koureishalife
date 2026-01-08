@@ -15,10 +15,10 @@
 <!--            <a href=""> 会社概要 </a>-->
 <!--          </li>-->
           <li class="link-item">
-            <CustomLink :to="'/cookies-jp.html'" target="_blank">プライバシーポリシー </CustomLink>
+            <CustomLink :to="'/cookies-ja.html'" target="_blank">プライバシーポリシー </CustomLink>
           </li>
           <li class="link-item">
-            <CustomLink :to="`/eula-jp.html`" target="_blank">利用規約 </CustomLink>
+            <CustomLink :to="`/eula-ja.html`" target="_blank">利用規約 </CustomLink>
           </li>
           <li class="link-item">
             <a href="mailto:service@koureishalife.com"> お問い合わせ </a>
@@ -119,10 +119,10 @@ export default {
       } else{
         let url;
         switch (type) {
-          case "facebook":
-            url = `https://www.facebook.com/people/Seniorsbetter/61586174372459/`;
-            window.open(url);
-            break;
+          // case "facebook":
+          //   url = `https://www.facebook.com/people/Seniorsbetter/61586174372459/`;
+          //   window.open(url,'_blank');
+          //   break;
           // case "twitter":
           //   url = ``;
           //   window.open(url);
@@ -188,12 +188,12 @@ export default {
     position: relative;
     margin-top: vw(32);
     .icon-logo {
-      margin-left: vw(46);
-      width: vw(424);
-      height: vw(64);
+      margin-left: vw(32);
+      width: vw(320);
+      height: vw(48);
     }
     .website-info {
-      padding: 0 vw(46);
+      padding: 0 vw(32);
       line-height: 1.5;
       font-size: vw(28);
       div:first-child{
@@ -201,7 +201,7 @@ export default {
       }
     }
     .link-info {
-      padding: vw(48) vw(46) 0;
+      padding: vw(48) vw(32) 0;
       ul,
       .link-item {
         width: 100%;

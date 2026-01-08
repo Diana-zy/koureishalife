@@ -7,7 +7,7 @@
         width="795"
         height="418"
         :src="item.cover"
-        :alt="item.name"
+        :alt="item.cover_seo_alt"
         loading="lazy"
         class="img"
       />
@@ -23,7 +23,7 @@
       <!--      />-->
     </div>
     <div class="swiper-rec-tag">
-      <div class="rec-tag" v-if="item.seo_category_name || item.category_locale_name || item.category_name">{{item.seo_category_name || item.category_locale_name || item.category_name}}</div>
+      <div class="rec-tag btn-tag" v-if="item.seo_category_name || item.category_locale_name || item.category_name">{{item.seo_category_name || item.category_locale_name || item.category_name}}</div>
     </div>
     <div class="swiper-rec-title">
       {{ item.name }}
@@ -64,7 +64,7 @@ export default {
     width: 100%;
     display: flex;
     gap: 8px;
-    margin: 24px 0 16px;
+    margin: 16px 0 16px;
     .rec-tag {
       line-height: 19px;
       font-size: 16px;
@@ -104,13 +104,14 @@ export default {
     .swiper-rec-img {
       margin-bottom: vw(24);
       .img {
-        width: vw(658);
-        height: vw(346);
+        width: vw(686);
+        height: vw(361);
       }
     }
     .swiper-rec-tag {
+      font-size: vw(24);
       width: 100%;
-      margin: vw(24) 0 vw(48);
+      margin: vw(24) 0 vw(24);
       gap: vw(12);
       .rec-tag {
         padding: vw(12) vw(16);
@@ -124,19 +125,20 @@ export default {
       min-height: vw(180);
     }
     .swiper-rec-author {
-      height: vw(42);
-      line-height: vw(42);
+      height: vw(28);
+      font-size: vw(28);
+      line-height: vw(28);
       .author-org {
-        height: vw(40);
+        height: vw(28);
         display: flex;
         align-items: center;
         .author-icon {
           margin-right: vw(6);
-          @include icon(vw(40), vw(40), "icon-logo-m.png");
+          @include icon(vw(28), vw(28), "icon-logo-m.png");
         }
         div {
-          line-height: vw(40);
-          font-size: vw(30);
+          line-height: vw(28);
+          font-size: vw(28);
         }
       }
       .edit-date {

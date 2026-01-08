@@ -7,11 +7,11 @@
         width="658"
         height="440"
         :src="item.cover"
-        :alt="item.name"
+        :alt="item.cover_seo_alt"
         loading="lazy"
         class="img"
       />
-      <p class="category">{{ capitalizeFirstLetter(item.category_locale_name) }}</p>
+      <p class="category btn-tag">{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name) }}</p>
       <p class="title">{{ item.name }}</p>
     </div>
     <div class="pc-hidden-flex m-news-style">
@@ -96,21 +96,23 @@ export default {
       max-width: vw(528);
       .m-news-title {
         width: 100%;
+        font-size: vw(32);
         line-height: vw(36);
         @include ellipsis();
       }
       .m-news-author {
         display: flex;
         gap: vw(26);
-        margin-top: vw(8);
-        font-size: vw(20);
+        margin-top: vw(12);
+        font-size: vw(26);
+        font-weight: 300;
         padding-bottom: vw(10);
-        @include author-icon(vw(20), vw(20));
+        @include author-icon(vw(26), vw(26));
       }
     }
     .m-news-right {
       flex-shrink: 0;
-      font-size: vw(20);
+      font-size: vw(26);
       color: $color1;
     }
   }

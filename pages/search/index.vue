@@ -13,7 +13,7 @@
         </section>
       </div>
       <div class="layout-right">
-        <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
+        <right-side-box :rec-news="trendingNews?.list" :trending-news="recNews?.list" />
       </div>
     </main>
     <FooterSeo />
@@ -32,13 +32,13 @@ export default {
             mod_id: "rec"
           }
         }),
-        $axios.$get("/api/article/menu", {
+        $axios.$get("/api/article/get_all_articles", {
           params: {
             site_id: env.SITE_ID,
-            mod_id: "trending",
-            size: 30
+            size: 4,
+            page:1
           }
-        })
+        }),
       ]);
       // 返回多个接口的数据
       return {
@@ -133,7 +133,7 @@ export default {
         channel: channelId,
         pubId: "partner-pub-6612490456597819",
         query: queryString,
-        styleId: "9867803701",
+        styleId: "6462282781",
         adsafe: "low",
         ivt: false,
         resultsPageBaseUrl,

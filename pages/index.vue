@@ -1,12 +1,13 @@
 <template>
   <div class="page home-page">
     <Header />
+    <h1 style="display: none">高齢者の暮らしとお金ガイド</h1>
     <main class="main">
       <div class="layout-left">
         <section v-swiper:mySwiper="swiperOption" class="swiper-box">
           <div class="swiper-wrapper">
             <item-swiper-rec
-              v-for="(item, i) in recNews.list"
+              v-for="(item, i) in recNews?.list"
               :key="i"
               class="swiper-slide"
               :item="item"
@@ -19,7 +20,7 @@
 
         <h2 class="title-new-tag">新着記事</h2>
         <section class="news-box-new">
-          <item-text-new v-for="(item, i) in trendingNews.list" :key="i" :item="item">
+          <item-text-new v-for="(item, i) in trendingNews?.list" :key="i" :item="item">
           </item-text-new>
         </section>
 
@@ -27,14 +28,14 @@
           <h2 class="title-h2">{{ items.seo_category.name }}</h2>
           <section>
             <div class="news-box-2">
-              <news-item-2 v-for="(item, i) in items.list" :key="i" :item="item" :index="index">
+              <news-item-2 v-for="(item, i) in items?.list" :key="i" :item="item" :index="index">
               </news-item-2>
             </div>
           </section>
         </div>
       </div>
       <div class="layout-right">
-        <right-side-box :rec-news="trendingNews.list" :trending-news="recNews.list" />
+        <right-side-box :rec-news="trendingNews?.list" :trending-news="recNews?.list" />
       </div>
     </main>
     <FooterSeo />
@@ -103,7 +104,7 @@ export default {
         recNews: recNewsResponse,
         trendingNews: trendingNewsResponse,
         allNews: allNewsResponse,
-        categoryList: list.filter((item) => item != null)
+        categoryList: list?.filter((item) => item != null)
       };
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -411,7 +412,8 @@ export default {
     color: #ffffff;
   }
   .swiper-box {
-    width: vw(658);
+    margin-top: vw(32);
+    width: 100%;
     .swiper-button-prev {
       top: vw(186);
       @include icon(vw(64), vw(64), "icon-left.png");
@@ -428,7 +430,7 @@ export default {
     }
   }
   .swiper-slide {
-    width: vw(658);
+    width: 100%;
     height: vw(764);
 
     /*margin-right: vw(32);*/

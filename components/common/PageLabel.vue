@@ -25,7 +25,7 @@ export default {
 @media screen and (max-width: 750px) {
   .page-title {
     font-size: vw(40);
-    margin-bottom: vw(48);
+    margin-bottom: vw(32);
     padding-left: vw(16);
     border-left: solid vw(16) $color1;
   }

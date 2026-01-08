@@ -6,7 +6,7 @@
       width="366"
       height="244"
       :src="item.cover"
-      :alt="item.name"
+      :alt="item.cover_seo_alt"
       loading="lazy"
       class="img m-hidden"
     />
@@ -16,7 +16,7 @@
       width="491"
       height="275"
       :src="item.cover"
-      :alt="item.name"
+      :alt="item.cover_seo_alt"
       loading="lazy"
       class="img pc-hidden"
     />

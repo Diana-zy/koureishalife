@@ -233,7 +233,7 @@
               });
               seo_user_id.Page_View_SEO = "yes";
             }
-            window.setCookie("seo_user_id-" + uuid, JSON.parse(seo_user_id));
+            window.setCookie("seo_user_id-" + uuid, JSON.stringify(seo_user_id));
             if (!seo_user_id.User_Stay_10s_SEO || !seo_user_id.User_Stay_20s_SEO) {
               new_time = new Date().getTime();
               const timer = setInterval(() => {
@@ -246,7 +246,7 @@
                     event: "User_Stay_10s_SEO"
                   });
                   seo_user_id.User_Stay_10s_SEO = "yes";
-                  window.setCookie("seo_user_id-" + uuid, JSON.parse(seo_user_id));
+                  window.setCookie("seo_user_id-" + uuid, JSON.stringify(seo_user_id));
                 }
                 if (
                   new_time - Number(seo_user_id.first_time) >= 20000 &&
@@ -256,7 +256,7 @@
                     event: "User_Stay_20s_SEO"
                   });
                   seo_user_id.User_Stay_20s_SEO = "yes";
-                  window.setCookie("seo_user_id-" + uuid, JSON.parse(seo_user_id));
+                  window.setCookie("seo_user_id-" + uuid, JSON.stringify(seo_user_id));
                   clearInterval(timer);
                 }
                 if (new_time - Number(seo_user_id.first_time) >= 30000) {

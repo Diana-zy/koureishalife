@@ -6,11 +6,11 @@
       width="658"
       height="440"
       :src="item.cover"
-      :alt="item.name"
+      :alt="item.cover_seo_alt"
       loading="lazy"
       class="img"
     />
-    <p class="category" v-if="item.seo_category_name || item.category_locale_name">{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name) }}</p>
+    <p class="category btn-tag" v-if="item.seo_category_name || item.category_locale_name">{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name) }}</p>
     <p class="title">{{ item.name }}</p>
     <div class="news-author">
       <div>{{ item.author.name }}</div>
@@ -110,24 +110,24 @@ export default {
       line-height: vw(44);
       padding: vw(8) vw(16);
       border-radius: 0;
-      margin: vw(24) 0 vw(32);
+      margin: vw(24) 0 vw(24);
     }
     .title {
       /*margin: vw(16) 0;*/
-      font-size: vw(32);
+      font-size: vw(36);
       line-height: vw(48);
       min-height: vw(96);
       margin-bottom: vw(26);
       @include ellipsis(2);
     }
-    .news-author {
+    /*.news-author {
       display: flex;
       justify-content: space-between;
       margin-top: vw(8);
       font-size: vw(24);
       padding-bottom: vw(24);
       @include author-icon(vw(50), vw(50));
-    }
+    }*/
   }
 }
 </style>

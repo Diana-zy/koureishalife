@@ -9,7 +9,7 @@
             width="366"
             height="244"
             :src="item.cover"
-            :alt="item.name"
+            :alt="item.cover_seo_alt"
             loading="lazy"
             class="img"
           />
@@ -20,7 +20,7 @@
       </div>
       <div class="right-info">
         <p class="title">{{ item.name }}</p>
-        <div class="tag">{{ capitalizeFirstLetter(item.category_locale_name) }}</div>
+        <div class="tag">{{ capitalizeFirstLetter(item.seo_category_name ||item.category_locale_name) }}</div>
         <div class="date"> {{ item.updated_at }}</div>
       </div>
     </div>
@@ -89,11 +89,11 @@ export default {
     }
   }
 }
-.news-author {
+/*.news-author {
   display: flex;
   justify-content: space-between;
   margin-top: 6px;
   font-size: 12px;
   @include author-icon(16px, 16px);
-}
+}*/
 </style>

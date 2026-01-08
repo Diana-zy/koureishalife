@@ -15,11 +15,12 @@
         />
         <section>
           <InfiniteLoadList
-            api-endpoint="/api/article/get_category_article"
-            :initial-page="3"
-            :page-size="20"
+            api-endpoint="/api/article/get_seo_category_page"
+            :initial-page="2"
+            :page-size="10"
+            :showMore="false"
             :query="{
-              category_id: id
+              seo_category_id: id
             }"
             :initial-items="categoryInfo?.list"
             class="news-box-4"
@@ -36,7 +37,7 @@
         </section>
       </div>
       <div class="layout-right">
-        <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
+        <right-side-box :rec-news="trendingNews?.list" :trending-news="recNews?.list" />
       </div>
     </main>
     <FooterSeo />
@@ -59,18 +60,18 @@ export default {
             mod_id: "rec"
           }
         }),
-        $axios.$get("/api/article/menu", {
+        $axios.$get("/api/article/get_all_articles", {
           params: {
             site_id: env.SITE_ID,
-            mod_id: "trending",
-            size: 6
+            size: 4,
+            page:1
           }
         }),
         $axios.$get("/api/article/get_seo_category_page", {
           params: {
             site_id: env.SITE_ID,
             seo_category_id: id,
-            size: 20,
+            size: 10,
             page: 1
           }
         })

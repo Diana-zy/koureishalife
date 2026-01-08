@@ -128,6 +128,9 @@ export function getRandomValueFromArray(array) {
 
 // 重新排序
 export function shuffleArray(array) {
+  if(!array){
+    return []
+  }
   for (let i = array.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1)); // 生成一个随机索引，范围是 [0, i]
     [array[i], array[j]] = [array[j], array[i]]; // 交换当前位置和随机位置的元素

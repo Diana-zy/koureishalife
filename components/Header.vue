@@ -29,7 +29,7 @@
           <!--          <Sidebar :is-open="isSidebarOpen" :nav-data="navData" @close="closeSidebar" />-->
         </div>
         <transition name="opacity">
-          <div class="mask" v-show="isSidebarOpen || showSearch">
+          <div class="mask" @click="handleClickMask" v-show="isSidebarOpen || showSearch">
             <transition name="slide">
               <div class="menu-nav-list" v-show="isSidebarOpen">
                 <ul>
@@ -118,6 +118,10 @@ export default {
       } else {
         document.body.classList.remove("no-scroll");
       }
+    },
+    handleClickMask(){
+      this.showSearch = false;
+      this.isSidebarOpen = false;
     },
     search() {
       if (this.input.length < 1) {
@@ -290,21 +294,21 @@ export default {
 @media screen and (max-width: 750px) {
   .header {
     width: 100%;
-    padding: 0 vw(46);
+    padding: 0 vw(32);
     max-width: 100vw;
     height: vw(114);
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin-bottom: vw(32);
+    /*margin-bottom: vw(32);*/
     border-bottom: vw(2) solid rgba($font3, 0.35);
     z-index: 11;
     .header-top {
       height: 100%;
       justify-content: start;
       .logo {
-        width: vw(398);
-        height: vw(60);
+        width: vw(320);
+        height: vw(48);
         @include bg("logo.png");
         margin-right: 0;
       }
@@ -314,7 +318,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    padding: vw(40) vw(46);
+    padding: vw(40) vw(32);
     height: auto;
     width: 100vw;
     transition: all 0.6s;
@@ -327,6 +331,10 @@ export default {
       padding: vw(16) 0;
       line-height: vw(48);
       border-bottom: vw(2) solid rgba($font3, 0.2);
+    }
+    a{
+      display: inline-block;
+      width: 100%;
     }
   }
   .show-menu {

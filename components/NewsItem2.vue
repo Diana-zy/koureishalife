@@ -6,12 +6,12 @@
       width="658"
       height="440"
       :src="item?.cover || ''"
-      :alt="item?.name"
+      :alt="item?.cover_seo_alt"
       loading="lazy"
       class="img"
     />
     <p
-      class="category"
+      class="category btn-tag"
       :style="{ background: colorList[index] }"
       v-if="item.seo_category_name || item.category_locale_name || item.category_name"
       >{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name || item.category_name) }}</p
@@ -108,7 +108,7 @@ export default {
       width: 100%;
       height: auto;
       object-fit: cover;
-      border-radius: vw(16);
+      border-radius: 0;
       margin-right: 0;
     }
     .category {
@@ -122,24 +122,26 @@ export default {
     .title {
       margin-top: vw(16);
       /*margin: vw(16) 0;*/
-      font-size: vw(26);
+      font-size: vw(32);
       line-height: vw(36);
       min-height: vw(106);
+      @include ellipsis(2);
     }
     .m-news-author {
       display: flex;
       justify-content: space-between;
-      margin-top: vw(8);
-      font-size: vw(16);
+      margin-top: vw(12);
+      font-size: vw(26);
+      font-weight: 300;
       padding-bottom: vw(10);
-      @include author-icon(vw(16), vw(16));
+      @include author-icon(vw(26), vw(26));
       div:first-child {
-        max-width: vw(156);
+        max-width: vw(300);
         @include ellipsis();
       }
       div:last-child {
-        max-width: vw(120);
-        font-size: vw(16);
+        max-width: vw(300);
+        font-size: vw(26);
         @include ellipsis();
       }
     }

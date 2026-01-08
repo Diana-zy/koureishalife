@@ -15,7 +15,8 @@ export default async function ({ $axios, env, isServer }, inject) {
     // });
     inject("navData", data);
     inject("sameAs", [
-      // "https:\\/\\/www.wikidata.org\\/wiki\\/Q7733312",
+      // "https://www.facebook.com/people/Seniorsbetter/61586174372459/",
+      // "https://x.com/seniorsbetter",
       // "https:\\/\\/www.freebase.com\\/m\\/0bmcfp1",
       // "https:\\/\\/en.wikipedia.org\\/wiki\\/The_Family_Handyman",
       // "https:\\/\\/www.facebook.com\\/TheFamilyHandyman",
