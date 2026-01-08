@@ -7,9 +7,9 @@
         v-if="info?.is_seo_category_on_site"
         :to="`/category/${info.seo_category_path}/`"
         class="type"
-        >{{ info?.category_locale_name || info?.seo_category_name }}</CustomLink
+        >{{info?.seo_category_name || info?.category_locale_name }}</CustomLink
       >
-      <span v-else class="type">{{ info?.category_locale_name || info?.seo_category_name }}</span>
+      <span v-else class="type">{{ info?.seo_category_name || info?.category_locale_name }}</span>
     </span>
     <span v-if="!isCategory"> / </span>
     <span v-if="!isCategory" class="type">{{ info?.name }}</span>

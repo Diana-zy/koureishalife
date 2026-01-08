@@ -88,7 +88,8 @@ export default {
       $axios.$get("/api/article/detail", {
         params: {
           site_id: env.SITE_ID,
-          article_id: id
+          article_id: id,
+          related_num:3,
         }
       }),
       $axios.$get("/api/article/menu", {

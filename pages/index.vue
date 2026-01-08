@@ -34,7 +34,7 @@
         </div>
       </div>
       <div class="layout-right">
-        <right-side-box :rec-news="recNews.list" :trending-news="trendingNews.list" />
+        <right-side-box :rec-news="trendingNews.list" :trending-news="recNews.list" />
       </div>
     </main>
     <FooterSeo />
@@ -63,11 +63,11 @@ export default {
               mod_id: "rec"
             }
           }),
-          $axios.$get("/api/article/menu", {
+          $axios.$get("/api/article/get_all_articles", {
             params: {
               site_id: env.SITE_ID,
-              mod_id: "trending",
-              size: 4
+              size: 4,
+              page:1
             }
           }),
           $axios.$get("/api/article/menu", {

@@ -128,7 +128,7 @@ export default {
   margin-top: 32px;
   color: rgba(#000, 0.65);
   .icon-logo {
-    width: 230px;
+    width: 212px;
     height: 32px;
     margin-bottom: 20px;
     img {
@@ -177,7 +177,7 @@ export default {
     margin-top: vw(32);
     .icon-logo {
       margin-left: vw(46);
-      width: vw(460);
+      width: vw(424);
       height: vw(64);
     }
     .website-info {

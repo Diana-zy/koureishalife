@@ -10,8 +10,8 @@
       loading="lazy"
       class="img"
     />
-    <p class="category" v-if="item.category_locale_name || item.category_name">{{
-      capitalizeFirstLetter(item.category_locale_name || item.category_name)
+    <p class="category" v-if="item.seo_category_name || item.category_locale_name || item.category_name">{{
+      capitalizeFirstLetter(item.seo_category_name || item.category_locale_name || item.category_name)
     }}</p>
     <p class="title">{{ item.name }}</p>
     <div class="m-news-author pc-hidden-flex">

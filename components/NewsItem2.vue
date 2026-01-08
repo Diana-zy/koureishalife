@@ -13,8 +13,8 @@
     <p
       class="category"
       :style="{ background: colorList[index] }"
-      v-if="item.category_locale_name || item.category_name"
-      >{{ capitalizeFirstLetter(item.category_locale_name || item.category_name) }}</p
+      v-if="item.seo_category_name || item.category_locale_name || item.category_name"
+      >{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name || item.category_name) }}</p
     >
     <p class="title">{{ item?.name }}</p>
     <div class="m-news-author pc-hidden-flex">
@@ -39,10 +39,10 @@ export default {
   },
   data() {
     return {
-      colorList: ["#C6F3E2", "#F0DFBA", "#C0E8B2", "#D2F0FD", "#FDD8DE"]
+      colorList: ["#C6F3E2", "#C9CDF2", "#C0E8B2", "#D2F0FD", "#FDD8DE"]
     };
+  },mounted() {
   },
-
   methods: {
     capitalizeFirstLetter
   }

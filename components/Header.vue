@@ -182,7 +182,7 @@ export default {
     justify-content: center;
     .logo {
       display: block;
-      width: 288px;
+      width: 265px;
       height: 40px;
       @include bg("logo.png");
       margin-right: 56px;
@@ -303,7 +303,7 @@ export default {
       height: 100%;
       justify-content: start;
       .logo {
-        width: vw(431);
+        width: vw(398);
         height: vw(60);
         @include bg("logo.png");
         margin-right: 0;

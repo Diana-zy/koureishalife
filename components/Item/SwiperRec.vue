@@ -23,7 +23,7 @@
       <!--      />-->
     </div>
     <div class="swiper-rec-tag">
-      <div class="rec-tag">相続税・贈与税</div>
+      <div class="rec-tag" v-if="item.seo_category_name || item.category_locale_name || item.category_name">{{item.seo_category_name || item.category_locale_name || item.category_name}}</div>
     </div>
     <div class="swiper-rec-title">
       {{ item.name }}
