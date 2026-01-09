@@ -537,24 +537,24 @@ export default {
   tr {
     text-align: center;
     padding: 10px;
-    height: 68px;
+    height: 61px;
     td {
       background: rgba(#fd9a25, 0.1);
       border: 2px solid #fff;
-      font-size: 20px;
+      font-size: 14px;
       color: $font5;
     }
     td:first-child {
-      font-weight: bold;
-      font-size: 26px;
+      /*font-weight: bold;*/
+      font-size: 16px;
       color: $font5;
     }
   }
   tr:first-child {
-    th {
-      font-weight: bold;
+    th,td {
+      /*font-weight: bold;*/
       color: $font5;
-      font-size: 26px;
+      font-size: 16px;
       border-bottom: 3px solid rgba($font3, 0.35);
     }
   }
@@ -704,7 +704,7 @@ export default {
     tr:first-child {
       border-collapse: collapse;
       /*border-bottom: vw(2) solid rgba($font3, 0.35);*/
-      th {
+      th,td {
         border-bottom: vw(4) solid rgba($font3, 0.35);
         min-width: vw(200);
         padding: vw(12) vw(32);
