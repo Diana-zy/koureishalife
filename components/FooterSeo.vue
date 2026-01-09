@@ -29,12 +29,22 @@
         <div class="m-hidden-block">関連サービス：</div>
         <ul>
           <li class="link-item">
+<!--            <a v-if="info" :href="`https://twitter.com/intent/tweet?url=${-->
+<!--              window.location.origin + window.location.pathname-->
+<!--            }&text=${info.name}`">X (Twitter)</a>-->
+<!--            <a v-else href="https://x.com/koureishalife">X (Twitter)</a>-->
             <span @click="handleClick('twitter')">X (Twitter) </span>
           </li>
 <!--          <li class="link-item">-->
 <!--            <span data-name="instagram">Instagram </span>-->
 <!--          </li>-->
           <li class="link-item">
+<!--            <a v-if="info && window" :href="`https://www.facebook.com/sharer/sharer.php?u=${-->
+<!--              window.location.origin + window.location.pathname-->
+<!--            }&t=Lung%20Cancer:%20Symptoms,%20Treatments,%20and%20Support%20Resources&picture=https://bunchthings.com/cdn-cgi/image/w=600,f=auto,fit=cover/${-->
+<!--              info.cover-->
+<!--            }&v=3`">Facebook</a>-->
+<!--            <a v-else href="https://www.facebook.com/people/Koureishalife/61585924755675/">Facebook</a>-->
             <span data-name="facebook" @click="handleClick('facebook')">Facebook </span>
           </li>
 <!--          <li class="link-item">-->

@@ -129,9 +129,9 @@ export default {
   },
   head() {
     return {
-      htmlAttrs: {
-        lang: this.newInfo.language
-      },
+      // htmlAttrs: {
+      //   lang: this.newInfo.language
+      // },
       title: this.newInfo.name + " - Koureishalife",
       meta: [
         {

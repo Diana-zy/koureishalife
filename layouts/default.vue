@@ -13,6 +13,9 @@ export default {
   },
   head() {
     return {
+      htmlAttrs: {
+        lang: "ja-JP"
+      },
       script: [
         {
           type: "application/ld+json",
@@ -45,7 +48,7 @@ export default {
       link:[
         {
           rel:'canonical',
-          href:`https://koureishalife.com${this.$nuxt.context.route.path}`
+          href:`https://www.koureishalife.com${this.$nuxt.context.route.path}`
         }
       ],
       __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
