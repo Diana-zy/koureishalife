@@ -4,11 +4,13 @@
       <NuxtImg
         format="auto"
         fit="cover"
-        width="795"
+        width="817"
         height="418"
         :src="item.cover"
         :alt="item.cover_seo_alt"
-        loading="lazy"
+        :loading="index === 0 ? 'eager' : 'lazy'"
+        :fetchpriority="index === 0 ? 'high' : 'low'"
+        :preload="index === 0"
         class="img"
       />
       <!--      <NuxtImg-->
@@ -23,7 +25,11 @@
       <!--      />-->
     </div>
     <div class="swiper-rec-tag">
-      <div class="rec-tag btn-tag" v-if="item.seo_category_name || item.category_locale_name || item.category_name">{{item.seo_category_name || item.category_locale_name || item.category_name}}</div>
+      <div
+        v-if="item.seo_category_name || item.category_locale_name || item.category_name"
+        class="rec-tag btn-tag"
+        >{{ item.seo_category_name || item.category_locale_name || item.category_name }}</div
+      >
     </div>
     <div class="swiper-rec-title">
       {{ item.name }}
@@ -44,6 +50,10 @@ export default {
   props: {
     item: {
       type: Object,
+      required: true
+    },
+    index: {
+      type: Number,
       required: true
     }
   }

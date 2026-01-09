@@ -6,8 +6,7 @@
           <NuxtImg
             format="auto"
             fit="cover"
-            width="366"
-            height="244"
+            width="140"
             :src="item.cover"
             :alt="item.cover_seo_alt"
             loading="lazy"

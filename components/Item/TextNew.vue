@@ -4,14 +4,16 @@
       <NuxtImg
         format="auto"
         fit="cover"
-        width="658"
-        height="440"
+        width="380"
+        height="214"
         :src="item.cover"
         :alt="item.cover_seo_alt"
         loading="lazy"
         class="img"
       />
-      <p class="category btn-tag">{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name) }}</p>
+      <p class="category btn-tag">{{
+        capitalizeFirstLetter(item.seo_category_name || item.category_locale_name)
+      }}</p>
       <p class="title">{{ item.name }}</p>
     </div>
     <div class="pc-hidden-flex m-news-style">

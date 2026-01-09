@@ -3,18 +3,22 @@
     <NuxtImg
       format="auto"
       fit="cover"
-      width="658"
-      height="440"
+      width="380"
+      height="214"
       :src="item?.cover || ''"
       :alt="item?.cover_seo_alt"
       loading="lazy"
       class="img"
     />
     <p
+      v-if="item.seo_category_name || item.category_locale_name || item.category_name"
       class="category btn-tag"
       :style="{ background: colorList[index] }"
-      v-if="item.seo_category_name || item.category_locale_name || item.category_name"
-      >{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name || item.category_name) }}</p
+      >{{
+        capitalizeFirstLetter(
+          item.seo_category_name || item.category_locale_name || item.category_name
+        )
+      }}</p
     >
     <p class="title">{{ item?.name }}</p>
     <div class="m-news-author pc-hidden-flex">
@@ -41,8 +45,8 @@ export default {
     return {
       colorList: ["#C6F3E2", "#C9CDF2", "#C0E8B2", "#D2F0FD", "#FDD8DE"]
     };
-  },mounted() {
   },
+  mounted() {},
   methods: {
     capitalizeFirstLetter
   }

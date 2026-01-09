@@ -11,6 +11,7 @@
               :key="i"
               class="swiper-slide"
               :item="item"
+              :index="i"
             >
             </item-swiper-rec>
           </div>
@@ -46,10 +47,8 @@
 import { directive } from "vue-awesome-swiper";
 import "swiper/css/swiper.min.css";
 import { simulateAFSSearch } from "~/utils/utils";
-import RightSideBox from "../components/RightSideBox";
 
 export default {
-  components: { RightSideBox },
   directives: {
     swiper: directive
   },
@@ -68,7 +67,7 @@ export default {
             params: {
               site_id: env.SITE_ID,
               size: 4,
-              page:1
+              page: 1
             }
           }),
           $axios.$get("/api/article/menu", {
