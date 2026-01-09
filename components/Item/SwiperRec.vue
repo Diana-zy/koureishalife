@@ -114,6 +114,7 @@ export default {
       margin: vw(24) 0 vw(24);
       gap: vw(12);
       .rec-tag {
+        font-size: vw(24);
         padding: vw(12) vw(16);
       }
     }

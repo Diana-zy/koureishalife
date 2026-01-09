@@ -212,8 +212,8 @@ $class-names: ("block", "flex", "grid");
     }
   }
   .btn-tag{
-    padding: vw(12) vw(16);
-    font-size: vw(24);
+    padding: vw(12) vw(16) !important;
+    font-size: vw(24) !important;
     line-height: 1.5 !important;
   }
   main{
