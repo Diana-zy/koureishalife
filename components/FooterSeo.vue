@@ -192,7 +192,14 @@ export default {
     background: #fd9a25;
   }
 }
-
+@media screen and (max-width: 1100px) {
+  .footer {
+    .bottom-info {
+      transform: none;
+      width: 100vw;
+    }
+  }
+}
 @media screen and (max-width: 750px) {
   .footer {
     position: relative;

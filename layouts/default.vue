@@ -19,7 +19,7 @@ export default {
       script: [
         {
           type: "application/ld+json",
-          innerHTML: JSON.stringify({
+          json: {
             "@context": "https://schema.org",
             "@type": "Organization",
             name: "Koureisha Life",
@@ -28,11 +28,11 @@ export default {
             sameAs: this.$sameAs,
             ContactPoint: [],
             parentOrganization: {}
-          })
+          }
         },
         {
           type: "application/ld+json",
-          innerHTML: JSON.stringify({
+          json: {
             "@context": "https://schema.org",
             "@type": "WebSite",
             name: "Koureisha Life",
@@ -42,16 +42,17 @@ export default {
               target: "https://www.koureishalife.com/search/?query={search_term_string}",
               "query-input": "required name=search_term_string"
             }
-          })
+          }
         }
       ],
       link:[
         {
           rel:'canonical',
+          hid: "canonical",
           href:`https://www.koureishalife.com${this.$nuxt.context.route.path}`
         }
       ],
-      __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
+      // __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
     };
   },
   mounted() {

@@ -203,7 +203,7 @@ export default {
       script: [
         {
           type: "application/ld+json",
-          innerHTML: JSON.stringify({
+          json: {
             "@context": "https://schema.org",
             "@type": "NewsArticle",
             articleBody: this.newInfo.content_text,
@@ -235,11 +235,11 @@ export default {
               `https://bunchthings.com/cdn-cgi/image/f=auto,fit=cover/${this.newInfo?.cover}`,
               `https://bunchthings.com/cdn-cgi/image/w=600,f=auto,fit=cover/${this.newInfo?.cover}`
             ]
-          })
+          }
         },
         {
           type: "application/ld+json",
-          innerHTML: JSON.stringify({
+          json:{
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
@@ -268,10 +268,10 @@ export default {
                 }
               }
             ]
-          })
+          }
         }
       ],
-      __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
+      // __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
     };
   },
 

@@ -93,7 +93,7 @@ export default {
       script: [
         {
           type: "application/ld+json",
-          innerHTML: JSON.stringify({
+          json: {
             "@context": "https:\/\/schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
@@ -114,11 +114,11 @@ export default {
                 }
               }
             ]
-          })
+          }
         },
         {
           type: "application/ld+json",
-          innerHTML: JSON.stringify({
+          json: {
             "@context": "https://schema.org",
             "@type": "ItemList",
             itemListElement: [
@@ -128,10 +128,10 @@ export default {
                 url: `https://www.koureishalife.com/detail/${item.path_v2}/`
               }))
             ]
-          })
+          }
         }
       ],
-      __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
+      // __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
     };
   },
   methods: {
