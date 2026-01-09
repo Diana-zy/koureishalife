@@ -89,11 +89,11 @@ export default {
     }
   }
 }
-/*.news-author {
+.news-author {
   display: flex;
   justify-content: space-between;
   margin-top: 6px;
   font-size: 12px;
   @include author-icon(16px, 16px);
-}*/
+}
 </style>
