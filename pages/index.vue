@@ -113,10 +113,6 @@ export default {
     return {
       swiperOption: {
         slidesPerView: "auto",
-        loop: true,
-        autoplay: {
-          delay: 2000
-        },
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev"
@@ -125,66 +121,8 @@ export default {
       input: ""
     };
   },
-  mounted() {
-    // this.handleInitSchema();
-  },
+  mounted() {},
   methods: {
-    //处理Schema
-    handleInitSchema() {
-      const data = {
-        "@context": "https:\\/\\/schema.org",
-        "@type": "WebPage", //组织
-        name: "Koureisha Life", //站点名称
-        url: "https:\\/\\/www.koureishalife.com\\/", //站点的网址
-        //站点logo，不低于112*112像素
-        logo: "https://bunchthings.com/site-logo/koureishalife/koureishalife-logo-144.png",
-        //其他三方网站中的个人资料页
-        sameAs: [
-          "https:\\/\\/www.wikidata.org\\/wiki\\/Q7733312",
-          "https:\\/\\/www.freebase.com\\/m\\/0bmcfp1",
-          "https:\\/\\/en.wikipedia.org\\/wiki\\/The_Family_Handyman",
-          "https:\\/\\/www.facebook.com\\/TheFamilyHandyman",
-          "https:\\/\\/www.instagram.com\\/familyhandyman\\/",
-          "https:\\/\\/www.youtube.com\\/user\\/thefamilyhandyman",
-          "https:\\/\\/www.pinterest.com\\/family_handyman\\/",
-          "https:\\/\\/twitter.com\\/Family_Handyman"
-        ],
-        //联络点
-        ContactPoint: [
-          {
-            "@type": "contactPoint",
-            telephone: "+1-877-732-4438", //电话
-            contactType: "customer service", //联络点的类型
-            contactOption: "TollFree", //该联系点提供的选项
-            areaServed: "US", //提供服务的区域，要英语地区 应该怎么配置
-            availableLanguage: ["English"] //语言
-          },
-          {
-            "@type": "contactPoint",
-            telephone: "+1-877-342-4775",
-            contactType: "technical support",
-            contactOption: "TollFree",
-            areaServed: "US",
-            availableLanguage: ["English"]
-          },
-          {
-            "@type": "contactPoint",
-            telephone: "+1-800-880-3012",
-            contactType: "sales",
-            contactOption: "TollFree",
-            areaServed: "US",
-            availableLanguage: ["English"]
-          }
-        ],
-        //父组织
-        parentOrganization: {
-          "@type": "Corporation",
-          url: "https:\\/\\/www.trustedmediabrands.com\\/",
-          name: "Trusted Media Brands, Inc."
-        }
-      };
-      window.handleCreatScriptSchema(JSON.stringify(data));
-    },
     search() {
       if (this.input.length < 1) {
         this.$globalMethod.showNotification({
@@ -199,9 +137,6 @@ export default {
     clear() {
       this.input = "";
     }
-    // clickWord(words) {
-    //   simulateAFSSearch(words);
-    // }
   }
 };
 </script>
@@ -216,6 +151,7 @@ export default {
   gap: 0px;
 }
 .swiper-box {
+  position: relative;
   overflow: hidden;
   .swiper-button-prev {
     top: 209px;

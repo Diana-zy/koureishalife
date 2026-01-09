@@ -82,14 +82,14 @@ export default {
         params: {
           site_id: env.SITE_ID,
           size: 4,
-          page:1
+          page: 1
         }
       }),
       $axios.$get("/api/article/detail", {
         params: {
           site_id: env.SITE_ID,
           article_id: id,
-          related_num:3,
+          related_num: 3
         }
       }),
       $axios.$get("/api/article/menu", {
@@ -207,7 +207,9 @@ export default {
             "@context": "https://schema.org",
             "@type": "NewsArticle",
             articleBody: this.newInfo.content_text,
-            articleSection: `Home, ${this.newInfo.seo_category_name || this.newInfo.category_locale_name}, ${this.newInfo.name}`,
+            articleSection: `Home, ${
+              this.newInfo.seo_category_name || this.newInfo.category_locale_name
+            }, ${this.newInfo.name}`,
             headline: this.newInfo.seo_title,
             description: this.newInfo.seo_desc,
             datePublished: this.newInfo.updated_at,
@@ -239,7 +241,7 @@ export default {
         },
         {
           type: "application/ld+json",
-          json:{
+          json: {
             "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
@@ -270,7 +272,7 @@ export default {
             ]
           }
         }
-      ],
+      ]
       // __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
     };
   },
@@ -298,98 +300,6 @@ export default {
     }, 0);
   },
   methods: {
-    //处理Schema
-    handleInitSchema() {
-      // 文章主体
-      const data = {
-        "@context": "https:\/\/schema.org",
-        "@type": "NewsArticle",
-        //文章主体的所有内容（正文部分）
-        articleBody: this.newInfo.content_text, //文章归属的板块（参考站是填写的面包屑层级）
-        articleSection: `Home, ${this.newInfo.seo_category_name || this.newInfo.category_locale_name}, ${this.newInfo.name}`,
-        //文章标题
-        headline: this.newInfo.seo_title,
-        //文章描述（参考站是填写的正文上方的一段文本）
-        description: this.newInfo.seo_desc,
-        datePublished: this.newInfo.updated_at, //发布时间
-        dateModified: this.newInfo.updated_at, //修改时间
-        //作者相关
-        author: [
-          {
-            "@type": "Person",
-            name: this.newInfo?.author?.name,
-            // //作者页面    （暂无）
-            // url: "https:\/\/www.familyhandyman.com\/author\/bob-lacivita\/",
-            // //作者卡片里面的内容描述  （暂无）
-            description: this.newInfo?.author?.intro,
-            //作者头像
-            image: `https://bunchthings.com/${this.newInfo?.author?.avatar}`
-            // email: "bobl273@comcast.net" //（暂无）
-          }
-        ],
-        //该文章内容所描述的主要实体所在的页面
-        mainEntityOfPage: {
-          "@type": "WebPage",
-          "@id": `https:${window.getMainDomain()}${window.location.pathname}`
-        },
-        //发布商相关
-        publisher: {
-          "@type": "NewsMediaOrganization",
-          name: "Koureisha Life",
-          url: "https:\/\/www.koureishalife.com",
-          //关于我们About Us
-          publishingPrinciples: "https:\/\/www.koureishalife.com\/us\/",
-          sameAs: [
-            "https:\/\/www.wikidata.org\/wiki\/Q7733312",
-            "https:\/\/www.freebase.com\/m\/0bmcfp1",
-            "https:\/\/en.wikipedia.org\/wiki\/The_Family_Handyman",
-            "https:\/\/www.facebook.com\/TheFamilyHandyman",
-            "https:\/\/www.instagram.com\/familyhandyman\/",
-            "https:\/\/www.youtube.com\/user\/thefamilyhandyman",
-            "https:\/\/www.pinterest.com\/family_handyman\/",
-            "https:\/\/twitter.com\/Family_Handyman"
-          ]
-        },
-        //文章主图的两个尺寸（参考站用的顶部的主图，非文章中间的图片）
-        image: [
-          `https://bunchthings.com/cdn-cgi/image/f=auto,fit=cover/${this.newInfo?.cover}`,
-          `https://bunchthings.com/cdn-cgi/image/w=600,f=auto,fit=cover/${this.newInfo?.cover}`
-        ]
-      };
-      window.handleCreatScriptSchema(JSON.stringify(data));
-      // 面包屑
-      const data1 = {
-        "@context": "https:\/\/schema.org",
-        "@type": "BreadcrumbList",
-        itemListElement: [
-          {
-            "@type": "ListItem",
-            position: 1,
-            item: {
-              "@id": "https:\/\/www.koureishalife.com\/",
-              name: "Home"
-            }
-          },
-          {
-            "@type": "ListItem",
-            position: 2,
-            item: {
-              "@id": `https:\/\/www.koureishalife.com\/category\/${this.newInfo.seo_category_path}\/`,
-              name: this.newInfo.category_name
-            }
-          },
-          {
-            "@type": "ListItem",
-            position: 3,
-            item: {
-              "@id": `https:\/\/www.koureishalife.com${window.location.pathname}`,
-              name: this.newInfo.name
-            }
-          }
-        ]
-      };
-      window.handleCreatScriptSchema(JSON.stringify(data1));
-    },
     scrollToAnchor(anchorId) {
       const target = document.getElementById(anchorId);
       if (!target) return;
@@ -406,10 +316,9 @@ export default {
       window.history.pushState({}, "", `#${anchorId}`);
     },
     handleAdsScript() {
-      if(this.newInfo.no_entry !== 1){
+      if (this.newInfo.no_entry !== 1) {
         this.addAdSenseScript();
       }
-
     },
     addAdSenseScript() {
       // if (window.getCountyByLanguage() !== "Japan") {
@@ -466,11 +375,11 @@ export default {
             window.trackEventToPixel("D_C_AC");
             window.pushEventParamsToGtm("C_AC");
             const hi_user_source = window.getValueByURLOrCookie("hi_source");
-            if(hi_user_source === "unknown"){
+            if (hi_user_source === "unknown") {
               window.dataLayer.push({
-                event: 'Detail_D_C_AC_SEO',
-                SEO_detail:"detail_"+this.id
-              })
+                event: "Detail_D_C_AC_SEO",
+                SEO_detail: "detail_" + this.id
+              });
             }
             try {
               let numberOfKeys = 0;
@@ -587,19 +496,18 @@ export default {
     padding-left: 40px;
   }
   menu,
-  ol{
+  ol {
     list-style: decimal;
     padding-left: 40px;
   }
-  a{
+  a {
     text-decoration: underline;
     color: $color1;
   }
-  p{
+  p {
     margin-bottom: 28px;
   }
-  h2
-  {
+  h2 {
     font-size: 1.2em !important;
   }
 }
@@ -645,7 +553,7 @@ export default {
   width: 100%;
   color: $font1;
   background: rgba(#fd9a25, 0.1);
-  ul{
+  ul {
     padding-left: 0;
   }
   .toc-title {
@@ -736,7 +644,7 @@ export default {
     ul {
       padding-left: vw(32);
     }
-    p{
+    p {
       margin-bottom: vw(32);
     }
   }
@@ -771,7 +679,7 @@ export default {
       font-size: vw(40);
       margin-bottom: vw(24);
     }
-    ul{
+    ul {
       padding-left: 0;
     }
     .toc-list {

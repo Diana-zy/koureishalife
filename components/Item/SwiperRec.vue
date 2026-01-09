@@ -4,25 +4,15 @@
       <NuxtImg
         format="auto"
         fit="cover"
-        width="817"
-        height="418"
+        width="654"
+        height="335"
         :src="item.cover"
         :alt="item.cover_seo_alt"
+        :preload="index === 0"
         :loading="index === 0 ? 'eager' : 'lazy'"
         :fetchpriority="index === 0 ? 'high' : 'low'"
-        :preload="index === 0"
         class="img"
       />
-      <!--      <NuxtImg-->
-      <!--        format="auto"-->
-      <!--        fit="cover"-->
-      <!--        width="658"-->
-      <!--        height="346"-->
-      <!--        :src="item.cover"-->
-      <!--        :alt="item.name"-->
-      <!--        loading="lazy"-->
-      <!--        class="img pc-hidden"-->
-      <!--      />-->
     </div>
     <div class="swiper-rec-tag">
       <div
@@ -67,6 +57,7 @@ export default {
     height: auto;
     .img {
       width: 100%;
+      height: 418px;
       object-fit: cover;
     }
   }

@@ -2,12 +2,10 @@ body {
   color: $font3;
   font-size: 16px;
 }
-h1
-{
+h1 {
   font-size: 1.4em !important;
 }
-h2
-{
+h2 {
   font-size: 1.2em !important;
 }
 .no-scroll {
@@ -27,7 +25,6 @@ main {
 }
 .layout-left {
   flex: 1;
-  //max-width: 795px;
 }
 .content-box {
   flex: 1;
@@ -75,7 +72,6 @@ $class-names: ("block", "flex", "grid");
   }
 }
 .title-new-tag {
-
   position: relative;
   font-family: Helvetica Neue, Helvetica Neue;
   font-size: 24px;
@@ -89,7 +85,7 @@ $class-names: ("block", "flex", "grid");
     position: absolute;
     left: 0;
     top: 0;
-    @include icon(52px,52px,'icon-new-tag.png')
+    @include icon(52px, 52px, "icon-new-tag.png");
   }
 }
 .title-h3 {
@@ -211,14 +207,14 @@ $class-names: ("block", "flex", "grid");
       margin-bottom: vw(10);
     }
   }
-  .btn-tag{
+  .btn-tag {
     padding: vw(12) vw(16) !important;
     font-size: vw(24) !important;
     line-height: 1.5 !important;
   }
-  main{
-    .layout-left{
-      .news-author{
+  main {
+    .layout-left {
+      .news-author {
         display: flex;
         margin-top: vw(8);
         justify-content: space-between;
@@ -226,22 +222,24 @@ $class-names: ("block", "flex", "grid");
         font-weight: 300;
         line-height: vw(26);
         padding-bottom: vw(24);
-        font-family: "Noto Sans SC","Noto Sans JP", "Lucida Grande", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-        @include author-icon(vw(26), vw(26));
+        font-family: "Noto Sans SC", "Noto Sans JP", "Lucida Grande", "Hiragino Kaku Gothic ProN",
+          Meiryo, sans-serif;
+        @include author-icon(vw(28), vw(26));
       }
-    .news-style-2 {
-      .news-author{
-        display: flex;
-        margin-top: vw(8);
-        justify-content: space-between;
-        font-size: vw(26);
-        line-height: vw(26);
-        font-weight: 300;
-        padding-bottom: vw(24);
-        font-family: "Noto Sans JP", "Lucida Grande", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
-        @include author-icon(vw(26), vw(26));
+      .news-style-2 {
+        .news-author {
+          display: flex;
+          margin-top: vw(8);
+          justify-content: space-between;
+          font-size: vw(26);
+          line-height: vw(26);
+          font-weight: 300;
+          padding-bottom: vw(24);
+          font-family: "Noto Sans JP", "Lucida Grande", "Hiragino Kaku Gothic ProN", Meiryo,
+            sans-serif;
+          @include author-icon(vw(26), vw(26));
+        }
       }
-    }
     }
   }
   body {
@@ -269,7 +267,7 @@ $class-names: ("block", "flex", "grid");
     margin-bottom: vw(20);
     padding-left: vw(76);
     &::before {
-      @include icon(vw(60),vw(60),'icon-new-tag.png')
+      @include icon(vw(60), vw(60), "icon-new-tag.png");
     }
   }
   .title-h3 {

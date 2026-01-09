@@ -36,9 +36,9 @@ export default {
           params: {
             site_id: env.SITE_ID,
             size: 4,
-            page:1
+            page: 1
           }
-        }),
+        })
       ]);
       // 返回多个接口的数据
       return {
@@ -54,7 +54,7 @@ export default {
       searchResultNews: [], // 新闻列表
       input: "", // 搜索输入
       channelId: "", // 频道 ID
-      isShowResults: false, // 是否显示搜索结果
+      isShowResults: false // 是否显示搜索结果
     };
   },
   computed: {
@@ -69,15 +69,10 @@ export default {
     // window.handleRequestAdByChannel("first", 5, true);
     const searchParams = new URLSearchParams(window.location.search);
     this.channelId = searchParams.has("channel") ? searchParams.get("channel") : "";
-    if (window.getDetailIsClickAc()) {
-      window.dataLayer.push({
-        event: "S_PL"
-      });
+    if (searchParams.has("from") && searchParams.get("from") === "detail") {
+      window.fromDetailId = window.getCookie("SEO_detail");
     }
-    if(searchParams.has("from") && searchParams.get("from") === 'detail'){
-      window.fromDetailId= window.getCookie('SEO_detail')
-    }
-    window.setCookie('SEO_detail',"")
+    window.setCookie("SEO_detail", "");
 
     this.input = this.$route.query.query || "";
     // if (window.isLoadAd === true) {
@@ -161,12 +156,7 @@ export default {
             if (hi_user_source === "unknown") {
               window.dataLayer.push({
                 event: "Detail_C_AR_C_SEO",
-                SEO_detail: window.fromDetailId || ''
-              });
-            }
-            if (window.getDetailIsClickAc()) {
-              window.dataLayer.push({
-                event: "C_AR_C"
+                SEO_detail: window.fromDetailId || ""
               });
             }
             try {
