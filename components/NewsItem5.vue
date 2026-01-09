@@ -96,7 +96,7 @@ export default {
       width: 100%;
       height: auto;
       object-fit: cover;
-      border-radius: vw(16);
+      border-radius: 0;
       margin-right: 0;
     }
     .category {
