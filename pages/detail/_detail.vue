@@ -786,6 +786,7 @@ export default {
     display: grid;
     grid-template-columns: repeat(1, 1fr);
     gap: vw(40);
+    padding-bottom: vw(32);
   }
 }
 </style>

@@ -122,6 +122,7 @@ export default {
     handleClickMask(){
       this.showSearch = false;
       this.isSidebarOpen = false;
+      document.body.classList.remove("no-scroll");
     },
     search() {
       if (this.input.length < 1) {

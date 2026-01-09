@@ -60,8 +60,8 @@ export default {
   .title {
     margin-top: 10px;
     font-size: 16px;
-    font-family: "se3";
     line-height: 22px;
+    font-weight: bold;
     @include ellipsis(3);
     transition: color 0.2s;
   }
@@ -108,11 +108,12 @@ export default {
       margin: vw(20) 0 0;
     }
     .title {
+      font-family: "Noto Sans SC";
       margin-top: vw(16);
       /*margin: vw(16) 0;*/
-      font-size: vw(26);
-      line-height: vw(36);
-      min-height: vw(106);
+      font-size: vw(36);
+      line-height: vw(48);
+      min-height: vw(96);
       @include ellipsis(2)
     }
     .m-news-author {

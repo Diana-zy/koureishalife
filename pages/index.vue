@@ -113,9 +113,10 @@ export default {
     return {
       swiperOption: {
         slidesPerView: "auto",
-        // autoplay: {
-        //   delay: 3000
-        // },
+        loop: true,
+        autoplay: {
+          delay: 2000
+        },
         navigation: {
           nextEl: ".swiper-button-next",
           prevEl: ".swiper-button-prev"
@@ -435,7 +436,7 @@ export default {
     /*margin-right: vw(32);*/
   }
   .news-box-2 {
-    gap: vw(14);
+    gap: vw(28) vw(14);
   }
   .news-box-new {
     grid-template-columns: repeat(1, 1fr);

@@ -127,9 +127,9 @@ export default {
       margin-top: vw(16);
       /*margin: vw(16) 0;*/
       font-size: vw(32);
-      line-height: vw(36);
-      min-height: vw(106);
-      @include ellipsis(2);
+      line-height: 1.5;
+      min-height: vw(144);
+      @include ellipsis(3);
     }
     .m-news-author {
       display: flex;

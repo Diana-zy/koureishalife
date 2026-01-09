@@ -17,8 +17,8 @@ export default async function ({ $axios, env, isServer }, inject) {
     inject("sameAs", [
       // "https://www.facebook.com/people/Seniorsbetter/61586174372459/",
       // "https://x.com/seniorsbetter",
-      // "https:\\/\\/www.freebase.com\\/m\\/0bmcfp1",
-      // "https:\\/\\/en.wikipedia.org\\/wiki\\/The_Family_Handyman",
+      "https://x.com/koureishalife",
+      "https://www.facebook.com/people/Koureishalife/61585924755675/",
       // "https:\\/\\/www.facebook.com\\/TheFamilyHandyman",
       // "https:\\/\\/www.instagram.com\\/familyhandyman\\/",
       // "https:\\/\\/www.youtube.com\\/user\\/thefamilyhandyman",

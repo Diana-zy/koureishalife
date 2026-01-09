@@ -5,8 +5,8 @@
         <img :src="icon" alt="" />
       </div>
       <div class="website-info">
-      <div>「高齢者ライフ」は、シニア世代の皆様が直面するお金や暮らしの不安を解消し、より豊かで安心なセカンドライフを送るための総合情報サイトです</div>
-      <div> 保険の見直し、相続対策、年金の仕組みといった専門的な経済知識から、日々の生活を彩るライフスタイルや再就職のヒントまで、シニアライフに役立つ最新资讯を分かりやすくお届けします</div>
+      <div>「高齢者ライフ」は、シニア世代の皆様が直面するお金や暮らしの不安を解消し、より豊かで安心なセカンドライフを送るための総合情報サイトです。</div>
+      <div> 保険の見直し、相続対策、年金の仕組みといった専門的な経済知識から、日々の生活を彩るライフスタイルや再就職のヒントまで、シニアライフに役立つ最新资讯を分かりやすくお届けします。</div>
       </div
       >
       <div class="link-info">
@@ -119,14 +119,14 @@ export default {
       } else{
         let url;
         switch (type) {
-          // case "facebook":
-          //   url = `https://www.facebook.com/people/Seniorsbetter/61586174372459/`;
-          //   window.open(url,'_blank');
-          //   break;
-          // case "twitter":
-          //   url = ``;
-          //   window.open(url);
-          //   break;
+          case "facebook":
+            url = `https://www.facebook.com/people/Koureishalife/61585924755675/`;
+            window.open(url,'_blank');
+            break;
+          case "twitter":
+            url = `https://x.com/koureishalife`;
+            window.open(url,'_blank');
+            break;
         }
       }
     }
@@ -197,7 +197,7 @@ export default {
       line-height: 1.5;
       font-size: vw(28);
       div:first-child{
-        margin-bottom: vw(32)
+        margin-bottom: vw(24)
       }
     }
     .link-info {

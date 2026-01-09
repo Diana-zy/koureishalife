@@ -226,6 +226,7 @@ $class-names: ("block", "flex", "grid");
         font-weight: 300;
         line-height: vw(26);
         padding-bottom: vw(24);
+        font-family: "Noto Sans SC","Noto Sans JP", "Lucida Grande", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
         @include author-icon(vw(28), vw(26));
       }
     .news-style-2 {
@@ -237,6 +238,7 @@ $class-names: ("block", "flex", "grid");
         line-height: vw(26);
         font-weight: 300;
         padding-bottom: vw(24);
+        font-family: "Noto Sans JP", "Lucida Grande", "Hiragino Kaku Gothic ProN", Meiryo, sans-serif;
         @include author-icon(vw(26), vw(26));
       }
     }

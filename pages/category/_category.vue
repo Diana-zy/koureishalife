@@ -151,6 +151,7 @@ export default {
 }
 @media screen and (max-width: 750px) {
   ::v-deep .news-box-4 {
+    padding-bottom: vw(32);
     .load-list-content {
       grid-template-columns: repeat(1, 1fr);
       gap: vw(52);
