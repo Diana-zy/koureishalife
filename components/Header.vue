@@ -43,7 +43,7 @@
             </transition>
             <transition name="slide">
               <div class="menu-nav-list" v-show="showSearch">
-                <div class="search-box-nav">
+                <div class="search-box-nav" @click.stop="handleClick">
                   <input
                     v-model="input"
                     placeholder="ウェブ検索"
@@ -154,9 +154,10 @@ export default {
     closeSidebar() {
       this.isSidebarOpen = false;
     },
+    handleClick(){},
     clear() {
       this.input = "";
-    }
+    },
     // 清空热词
   }
 };
