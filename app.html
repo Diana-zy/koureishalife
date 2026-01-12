@@ -248,7 +248,6 @@
       }
     </script>
     <script>
-      /* eslint-disable no-unused-vars */
       function getMainDomain() {
         const url = window.location.hostname;
         const parts = url.split(".");
@@ -654,9 +653,6 @@
         }
       });
     </script>
-    <!-- <script src="/afsChannelTrackEvent.js"></script>
-    <script src="/afsCommonsEvent.js"></script>
-    <script src="/afsTrafficDataMonitor.js"></script> -->
     <script>
       const searchParams = new URLSearchParams(window.location.search);
       const ttclid = searchParams.get("ttclid");
@@ -675,17 +671,16 @@
         });
       };
     </script>
-    <script async="async" src="https://www.google.com/adsense/search/ads.js">
-      </scrip>
-          <script type="text/javascript" charset="utf-8">
-            (function (g, o) {
-              (g[o] =
-                g[o] ||
-                function () {
-                  (g[o]["q"] = g[o]["q"] || []).push(arguments);
-                }),
-                (g[o]["t"] = 1 * new Date());
-            })(window, "_googCsa");
+    <script async="async" src="https://www.google.com/adsense/search/ads.js"></script>
+    <script type="text/javascript" charset="utf-8">
+      (function (g, o) {
+        (g[o] =
+          g[o] ||
+          function () {
+            (g[o]["q"] = g[o]["q"] || []).push(arguments);
+          }),
+          (g[o]["t"] = 1 * new Date());
+      })(window, "_googCsa");
     </script>
 
     <!-- Google tag (gtag.js) -->
@@ -712,7 +707,9 @@
 
       gtag("config", "G-Z2NV94794K");
 
+      //拦截fetch
       window.interceptGaFetch();
+
       //seo自然流量计时
       (function (uuid) {
         let new_time = new Date().getTime();
