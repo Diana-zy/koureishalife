@@ -7,10 +7,14 @@
       height="440"
       :src="item.cover"
       :alt="item.cover_seo_alt"
-      loading="lazy"
+      :loading="index === 0 ? 'eager' : 'lazy'"
+      :preload="index === 0"
+      :fetchpriority="index === 0 ? 'high' : 'low'"
       class="img"
     />
-    <p class="category btn-tag" v-if="item.seo_category_name || item.category_locale_name">{{ capitalizeFirstLetter(item.seo_category_name || item.category_locale_name) }}</p>
+    <p class="category btn-tag" v-if="item.seo_category_name || item.category_locale_name">{{
+      capitalizeFirstLetter(item.seo_category_name || item.category_locale_name)
+    }}</p>
     <p class="title">{{ item.name }}</p>
     <div class="news-author">
       <div>{{ item.author.name }}</div>
@@ -26,6 +30,10 @@ export default {
     item: {
       type: Object,
       required: true
+    },
+    index: {
+      type: Number,
+      default: 0
     }
   },
 

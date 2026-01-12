@@ -94,14 +94,14 @@ export default {
         {
           type: "application/ld+json",
           json: {
-            "@context": "https:\/\/schema.org",
+            "@context": "https://schema.org",
             "@type": "BreadcrumbList",
             itemListElement: [
               {
                 "@type": "ListItem",
                 position: 1,
                 item: {
-                  "@id": "https:\/\/www.koureishalife.com\/",
+                  "@id": "https://www.koureishalife.com/",
                   name: "Home"
                 }
               },
