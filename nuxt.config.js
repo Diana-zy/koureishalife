@@ -20,8 +20,8 @@ export default {
       );
       const path = await pathData.json();
       const categoryPaths = path.data.seo_category.map((item) => `/category/${item}/`);
-      // 新格式URL: /分类slug/文章slug-id/ (URL层级优化)
-      const detailPaths = path.data.detail.map((item) => `/${item}/`);
+      // URL层级优化：保持 /detail/前缀，后端返回的path_v2已包含分类slug
+      const detailPaths = path.data.detail.map((item) => `/detail/${item}/`);
       const urls = [...categoryPaths, ...detailPaths];
       return urls;
     }

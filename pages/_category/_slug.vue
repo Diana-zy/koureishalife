@@ -183,5 +183,5 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-@import "~/assets/css/detail.scss";
+// 样式在页面组件中直接定义，复用 detail 页面的样式结构
 </style>

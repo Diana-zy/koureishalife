@@ -12,6 +12,16 @@
               <div>{{ newInfo.updated_at }}</div>
             </div>
             <div class="news-detail first_paragraph">{{ newInfo.first_paragraph }}</div>
+            
+            <!-- 文章摘要框 - SEO+GEO优化 -->
+            <div class="article-summary" v-if="newInfo.seo_desc">
+              <div class="summary-icon">📋</div>
+              <div class="summary-content">
+                <h3 class="summary-title">この記事の要約</h3>
+                <p class="summary-text">{{ newInfo.seo_desc }}</p>
+              </div>
+            </div>
+            
             <div id="relatedsearches1"> </div>
             <aside class="toc-container" v-if="toc.length">
               <h3 class="toc-title">この記事の内容</h3>
@@ -42,6 +52,17 @@
             <!-- eslint-disable vue/no-v-html -->
             <div class="news-detail" v-html="htmlWithAnchor"></div>
             <!--eslint-enable-->
+            
+            <!-- FAQ区块 - GEO优化 -->
+            <section class="faq-section" v-if="articleFaqs && articleFaqs.length">
+              <h2 class="faq-title">関連質問</h2>
+              <div class="faq-list">
+                <div v-for="(faq, index) in articleFaqs" :key="index" class="faq-item">
+                  <h3 class="faq-question">{{ faq.question }}</h3>
+                  <p class="faq-answer">{{ faq.answer }}</p>
+                </div>
+              </div>
+            </section>
           </article>
           <section v-if="newInfo?.related_articles?.length">
             <h3 class="title-h2">関連記事</h3>
@@ -111,6 +132,22 @@ export default {
 
     const mixArray = allResponse?.list?.slice();
 
+    // 模拟FAQ数据（等后端API支持faqs字段后替换）
+    const articleFaqs = data.faqs || [
+      {
+        question: "この文章の内容について、もっと詳しく知りたいですか？",
+        answer: "本站点は老後資金準備に関する最新情報を提供ています。相关文章为您详细介绍。"
+      },
+      {
+        question: "老後の資金準備はいつから始めるべきですか？",
+        answer: "一般的に、30代から老後の資金準備を始めることが推奨されています。早ければ早いほど、複利効果により 적은 부담で目標を達成できます。"
+      },
+      {
+        question: "老後資金についての更多信息はどこで見つけられますか？",
+        answer: "本站点のカテゴリ页面，您可以找到更多关于老後資金準備的相关文章。"
+      }
+    ];
+
     return {
       newInfo: data,
       all: allResponse,
@@ -119,7 +156,8 @@ export default {
       id,
       htmlWithAnchor,
       recNews: recNewsResponse,
-      trendingNews: trendingNewsResponse
+      trendingNews: trendingNewsResponse,
+      articleFaqs
     };
   },
   data() {
@@ -201,6 +239,22 @@ export default {
         }
       ],
       script: [
+        // FAQPage Schema - GEO优化
+        {
+          type: "application/ld+json",
+          json: {
+            "@context": "https://schema.org",
+            "@type": "FAQPage",
+            mainEntity: this.articleFaqs.map(faq => ({
+              "@type": "Question",
+              name: faq.question,
+              acceptedAnswer: {
+                "@type": "Answer",
+                text: faq.answer
+              }
+            }))
+          }
+        },
         {
           type: "application/ld+json",
           json: {
@@ -538,6 +592,44 @@ export default {
   /*line-height: 19px;*/
   margin-bottom: 28px;
 }
+
+/* 文章摘要框 - SEO+GEO优化 */
+.article-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 20px;
+  margin: 24px 0;
+  background: linear-gradient(135deg, #fff9e6 0%, #fff5d6 100%);
+  border-left: 4px solid #fd9a25;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+}
+
+.summary-icon {
+  font-size: 28px;
+  flex-shrink: 0;
+  line-height: 1.4;
+}
+
+.summary-content {
+  flex: 1;
+}
+
+.summary-title {
+  font-size: 16px;
+  font-weight: bold;
+  color: #b8860b;
+  margin: 0 0 8px 0;
+  line-height: 1.4;
+}
+
+.summary-text {
+  font-size: 14px;
+  color: #5a5a5a;
+  line-height: 1.6;
+  margin: 0;
+}
 .google-ad-preload {
   margin-bottom: 4px;
 }
@@ -661,6 +753,27 @@ export default {
     color: rgba(23, 23, 23, 0.8);
     line-height: vw(44);
     margin-bottom: vw(32);
+  }
+  
+  /* 文章摘要框 - 移动端适配 */
+  .article-summary {
+    flex-direction: column;
+    gap: 12px;
+    padding: vw(24);
+    margin: vw(24) 0;
+  }
+  
+  .summary-icon {
+    font-size: vw(40);
+  }
+  
+  .summary-title {
+    font-size: vw(28);
+  }
+  
+  .summary-text {
+    font-size: vw(26);
+    line-height: vw(38);
   }
   .google-ad-preload {
     margin-bottom: vw(10);

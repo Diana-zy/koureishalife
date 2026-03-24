@@ -278,3 +278,82 @@ $class-names: ("block", "flex", "grid");
     color: $font3;
   }
 }
+
+// FAQ Section - GEO优化
+.faq-section {
+  margin-top: 40px;
+  padding: 24px;
+  background-color: #f8f9fa;
+  border-radius: 8px;
+  border-left: 4px solid $color1;
+  
+  .faq-title {
+    font-family: "hem";
+    font-size: 20px;
+    margin-bottom: 20px;
+    color: $font1;
+  }
+  
+  .faq-list {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  
+  .faq-item {
+    background: white;
+    padding: 16px;
+    border-radius: 6px;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    
+    .faq-question {
+      font-size: 16px;
+      font-weight: bold;
+      color: $font1;
+      margin-bottom: 8px;
+      line-height: 1.5;
+      
+      &::before {
+        content: "Q. ";
+        color: $color1;
+      }
+    }
+    
+    .faq-answer {
+      font-size: 14px;
+      color: $font3;
+      line-height: 1.7;
+      margin: 0;
+      
+      &::before {
+        content: "A. ";
+        color: #666;
+        font-weight: bold;
+      }
+    }
+  }
+}
+
+// 移动端适配
+@media (max-width: 768px) {
+  .faq-section {
+    margin-top: 24px;
+    padding: 16px;
+    
+    .faq-title {
+      font-size: 18px;
+    }
+    
+    .faq-item {
+      padding: 12px;
+      
+      .faq-question {
+        font-size: 15px;
+      }
+      
+      .faq-answer {
+        font-size: 13px;
+      }
+    }
+  }
+}
