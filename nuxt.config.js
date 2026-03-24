@@ -20,7 +20,8 @@ export default {
       );
       const path = await pathData.json();
       const categoryPaths = path.data.seo_category.map((item) => `/category/${item}/`);
-      const detailPaths = path.data.detail.map((item) => `/detail/${item}/`);
+      // 新格式URL: /分类slug/文章slug-id/ (URL层级优化)
+      const detailPaths = path.data.detail.map((item) => `/${item}/`);
       const urls = [...categoryPaths, ...detailPaths];
       return urls;
     }
@@ -77,7 +78,7 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
   image: {
-    provider: "cloudflare",
+    provider: "static",
     cloudflare: {
       baseURL: "https://bunchthings.com"
     }
@@ -89,7 +90,7 @@ export default {
     "~/plugins/nav-data"
   ],
   components: true,
-  buildModules: ["@nuxtjs/style-resources", "@nuxt/image", "@nuxtjs/pwa", "@nuxtjs/sitemap"],
+  buildModules: ["@nuxtjs/style-resources", "@nuxtjs/pwa", "@nuxtjs/sitemap"],
   css: ["@/assets/css/fonts.css", "@/assets/css/reset.css", "@/assets/css/common.scss"],
   styleResources: {
     scss: ["~/assets/css/_mixins.scss"]
