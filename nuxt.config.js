@@ -78,7 +78,7 @@ export default {
     link: [{ rel: "icon", type: "image/x-icon", href: "/favicon.ico" }]
   },
   image: {
-    provider: "static",
+    provider: "cloudflare",
     cloudflare: {
       baseURL: "https://bunchthings.com"
     }
@@ -90,7 +90,7 @@ export default {
     "~/plugins/nav-data"
   ],
   components: true,
-  buildModules: ["@nuxtjs/style-resources", "@nuxtjs/pwa", "@nuxtjs/sitemap"],
+  buildModules: ["@nuxtjs/style-resources", "@nuxt/image","@nuxtjs/pwa", "@nuxtjs/sitemap"],
   css: ["@/assets/css/fonts.css", "@/assets/css/reset.css", "@/assets/css/common.scss"],
   styleResources: {
     scss: ["~/assets/css/_mixins.scss"]
