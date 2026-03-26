@@ -107,6 +107,13 @@ export default {
       };
     } catch (error) {
       console.error("Error fetching data:", error);
+      // 返回默认数据避免页面崩溃
+      return {
+        recNews: null,
+        trendingNews: null,
+        allNews: null,
+        categoryList: []
+      };
     }
   },
   data() {

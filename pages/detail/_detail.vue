@@ -5,15 +5,15 @@
       <div class="layout-left">
         <div class="page-layout">
           <breadcrumb :info="newInfo"></breadcrumb>
-          <article class="article">
+          <article class="article" v-if="newInfo">
             <h1 class="article-title" style="">{{ newInfo.name }}</h1>
             <div class="news-author">
-              <div>{{ newInfo.author.name }}</div>
+              <div>{{ newInfo.author?.name }}</div>
               <div>{{ newInfo.updated_at }}</div>
             </div>
             <div class="news-detail first_paragraph">{{ newInfo.first_paragraph }}</div>
-            
-            <!-- 文章摘要框 - SEO+GEO优化 -->
+
+            <!-- 文章摘要框 - SEO+GEO 优化 -->
             <div class="article-summary" v-if="newInfo.seo_desc">
               <div class="summary-icon">📋</div>
               <div class="summary-content">
@@ -21,14 +21,12 @@
                 <p class="summary-text">{{ newInfo.seo_desc }}</p>
               </div>
             </div>
-            
+
             <div id="relatedsearches1"> </div>
             <aside class="toc-container" v-if="toc.length">
               <h3 class="toc-title">この記事の内容</h3>
               <nav class="toc-nav">
                 <ul class="toc-list">
-                  <!-- 两种方式都行 -->
-                  <!--                <a v-for="item in toc" :key="item.id" :href="`#${item.id}`">{{ item.text }}</a>-->
                   <li
                     v-for="item in toc"
                     :key="item.id"
@@ -52,8 +50,8 @@
             <!-- eslint-disable vue/no-v-html -->
             <div class="news-detail" v-html="htmlWithAnchor"></div>
             <!--eslint-enable-->
-            
-            <!-- FAQ区块 - GEO优化 -->
+
+            <!-- FAQ 区块 - GEO 优化 -->
             <section class="faq-section" v-if="articleFaqs && articleFaqs.length">
               <h2 class="faq-title">関連質問</h2>
               <div class="faq-list">
@@ -77,7 +75,7 @@
         <right-side-box :rec-news="trendingNews?.list" :trending-news="recNews?.list" />
       </div>
     </main>
-    <footer-seo :info="newInfo" />
+    <footer-seo :info="newInfo || {}" />
   </div>
 </template>
 
@@ -85,6 +83,7 @@
 import { shuffleArray } from "../../utils/utils";
 import Breadcrumb from "../../components/Breadcrumb";
 import { processHtmlWithToc, generateNestedToc } from "../../utils/cheerio-toc.js";
+
 export default {
   components: { Breadcrumb },
   async asyncData({ $axios, params, env }) {
@@ -92,73 +91,91 @@ export default {
     const lastDashIndex = path.lastIndexOf("-");
     const id = path.substring(lastDashIndex + 1, path.length);
 
-    const [recNewsResponse, trendingNewsResponse, data, allResponse] = await Promise.all([
-      $axios.$get("/api/article/menu", {
-        params: {
-          site_id: env.SITE_ID,
-          mod_id: "rec"
-        }
-      }),
-      $axios.$get("/api/article/get_all_articles", {
-        params: {
-          site_id: env.SITE_ID,
-          size: 4,
-          page: 1
-        }
-      }),
-      $axios.$get("/api/article/detail", {
-        params: {
-          site_id: env.SITE_ID,
-          article_id: id,
-          related_num: 3
-        }
-      }),
-      $axios.$get("/api/article/menu", {
-        params: {
-          site_id: env.SITE_ID,
-          mod_id: "all",
-          page: 1,
-          size: 20
-        }
-      })
-    ]);
-    data.content = data.content.replace(/font-family:\s*['"]?宋体['"]?;/g, "");
-    data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
-      return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
-    });
+    try {
+      const [recNewsResponse, trendingNewsResponse, data, allResponse] = await Promise.all([
+        $axios.$get("/api/article/menu", {
+          params: {
+            site_id: env.SITE_ID,
+            mod_id: "rec"
+          }
+        }),
+        $axios.$get("/api/article/get_all_articles", {
+          params: {
+            site_id: env.SITE_ID,
+            size: 4,
+            page: 1
+          }
+        }),
+        $axios.$get("/api/article/detail", {
+          params: {
+            site_id: env.SITE_ID,
+            article_id: id,
+            related_num: 3
+          }
+        }),
+        $axios.$get("/api/article/menu", {
+          params: {
+            site_id: env.SITE_ID,
+            mod_id: "all",
+            page: 1,
+            size: 20
+          }
+        })
+      ]);
 
-    const { toc: flatToc, htmlWithAnchor } = processHtmlWithToc(data.content, [2]);
-    const toc = generateNestedToc(flatToc);
+      // 处理文章内容
+      if (data?.content) {
+        data.content = data.content.replace(/font-family:\s*['"]? 宋体 ['"]?;/g, "");
+        data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
+          return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
+        });
 
-    const mixArray = allResponse?.list?.slice();
+        const { toc: flatToc, htmlWithAnchor } = processHtmlWithToc(data.content, [2]);
+        const toc = generateNestedToc(flatToc);
 
-    // 模拟FAQ数据（等后端API支持faqs字段后替换）
-    const articleFaqs = data.faqs || [
-      {
-        question: "この文章の内容について、もっと詳しく知りたいですか？",
-        answer: "本站点は老後資金準備に関する最新情報を提供ています。相关文章为您详细介绍。"
-      },
-      {
-        question: "老後の資金準備はいつから始めるべきですか？",
-        answer: "一般的に、30代から老後の資金準備を始めることが推奨されています。早ければ早いほど、複利効果により 적은 부담で目標を達成できます。"
-      },
-      {
-        question: "老後資金についての更多信息はどこで見つけられますか？",
-        answer: "本站点のカテゴリ页面，您可以找到更多关于老後資金準備的相关文章。"
+        const articleFaqs = data.faqs || [
+          {
+            question: "この文章の内容について、もっと詳しく知りたいですか？",
+            answer: "本站点は老後資金準備に関する最新情報を提供ています。相关文章为您详细介绍。"
+          },
+          {
+            question: "老後の資金準備はいつから始めるべきですか？",
+            answer: "一般的に、30 代から老後の資金準備を始めることが推奨されています。早ければ早いほど、複利効果により 적은 부담 で目標を達成できます。"
+          },
+          {
+            question: "老後資金についての更多信息はどこで見つけられますか？",
+            answer: "本站点のカテゴリ页面，您可以找到更多关于老後資金準備的相关文章。"
+          }
+        ];
+
+        return {
+          newInfo: data,
+          all: allResponse,
+          floatArray: shuffleArray(allResponse?.list?.slice() || []),
+          toc,
+          id,
+          htmlWithAnchor,
+          recNews: recNewsResponse,
+          trendingNews: trendingNewsResponse,
+          articleFaqs
+        };
+      } else {
+        throw new Error("Article data not found");
       }
-    ];
-
-    return {
-      newInfo: data,
-      all: allResponse,
-      floatArray: shuffleArray(mixArray),
-      toc,
-      id,
-      htmlWithAnchor,
-      recNews: recNewsResponse,
-      trendingNews: trendingNewsResponse,
-      articleFaqs
-    };
+    } catch (error) {
+      console.error("Error fetching data:", error);
+      return {
+        newInfo: null,
+        all: null,
+        floatArray: [],
+        toc: [],
+        id,
+        htmlWithAnchor: "",
+        recNews: null,
+        trendingNews: null,
+        articleFaqs: []
+      };
+    }
   },
   data() {
     return {
@@ -167,40 +184,32 @@ export default {
   },
   head() {
     return {
-      // htmlAttrs: {
-      //   lang: this.newInfo.language
-      // },
-      title: this.newInfo.name + " - Koureishalife",
+      title: this.newInfo?.name ? this.newInfo.name + " - Koureishalife" : "Koureishalife",
       meta: [
         {
           hid: "description",
           name: "description",
-          content: this.newInfo.seo_desc
+          content: this.newInfo?.seo_desc
         },
-        // {
-        //   hid: "keywords",
-        //   name: "keywords",
-        //   content: this.newInfo.terms
-        // },
         {
           hid: "og:title",
           property: "og:title",
-          content: this.newInfo.seo_title
+          content: this.newInfo?.seo_title
         },
         {
           hid: "og:description",
           property: "og:description",
-          content: this.newInfo.seo_desc
+          content: this.newInfo?.seo_desc
         },
         {
           hid: "og:url",
           property: "og:url",
-          content: `https://koureishalife.com/detail/${this.newInfo.path_v2}/`
+          content: `https://koureishalife.com/detail/${this.newInfo?.path_v2}/`
         },
         {
           hid: "og:locale",
           property: "og:locale",
-          content: this.newInfo.language
+          content: this.newInfo?.language
         },
         {
           hid: "og:image",
@@ -220,32 +229,31 @@ export default {
         {
           hid: "twitter:title",
           property: "twitter:title",
-          content: this.newInfo.seo_title
+          content: this.newInfo?.seo_title
         },
         {
           hid: "twitter:description",
           property: "twitter:description",
-          content: this.newInfo.seo_desc
+          content: this.newInfo?.seo_desc
         },
         {
           hid: "twitter:url",
           property: "twitter:url",
-          content: `https://koureishalife.com/detail/${this.newInfo.path_v2}/`
+          content: `https://koureishalife.com/detail/${this.newInfo?.path_v2}/`
         },
         {
           hid: "twitter:locale",
           property: "twitter:locale",
-          content: this.newInfo.language
+          content: this.newInfo?.language
         }
       ],
       script: [
-        // FAQPage Schema - GEO优化
         {
           type: "application/ld+json",
           json: {
             "@context": "https://schema.org",
             "@type": "FAQPage",
-            mainEntity: this.articleFaqs.map(faq => ({
+            mainEntity: (this.articleFaqs || []).map(faq => ({
               "@type": "Question",
               name: faq.question,
               acceptedAnswer: {
@@ -260,25 +268,25 @@ export default {
           json: {
             "@context": "https://schema.org",
             "@type": "NewsArticle",
-            articleBody: this.newInfo.content_text,
+            articleBody: this.newInfo?.content_text || "",
             articleSection: `Home, ${
-              this.newInfo.seo_category_name || this.newInfo.category_locale_name
-            }, ${this.newInfo.name}`,
-            headline: this.newInfo.seo_title,
-            description: this.newInfo.seo_desc,
-            datePublished: this.newInfo.updated_at,
-            dateModified: this.newInfo.updated_at,
+              this.newInfo?.seo_category_name || this.newInfo?.category_locale_name || ""
+            }, ${this.newInfo?.name || ""}`,
+            headline: this.newInfo?.seo_title || "",
+            description: this.newInfo?.seo_desc || "",
+            datePublished: this.newInfo?.updated_at || "",
+            dateModified: this.newInfo?.updated_at || "",
             author: [
               {
                 "@type": "Person",
-                name: this.newInfo?.author?.name,
-                description: this.newInfo?.author?.intro,
-                image: `https://bunchthings.com/${this.newInfo?.author?.avatar}`
+                name: this.newInfo?.author?.name || "",
+                description: this.newInfo?.author?.intro || "",
+                image: `https://bunchthings.com/${this.newInfo?.author?.avatar || ""}`
               }
             ],
             mainEntityOfPage: {
               "@type": "WebPage",
-              "@id": `https://www.koureishalife.com/detail/${this.newInfo.path_v2}/`
+              "@id": `https://www.koureishalife.com/detail/${this.newInfo?.path_v2 || ""}/`
             },
             publisher: {
               "@type": "NewsMediaOrganization",
@@ -288,8 +296,8 @@ export default {
               sameAs: this.$sameAs
             },
             image: [
-              `https://bunchthings.com/cdn-cgi/image/f=auto,fit=cover/${this.newInfo?.cover}`,
-              `https://bunchthings.com/cdn-cgi/image/w=600,f=auto,fit=cover/${this.newInfo?.cover}`
+              `https://bunchthings.com/cdn-cgi/image/f=auto,fit=cover/${this.newInfo?.cover || ""}`,
+              `https://bunchthings.com/cdn-cgi/image/w=600,f=auto,fit=cover/${this.newInfo?.cover || ""}`
             ]
           }
         },
@@ -311,41 +319,35 @@ export default {
                 "@type": "ListItem",
                 position: 2,
                 item: {
-                  "@id": `https://www.koureishalife.com/category/${this.newInfo.category_id}/`,
-                  name: this.newInfo.category_name
+                  "@id": `https://www.koureishalife.com/category/${this.newInfo?.category_id || ""}/`,
+                  name: this.newInfo?.category_name || ""
                 }
               },
               {
                 "@type": "ListItem",
                 position: 3,
                 item: {
-                  "@id": `https://www.koureishalife.com/detail/${this.newInfo.path_v2}/`,
-                  name: this.newInfo.name
+                  "@id": `https://www.koureishalife.com/detail/${this.newInfo?.path_v2 || ""}/`,
+                  name: this.newInfo?.name || ""
                 }
               }
             ]
           }
         }
       ]
-      // __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
     };
   },
 
   mounted: function () {
-    // window.handleRequestAdByChannel("mounted", 1);
     this.handleCreateTableParentDom();
-    // 获取 URL 查询参数
     const searchParams = new URLSearchParams(window.location.search);
-    // AdSense 配置参数
     if (searchParams.has("channel")) {
       this.channelId = searchParams.get("channel");
     } else {
-      this.channelId = this.newInfo.channel || "";
+      this.channelId = this.newInfo?.channel || "";
       if (this.channelId !== "") {
         searchParams.set("channel", this.channelId);
-        const newUrl = `${window.location.origin}${
-          window.location.pathname
-        }?${searchParams.toString()}`;
+        const newUrl = `${window.location.origin}${window.location.pathname}?${searchParams.toString()}`;
         window.history.replaceState({}, "", newUrl);
       }
     }
@@ -357,40 +359,29 @@ export default {
     scrollToAnchor(anchorId) {
       const target = document.getElementById(anchorId);
       if (!target) return;
-      // 考虑导航栏高度，避免锚点被遮挡
       const navbarHeight = 60;
       const targetTop = target.getBoundingClientRect().top + window.pageYOffset - navbarHeight;
-
       window.scrollTo({
         top: targetTop,
-        behavior: "smooth" // 平滑滚动
+        behavior: "smooth"
       });
-
-      // 更新URL锚点（可选，优化体验）
       window.history.pushState({}, "", `#${anchorId}`);
     },
     handleAdsScript() {
-      if (this.newInfo.no_entry !== 1) {
+      if (this.newInfo?.no_entry !== 1) {
         this.addAdSenseScript();
       }
     },
     addAdSenseScript() {
-      // if (window.getCountyByLanguage() !== "Japan") {
-      //   return;
-      // }
-      // 获取 URL 查询参数
       const searchParams = new URLSearchParams(window.location.search);
-      // 获取Url携带的terms参数
       let terms = searchParams.has("terms") ? searchParams.get("terms") : "";
       terms = terms.replace(/[，]/g, ",");
-      // 获取Url携带的headline参数
       let headline = searchParams.has("headline") ? searchParams.get("headline") : "";
       if (headline === "{title}" || headline === "{{ad_title}}") {
         headline = "";
       }
 
       const paramKeys = [];
-      // 遍历查询参数并将其添加到 paramKeys 数组中
       for (const param of searchParams) {
         paramKeys.push(param[0]);
       }
@@ -414,16 +405,15 @@ export default {
         relatedSearchTargeting: "content",
         resultsPageBaseUrl,
         resultsPageQueryParam: "query",
-        terms: terms || this.newInfo.terms,
-        referrerAdCreative: headline || terms || this.newInfo.referrer_ad_creative,
+        terms: terms || this.newInfo?.terms,
+        referrerAdCreative: headline || terms || this.newInfo?.referrer_ad_creative,
         ivt: false
       };
 
-      // 初始化 _googCsa 并加载相关搜索广告
       // eslint-disable-next-line no-undef
       _googCsa("relatedsearch", adSenseConfig, {
-        container: "relatedsearches1", // 广告容器 ID
-        relatedSearches: 10, // 相关搜索广告数量
+        container: "relatedsearches1",
+        relatedSearches: 10,
         adLoadedCallback: function (loaded, response, isExperimentVariant, callbackOptions) {
           if (response) {
             window.trackEventToPixel("D_C_AC");
@@ -455,7 +445,7 @@ export default {
                 num: result,
                 key1: numberOfKeys,
                 key2: concatenatedKeys
-              }); // 事件推送到 dataLayer
+              });
             } catch (e) {
               console.log(e);
             }
@@ -463,15 +453,14 @@ export default {
         }
       });
     },
-    //处理表格
     handleCreateTableParentDom() {
       let dom = document.getElementsByClassName("table-container")?.[0];
       if (dom) {
-        let newParent = document.createElement("div"); // 创建一个新的div元素作为父级元素
-        newParent.setAttribute("class", "table-container-parent"); // 设置新元素的class属性
-        let parent = dom.parentNode; // 获取现有元素的父级元素
-        parent.insertBefore(newParent, dom); // 将新父级元素插入到现有元素之前
-        newParent.appendChild(dom); // 将现有元素移动到新父级元素中
+        let newParent = document.createElement("div");
+        newParent.setAttribute("class", "table-container-parent");
+        let parent = dom.parentNode;
+        parent.insertBefore(newParent, dom);
+        newParent.appendChild(dom);
       }
     }
   }
@@ -508,14 +497,12 @@ export default {
       color: $font5;
     }
     td:first-child {
-      /*font-weight: bold;*/
       font-size: 16px;
       color: $font5;
     }
   }
   tr:first-child {
     th,td {
-      /*font-weight: bold;*/
       color: $font5;
       font-size: 16px;
       border-bottom: 3px solid rgba($font3, 0.35);
@@ -574,7 +561,6 @@ export default {
 .news-detail {
   color: $font5;
   p {
-    /*text-indent: 1em;*/
   }
 }
 .read-more {
@@ -587,13 +573,10 @@ export default {
   }
 }
 .first_paragraph {
-  /*text-indent: 1em;*/
   font-size: 14px;
-  /*line-height: 19px;*/
   margin-bottom: 28px;
 }
 
-/* 文章摘要框 - SEO+GEO优化 */
 .article-summary {
   display: flex;
   align-items: flex-start;
@@ -694,7 +677,6 @@ export default {
         border: vw(4) solid #fff;
         font-size: vw(28);
         padding: vw(12) vw(32);
-        /*min-width: vw(300);*/
       }
       td:first-child {
         font-weight: normal;
@@ -703,7 +685,6 @@ export default {
     }
     tr:first-child {
       border-collapse: collapse;
-      /*border-bottom: vw(2) solid rgba($font3, 0.35);*/
       th,td {
         border-bottom: vw(4) solid rgba($font3, 0.35);
         min-width: vw(200);
@@ -714,14 +695,6 @@ export default {
       }
     }
   }
-  /*.news-author {
-    display: flex;
-    justify-content: space-between;
-    margin-top: 0;
-    font-size: vw(28);
-    padding-bottom: vw(24);
-    @include author-icon(vw(50), vw(50));
-  }*/
   .page-layout {
     padding: 0 0;
   }
@@ -754,23 +727,22 @@ export default {
     line-height: vw(44);
     margin-bottom: vw(32);
   }
-  
-  /* 文章摘要框 - 移动端适配 */
+
   .article-summary {
     flex-direction: column;
     gap: 12px;
     padding: vw(24);
     margin: vw(24) 0;
   }
-  
+
   .summary-icon {
     font-size: vw(40);
   }
-  
+
   .summary-title {
     font-size: vw(28);
   }
-  
+
   .summary-text {
     font-size: vw(26);
     line-height: vw(38);
