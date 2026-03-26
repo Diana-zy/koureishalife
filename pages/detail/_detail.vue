@@ -92,27 +92,63 @@ export default {
     const id = path.substring(lastDashIndex + 1, path.length);
 
     try {
-      const [recNewsResponse, trendingNewsResponse, data, allResponse] = await Promise.all([
+      // 串行请求 API，避免并发触发限流
+      // 首先获取详情数据（最重要）
+      let data = null;
+      try {
+        data = await $axios.$get("/api/article/detail", {
+          params: {
+            site_id: env.SITE_ID,
+            article_id: id,
+            related_num: 3
+          }
+        });
+      } catch (detailError) {
+        console.error(`Failed to fetch detail for ID ${id}:`, detailError);
+        return {
+          newInfo: null,
+          all: null,
+          floatArray: [],
+          toc: [],
+          id,
+          htmlWithAnchor: "",
+          recNews: null,
+          trendingNews: null,
+          articleFaqs: []
+        };
+      }
+
+      // 如果详情数据为空，直接返回
+      if (!data?.content) {
+        console.warn(`No content found for ID ${id}`);
+        return {
+          newInfo: null,
+          all: null,
+          floatArray: [],
+          toc: [],
+          id,
+          htmlWithAnchor: "",
+          recNews: null,
+          trendingNews: null,
+          articleFaqs: []
+        };
+      }
+
+      // 并行获取其他数据（非关键）
+      const [recNewsResponse, trendingNewsResponse, allResponse] = await Promise.all([
         $axios.$get("/api/article/menu", {
           params: {
             site_id: env.SITE_ID,
             mod_id: "rec"
           }
-        }),
+        }).catch(() => null),
         $axios.$get("/api/article/get_all_articles", {
           params: {
             site_id: env.SITE_ID,
             size: 4,
             page: 1
           }
-        }),
-        $axios.$get("/api/article/detail", {
-          params: {
-            site_id: env.SITE_ID,
-            article_id: id,
-            related_num: 3
-          }
-        }),
+        }).catch(() => null),
         $axios.$get("/api/article/menu", {
           params: {
             site_id: env.SITE_ID,
@@ -120,48 +156,44 @@ export default {
             page: 1,
             size: 20
           }
-        })
+        }).catch(() => null)
       ]);
 
       // 处理文章内容
-      if (data?.content) {
-        data.content = data.content.replace(/font-family:\s*['"]? 宋体 ['"]?;/g, "");
-        data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
-          return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
-        });
+      data.content = data.content.replace(/font-family:\s*['"]? 宋体 ['"]?;/g, "");
+      data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
+        return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
+      });
 
-        const { toc: flatToc, htmlWithAnchor } = processHtmlWithToc(data.content, [2]);
-        const toc = generateNestedToc(flatToc);
+      const { toc: flatToc, htmlWithAnchor } = processHtmlWithToc(data.content, [2]);
+      const toc = generateNestedToc(flatToc);
 
-        const articleFaqs = data.faqs || [
-          {
-            question: "この文章の内容について、もっと詳しく知りたいですか？",
-            answer: "本站点は老後資金準備に関する最新情報を提供ています。相关文章为您详细介绍。"
-          },
-          {
-            question: "老後の資金準備はいつから始めるべきですか？",
-            answer: "一般的に、30 代から老後の資金準備を始めることが推奨されています。早ければ早いほど、複利効果により 적은 부담 で目標を達成できます。"
-          },
-          {
-            question: "老後資金についての更多信息はどこで見つけられますか？",
-            answer: "本站点のカテゴリ页面，您可以找到更多关于老後資金準備的相关文章。"
-          }
-        ];
+      const articleFaqs = data.faqs || [
+        {
+          question: "この文章の内容について、もっと詳しく知りたいですか？",
+          answer: "本站点は老後資金準備に関する最新情報を提供ています。相关文章为您详细介绍。"
+        },
+        {
+          question: "老後の資金準備はいつから始めるべきですか？",
+          answer: "一般的に、30 代から老後の資金準備を始めることが推奨されています。早ければ早いほど、複利効果により 적은 부담 で目標を達成できます。"
+        },
+        {
+          question: "老後資金についての更多信息はどこで見つけられますか？",
+          answer: "本站点のカテゴリ页面，您可以找到更多关于老後資金準備的相关文章。"
+        }
+      ];
 
-        return {
-          newInfo: data,
-          all: allResponse,
-          floatArray: shuffleArray(allResponse?.list?.slice() || []),
-          toc,
-          id,
-          htmlWithAnchor,
-          recNews: recNewsResponse,
-          trendingNews: trendingNewsResponse,
-          articleFaqs
-        };
-      } else {
-        throw new Error("Article data not found");
-      }
+      return {
+        newInfo: data,
+        all: allResponse,
+        floatArray: shuffleArray(allResponse?.list?.slice() || []),
+        toc,
+        id,
+        htmlWithAnchor,
+        recNews: recNewsResponse,
+        trendingNews: trendingNewsResponse,
+        articleFaqs
+      };
     } catch (error) {
       console.error("Error fetching data:", error);
       return {
@@ -204,7 +236,7 @@ export default {
         {
           hid: "og:url",
           property: "og:url",
-          content: `https://koureishalife.com/detail/${this.newInfo?.path_v2}/`
+          content: `https://koureishalife.com/${this.newInfo?.path_v2}/`
         },
         {
           hid: "og:locale",
@@ -239,7 +271,7 @@ export default {
         {
           hid: "twitter:url",
           property: "twitter:url",
-          content: `https://koureishalife.com/detail/${this.newInfo?.path_v2}/`
+          content: `https://koureishalife.com/${this.newInfo?.path_v2}/`
         },
         {
           hid: "twitter:locale",
@@ -286,7 +318,7 @@ export default {
             ],
             mainEntityOfPage: {
               "@type": "WebPage",
-              "@id": `https://www.koureishalife.com/detail/${this.newInfo?.path_v2 || ""}/`
+              "@id": `https://www.koureishalife.com/${this.newInfo?.path_v2 || ""}/`
             },
             publisher: {
               "@type": "NewsMediaOrganization",
@@ -327,7 +359,7 @@ export default {
                 "@type": "ListItem",
                 position: 3,
                 item: {
-                  "@id": `https://www.koureishalife.com/detail/${this.newInfo?.path_v2 || ""}/`,
+                  "@id": `https://www.koureishalife.com/${this.newInfo?.path_v2 || ""}/`,
                   name: this.newInfo?.name || ""
                 }
               }

@@ -1,5 +1,5 @@
 <template>
-  <CustomLink :to="`/detail/${item.path_v2}/`">
+  <CustomLink :to="`/${item.path_v2}/`">
     <div class="mode-new">
       <div>
         <div class="img-box">

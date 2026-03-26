@@ -1,5 +1,5 @@
 <template>
-  <CustomLink class="news-style-1" :to="`/detail/${item.path_v2}/`">
+  <CustomLink class="news-style-1" :to="`/${item.path_v2}/`">
     <NuxtImg
       format="auto"
       fit="cover"

@@ -49,10 +49,11 @@ import { capitalizeFirstLetter } from "~/utils/utils";
 
 export default {
   async asyncData({ $axios, params, env }) {
+    const path = params.category;
+    const lastDashIndex = path.lastIndexOf("-");
+    const id = path.substring(lastDashIndex + 1, path.length);
+
     try {
-      const path = params.category;
-      const lastDashIndex = path.lastIndexOf("-");
-      const id = path.substring(lastDashIndex + 1, path.length);
       const [recNewsResponse, trendingNewsResponse, categoryInfoResponse] = await Promise.all([
         $axios.$get("/api/article/menu", {
           params: {
@@ -86,9 +87,21 @@ export default {
       };
     } catch (error) {
       console.error("Error fetching data:", error);
+      return {
+        recNews: null,
+        trendingNews: null,
+        categoryInfo: null,
+        id
+      };
     }
   },
   head() {
+    const itemListElements = this.categoryInfo?.list?.map((item, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      url: `https://www.koureishalife.com/${item.path_v2}/`
+    })) || [];
+
     return {
       script: [
         {
@@ -110,7 +123,7 @@ export default {
                 position: 2,
                 item: {
                   "@id": `https://www.koureishalife.com/category/${this.id}/`,
-                  name: this.categoryInfo?.seo_category.name
+                  name: this.categoryInfo?.seo_category?.name || ""
                 }
               }
             ]
@@ -121,13 +134,7 @@ export default {
           json: {
             "@context": "https://schema.org",
             "@type": "ItemList",
-            itemListElement: [
-              ...this.categoryInfo?.list.map((item, index) => ({
-                "@type": "ListItem",
-                position: index + 1,
-                url: `https://www.koureishalife.com/detail/${item.path_v2}/`
-              }))
-            ]
+            itemListElement: itemListElements
           }
         }
       ],
