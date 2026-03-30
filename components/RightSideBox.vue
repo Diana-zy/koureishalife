@@ -17,13 +17,15 @@
       <h2 class="title-h2"> 新着記事 </h2>
       <div class="new-content">
         <item-mode-new v-for="(item, i) in recNews" :key="i" :item="item"></item-mode-new>
+        <p v-if="recNews.length === 0" class="empty-message">記事はありません</p>
       </div>
     </div>
     <div class="rec-box">
       <h2 class="title-h2"> イチオシ記事 </h2>
       <div class="rec-content">
-        <item-mode-new v-for="(item, i) in trendingNews" :key="i" :item="item"></item-mode-new
-      ></div>
+        <item-mode-new v-for="(item, i) in trendingNews" :key="i" :item="item"></item-mode-new>
+        <p v-if="trendingNews.length === 0" class="empty-message">記事はありません</p>
+      </div>
     </div>
   </div>
 </template>
@@ -36,19 +38,18 @@ export default {
   components: { CustomLink },
   props: {
     recNews: {
-      type: Array
+      type: Array,
+      default: () => []
     },
     trendingNews: {
-      type: Array
+      type: Array,
+      default: () => []
     }
   },
   data() {
     return {
       navData: this.$root.$options.navData || this.$navData
     };
-  },
-  mounted() {
-    console.log(this.navData,1111);
   },
   methods: {
     capitalizeFirstLetter
@@ -100,6 +101,12 @@ export default {
       flex-direction: column;
       gap: 20px;
     }
+  }
+  .empty-message {
+    color: #999;
+    font-size: 14px;
+    text-align: center;
+    padding: 20px;
   }
 }
 </style>

@@ -72,7 +72,32 @@
         </div>
       </div>
       <div class="layout-right">
-        <right-side-box :rec-news="trendingNews?.list" :trending-news="recNews?.list" />
+        <div class="right-sider">
+          <div class="category-box">
+            <div class="right-title"> カテゴリー</div>
+            <div class="category-content">
+              <CustomLink
+                v-for="(item, i) in navData?.list || []"
+                :key="i"
+                :to="`/category/${item.path}/`"
+                class="category-item"
+                >{{ capitalizeFirstLetter(item.name) }}</CustomLink
+              >
+            </div>
+          </div>
+          <div class="new-box">
+            <h2 class="title-h2"> 新着記事 </h2>
+            <div class="new-content">
+              <item-mode-new v-for="(item, i) in recNews" :key="i" :item="item"></item-mode-new>
+            </div>
+          </div>
+          <div class="rec-box">
+            <h2 class="title-h2"> イチオシ記事 </h2>
+            <div class="rec-content">
+              <item-mode-new v-for="(item, i) in trendingNews" :key="i" :item="item"></item-mode-new>
+            </div>
+          </div>
+        </div>
       </div>
     </main>
     <footer-seo :info="newInfo || {}" />
@@ -80,12 +105,14 @@
 </template>
 
 <script>
-import { shuffleArray } from "../../utils/utils";
+import { shuffleArray, capitalizeFirstLetter } from "../../utils/utils";
 import Breadcrumb from "../../components/Breadcrumb";
+import CustomLink from "../../components/CustomLink";
+import ItemModeNew from "../../components/Item/ModeNew";
 import { processHtmlWithToc, generateNestedToc } from "../../utils/cheerio-toc.js";
 
 export default {
-  components: { Breadcrumb },
+  components: { Breadcrumb, CustomLink, ItemModeNew },
   async asyncData({ $axios, params, env }) {
     const path = params.detail;
     const lastDashIndex = path.lastIndexOf("-");
@@ -112,13 +139,14 @@ export default {
           toc: [],
           id,
           htmlWithAnchor: "",
-          recNews: null,
-          trendingNews: null,
+          recNews: [],
+          trendingNews: [],
           articleFaqs: []
         };
       }
 
       // 如果详情数据为空，直接返回
+      console.log("Detail data check:", { hasData: !!data, hasContent: !!data?.content, contentLength: data?.content?.length });
       if (!data?.content) {
         console.warn(`No content found for ID ${id}`);
         return {
@@ -128,36 +156,67 @@ export default {
           toc: [],
           id,
           htmlWithAnchor: "",
-          recNews: null,
-          trendingNews: null,
+          recNews: [],
+          trendingNews: [],
           articleFaqs: []
         };
       }
 
-      // 并行获取其他数据（非关键）
-      const [recNewsResponse, trendingNewsResponse, allResponse] = await Promise.all([
-        $axios.$get("/api/article/menu", {
-          params: {
-            site_id: env.SITE_ID,
-            mod_id: "rec"
-          }
-        }).catch(() => null),
-        $axios.$get("/api/article/get_all_articles", {
-          params: {
-            site_id: env.SITE_ID,
-            size: 4,
-            page: 1
-          }
-        }).catch(() => null),
-        $axios.$get("/api/article/menu", {
-          params: {
-            site_id: env.SITE_ID,
-            mod_id: "all",
-            page: 1,
-            size: 20
-          }
-        }).catch(() => null)
-      ]);
+      // 並行获取其他数据（非关键）
+      let recNewsResponse = null;
+      let trendingNewsResponse = null;
+      let allResponse = null;
+
+      try {
+        [recNewsResponse, trendingNewsResponse, allResponse] = await Promise.all([
+          $axios.$get("/api/article/menu", {
+            params: {
+              site_id: env.SITE_ID,
+              mod_id: "rec"
+            }
+          }).catch(err => {
+            console.error("recNews API error:", err.message);
+            return null;
+          }),
+          $axios.$get("/api/article/get_all_articles", {
+            params: {
+              site_id: env.SITE_ID,
+              size: 4,
+              page: 1
+            }
+          }).catch(err => {
+            console.error("trendingNews API error:", err.message);
+            return null;
+          }),
+          $axios.$get("/api/article/menu", {
+            params: {
+              site_id: env.SITE_ID,
+              mod_id: "all",
+              page: 1,
+              size: 20
+            }
+          }).catch(err => {
+            console.error("allResponse API error:", err.message);
+            return null;
+          })
+        ]);
+      } catch (error) {
+        console.error("Parallel fetch error:", error);
+      }
+
+      // 辅助函数：从响应中提取列表数据
+      const extractList = (response) => {
+        if (!response) return [];
+        if (Array.isArray(response)) return response;
+        if (response.list) return response.list;
+        if (response.data?.list) return response.data.list;
+        if (response.data && Array.isArray(response.data)) return response.data;
+        if (response.items) return response.items;
+        if (response.result) return response.result;
+        return [];
+      };
+
+      // 处理文章内容
 
       // 处理文章内容
       data.content = data.content.replace(/font-family:\s*['"]? 宋体 ['"]?;/g, "");
@@ -190,8 +249,8 @@ export default {
         toc,
         id,
         htmlWithAnchor,
-        recNews: recNewsResponse,
-        trendingNews: trendingNewsResponse,
+        recNews: extractList(recNewsResponse),
+        trendingNews: extractList(trendingNewsResponse),
         articleFaqs
       };
     } catch (error) {
@@ -203,15 +262,16 @@ export default {
         toc: [],
         id,
         htmlWithAnchor: "",
-        recNews: null,
-        trendingNews: null,
+        recNews: [],
+        trendingNews: [],
         articleFaqs: []
       };
     }
   },
   data() {
     return {
-      channelId: ""
+      channelId: "",
+      navData: this.$root.$options.navData || this.$navData || {}
     };
   },
   head() {
@@ -499,7 +559,7 @@ export default {
 };
 </script>
 
-<style lang="scss" scoped>
+<style lang="scss">
 ::v-deep .table-container-parent {
   width: 100%;
   overflow-x: auto;

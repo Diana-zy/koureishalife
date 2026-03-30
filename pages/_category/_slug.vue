@@ -70,7 +70,7 @@
         </div>
       </div>
       <div class="layout-right">
-        <right-side-box :rec-news="trendingNews?.list" :trending-news="recNews?.list" />
+        <right-side-box :rec-news="recNews" :trending-news="trendingNews" />
       </div>
     </main>
     <footer-seo :info="newInfo" />
