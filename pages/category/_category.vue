@@ -96,6 +96,11 @@ export default {
     }
   },
   head() {
+    const category = this.categoryInfo && this.categoryInfo.seo_category;
+    const categoryName = (category && category.name) || "";
+    const seoTitle = (category && category.seo_title) || `「${categoryName}」の記事一覧 | 高齢者ライフ`;
+    const seoDesc = (category && category.seo_desc) || `${categoryName}に関する最新記事の一覧です。老後の生活に役立つ情報を専門家が解説します。`;
+
     const itemListElements = this.categoryInfo?.list?.map((item, index) => ({
       "@type": "ListItem",
       position: index + 1,
@@ -103,6 +108,34 @@ export default {
     })) || [];
 
     return {
+      title: seoTitle,
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: seoDesc
+        },
+        {
+          hid: "og:title",
+          property: "og:title",
+          content: seoTitle
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content: seoDesc
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `https://www.koureishalife.com/category/${this.id}/`
+        },
+        {
+          hid: "og:type",
+          property: "og:type",
+          content: "website"
+        }
+      ],
       script: [
         {
           type: "application/ld+json",
@@ -137,8 +170,7 @@ export default {
             itemListElement: itemListElements
           }
         }
-      ],
-      // __dangerouslyDisableSanitizers: ["script"] // 禁用清理，允许插入内联 JavaScript
+      ]
     };
   },
   methods: {
