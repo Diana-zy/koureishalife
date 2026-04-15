@@ -7,7 +7,7 @@
         <section v-swiper:mySwiper="swiperOption" class="swiper-box">
           <div class="swiper-wrapper">
             <item-swiper-rec
-              v-for="(item, i) in recNews?.list"
+              v-for="(item, i) in recNews && recNews.list"
               :key="i"
               class="swiper-slide"
               :item="item"
@@ -21,22 +21,22 @@
 
         <h2 class="title-new-tag">新着記事</h2>
         <section class="news-box-new">
-          <item-text-new v-for="(item, i) in trendingNews?.list" :key="i" :item="item">
+          <item-text-new v-for="(item, i) in trendingNews && trendingNews.list" :key="i" :item="item">
           </item-text-new>
         </section>
 
         <div v-for="(items, index) in categoryList" class="category-box" :key="items.id">
-          <h2 class="title-h2">{{ items.seo_category.name }}</h2>
+          <h2 class="title-h2">{{ items.seo_category && items.seo_category.name }}</h2>
           <section>
             <div class="news-box-2">
-              <news-item-2 v-for="(item, i) in items?.list" :key="i" :item="item" :index="index">
+              <news-item-2 v-for="(item, i) in items && items.list" :key="i" :item="item" :index="index">
               </news-item-2>
             </div>
           </section>
         </div>
       </div>
       <div class="layout-right">
-        <right-side-box :rec-news="trendingNews?.list" :trending-news="recNews?.list" />
+        <right-side-box :rec-news="(trendingNews && trendingNews.list) || []" :trending-news="(recNews && recNews.list) || []" />
       </div>
     </main>
     <FooterSeo />
@@ -84,30 +84,29 @@ export default {
             }
           })
         ]);
-      let category = [];
-      await categoryResponse.list.map(async (item) => {
-        category.push(
-          $axios.$get("/api/article/get_seo_category_page", {
-            params: {
-              site_id: env.SITE_ID,
-              seo_category_id: item.id,
-              size: 4,
-              page: 1
-            }
-          })
-        );
-      });
-      let list = await Promise.all(category);
-      // 返回多个接口的数据
+
+      // 防御性处理：categoryResponse.list 可能为 null/undefined
+      const categoryItems = (categoryResponse && categoryResponse.list) || [];
+      const category = categoryItems.map((item) =>
+        $axios.$get("/api/article/get_seo_category_page", {
+          params: {
+            site_id: env.SITE_ID,
+            seo_category_id: item.id,
+            size: 4,
+            page: 1
+          }
+        })
+      );
+      const list = await Promise.all(category);
+
       return {
         recNews: recNewsResponse,
         trendingNews: trendingNewsResponse,
         allNews: allNewsResponse,
-        categoryList: list?.filter((item) => item != null)
+        categoryList: list.filter((item) => item != null)
       };
     } catch (error) {
       console.error("Error fetching data:", error);
-      // 返回默认数据避免页面崩溃
       return {
         recNews: null,
         trendingNews: null,
@@ -275,10 +274,6 @@ export default {
 }
 
 .swiper-slide {
-  /*width: 282px;*/
-  /*border-radius: 16px 16px 16px 16px;*/
-  /*border: 1px solid rgba(23, 23, 23, 0.1);*/
-  /*margin-right: 24px;*/
   overflow: hidden;
 }
 .news-box-new {
@@ -301,8 +296,6 @@ export default {
 }
 @media screen and (max-width: 1100px) {
   .news-box-2 {
-    /*display: flex;*/
-    /*flex-wrap: wrap;*/
   }
 }
 @media screen and (max-width: 750px) {
@@ -375,8 +368,6 @@ export default {
   .swiper-slide {
     width: 100%;
     height: vw(764);
-
-    /*margin-right: vw(32);*/
   }
   .news-box-2 {
     gap: vw(28) vw(14);
