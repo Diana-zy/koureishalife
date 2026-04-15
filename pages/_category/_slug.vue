@@ -84,7 +84,7 @@ import { processHtmlWithToc, generateNestedToc } from "../../utils/cheerio-toc.j
 export default {
   components: { Breadcrumb },
   async asyncData({ $axios, params, env }) {
-    // 从URL中提取文章ID
+    // 从 URL中提取文章ID
     // 新格式: /分类slug/文章slug-id/ => params.category=分类slug, params.slug=文章slug-id
     const slug = params.slug;
     const lastDashIndex = slug.lastIndexOf("-");
@@ -120,7 +120,7 @@ export default {
         }
       })
     ]);
-    data.content = data.content.replace(/font-family:\s*['"]?宋体['"]?;/g, "");
+    data.content = data.content.replace(/font-family:\s*['"']?\u5b8b\u4f53['"']?;/g, "");
     data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
       return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
     });
@@ -138,11 +138,11 @@ export default {
       },
       {
         question: "老後の資金準備はいつから始めるべきですか？",
-        answer: "一般的に、30代から老後の資金準備を始めることが推奨されています。早ければ早いほど、複利効果により 적은 부담で目標を達成できます。"
+        answer: "一般的に、３０代から老後の資金準備を始めることが推奨されています。早ければ早いほど、複利効果により 적은 부담で目標を達成できます。"
       },
       {
         question: "老後資金についての更多信息はどこで見つけられますか？",
-        answer: "本站点のカテゴリ页面，您可以找到更多关于老後資金準備的相关文章。"
+        answer: "本站点のカテゴリ頁面，您可以找到更多关于老後資金準備的相关文章。"
       }
     ];
 
@@ -169,6 +169,45 @@ export default {
       recNews,
       trendingNews,
       mixArray
+    };
+  },
+  head() {
+    const seoTitle = (this.newInfo && (this.newInfo.seo_title || this.newInfo.name)) || "";
+    const seoDesc = (this.newInfo && (this.newInfo.seo_desc || this.newInfo.first_paragraph)) || "";
+    return {
+      title: seoTitle ? `${seoTitle} | 高齢者ライフ` : "高齢者ライフ",
+      meta: [
+        {
+          hid: "description",
+          name: "description",
+          content: seoDesc
+        },
+        {
+          hid: "og:title",
+          property: "og:title",
+          content: seoTitle
+        },
+        {
+          hid: "og:description",
+          property: "og:description",
+          content: seoDesc
+        },
+        {
+          hid: "og:url",
+          property: "og:url",
+          content: `https://www.koureishalife.com/${(this.newInfo && this.newInfo.path_v2) || ""}/`
+        },
+        {
+          hid: "og:image",
+          property: "og:image",
+          content: `https://bunchthings.com/cdn-cgi/image/w=600,f=auto,fit=cover/${(this.newInfo && this.newInfo.cover) || ""}`
+        },
+        {
+          hid: "og:type",
+          property: "og:type",
+          content: "article"
+        }
+      ]
     };
   },
   methods: {
