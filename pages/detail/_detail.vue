@@ -219,7 +219,7 @@ export default {
       // 处理文章内容
 
       // 处理文章内容
-      data.content = data.content.replace(/font-family:\s*['"]? 宋体 ['"]?;/g, "");
+      data.content = data.content.replace(/font-family:\s*['"']?\u5b8b\u4f53['"']?;/g, "");
       data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
         return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
       });
@@ -275,23 +275,25 @@ export default {
     };
   },
   head() {
+    const seoTitle = this.newInfo?.seo_title || this.newInfo?.name;
+    const seoDesc = this.newInfo?.seo_desc;
     return {
-      title: this.newInfo?.name ? this.newInfo.name + " - Koureishalife" : "Koureishalife",
+      title: seoTitle ? `${seoTitle} | 高齢者ライフ` : "高齢者ライフ",
       meta: [
         {
           hid: "description",
           name: "description",
-          content: this.newInfo?.seo_desc
+          content: seoDesc
         },
         {
           hid: "og:title",
           property: "og:title",
-          content: this.newInfo?.seo_title
+          content: seoTitle
         },
         {
           hid: "og:description",
           property: "og:description",
-          content: this.newInfo?.seo_desc
+          content: seoDesc
         },
         {
           hid: "og:url",
@@ -321,12 +323,12 @@ export default {
         {
           hid: "twitter:title",
           property: "twitter:title",
-          content: this.newInfo?.seo_title
+          content: seoTitle
         },
         {
           hid: "twitter:description",
           property: "twitter:description",
-          content: this.newInfo?.seo_desc
+          content: seoDesc
         },
         {
           hid: "twitter:url",
@@ -364,8 +366,8 @@ export default {
             articleSection: `Home, ${
               this.newInfo?.seo_category_name || this.newInfo?.category_locale_name || ""
             }, ${this.newInfo?.name || ""}`,
-            headline: this.newInfo?.seo_title || "",
-            description: this.newInfo?.seo_desc || "",
+            headline: this.newInfo?.seo_title || this.newInfo?.name || "",
+            description: seoDesc || "",
             datePublished: this.newInfo?.updated_at || "",
             dateModified: this.newInfo?.updated_at || "",
             author: [
@@ -554,7 +556,8 @@ export default {
         parent.insertBefore(newParent, dom);
         newParent.appendChild(dom);
       }
-    }
+    },
+    capitalizeFirstLetter
   }
 };
 </script>
