@@ -210,12 +210,98 @@ export default {
       ]
     };
   },
+  data() {
+    return {
+      channelId: ""
+    };
+  },
+  mounted() {
+    const searchParams = new URLSearchParams(window.location.search);
+    if (searchParams.has("channel")) {
+      this.channelId = searchParams.get("channel");
+    } else {
+      this.channelId = this.newInfo.channel || "";
+    }
+    this.$nextTick(() => {
+      this.newInfo.no_entry !== 1 && this.addAdSenseScript();
+    });
+  },
   methods: {
     scrollToAnchor(id) {
       const element = document.getElementById(id);
       if (element) {
         element.scrollIntoView({ behavior: "smooth", block: "start" });
       }
+    },
+    addAdSenseScript() {
+      const searchParams = new URLSearchParams(window.location.search);
+      let terms = searchParams.has("terms") ? searchParams.get("terms") : "";
+      terms = terms.replace(/[，]/g, ",");
+      let headline = searchParams.has("headline") ? searchParams.get("headline") : "";
+      if (headline === "{title}" || headline === "{{ad_title}}") {
+        headline = "";
+      }
+
+      const paramKeys = [];
+      for (const param of searchParams) {
+        paramKeys.push(param[0]);
+      }
+      const ignoredPageParams = paramKeys.join(",");
+
+      const hiSource = window.getParam("hi_source");
+      const hiPc = window.getParam("hi_pc");
+      const resultsPageBaseUrl = window.getResultsPageUrl({
+        channel: this.channelId,
+        from: "detail",
+        hi_source: hiSource,
+        hi_pc: hiPc
+      });
+
+      const adSenseConfig = {
+        channel: this.channelId,
+        pubId: "partner-pub-6612490456597819",
+        styleId: "6462282781",
+        adsafe: "low",
+        ignoredPageParams,
+        relatedSearchTargeting: "content",
+        resultsPageBaseUrl,
+        resultsPageQueryParam: "query",
+        terms: terms || this.newInfo.terms,
+        referrerAdCreative: headline || terms || this.newInfo.referrer_ad_creative,
+        ivt: false,
+        adtest: "off"
+      };
+
+      // eslint-disable-next-line no-undef
+      _googCsa("relatedsearch", adSenseConfig, {
+        container: "relatedsearches1",
+        relatedSearches: 10,
+        adLoadedCallback: function (loaded, response, isExperimentVariant, callbackOptions) {
+          if (response) {
+            window.trackEventToPixel("D_C_AC");
+            window.pushEventParamsToGtm("C_AC");
+            window.setCookie("query_ad", 1);
+            try {
+              let numberOfKeys = 0;
+              let concatenatedKeys = "miss";
+              if (callbackOptions && callbackOptions.termPositions) {
+                const keys = Object.keys(callbackOptions.termPositions);
+                numberOfKeys = keys.length;
+                concatenatedKeys = keys.join(",");
+              }
+              // eslint-disable-next-line no-undef
+              dataLayer.push({
+                event: "C_AC_IN",
+                num: numberOfKeys,
+                key1: numberOfKeys,
+                key2: concatenatedKeys
+              });
+            } catch (e) {
+              console.log(e);
+            }
+          }
+        }
+      });
     }
   }
 };
