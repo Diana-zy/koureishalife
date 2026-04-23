@@ -106,8 +106,20 @@ export default {
       return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
     });
 
-    const { toc: flatToc, htmlWithAnchor } = processHtmlWithToc(data.content, [2]);
+    const { toc: flatToc, htmlWithAnchor: rawHtml } = processHtmlWithToc(data.content, [2]);
     const toc = generateNestedToc(flatToc);
+
+    let htmlWithAnchor = rawHtml;
+    const pEnds = [];
+    const pRegex = /<\/p>/gi;
+    let pMatch;
+    while ((pMatch = pRegex.exec(rawHtml)) !== null) {
+      pEnds.push(pMatch.index + pMatch[0].length);
+    }
+    if (pEnds.length > 0) {
+      const midPos = pEnds[Math.floor(pEnds.length / 2)];
+      htmlWithAnchor = rawHtml.slice(0, midPos) + '<div id="relatedsearches2"></div>' + rawHtml.slice(midPos);
+    }
 
     const mixArray = allResponse?.list?.slice();
 
@@ -367,47 +379,55 @@ export default {
 
       // 初始化 _googCsa 并加载相关搜索广告
       // eslint-disable-next-line no-undef
-      _googCsa("relatedsearch", adSenseConfig, {
-        container: "relatedsearches1", // 广告容器 ID
-        relatedSearches: 10, // 相关搜索广告数量
-        adLoadedCallback: function (loaded, response, isExperimentVariant, callbackOptions) {
-          if (response) {
-            window.trackEventToPixel("D_C_AC");
-            window.pushEventParamsToGtm("C_AC");
-            const hi_user_source = window.getValueByURLOrCookie("hi_source");
-            if (hi_user_source === "unknown") {
-              window.dataLayer.push({
-                event: "Detail_D_C_AC_SEO",
-                SEO_detail: "detail_" + this.id
-              });
-            }
-            try {
-              let numberOfKeys = 0;
-              let concatenatedKeys = "miss";
-              if (callbackOptions.termPositions) {
-                const keys = Object.keys(callbackOptions.termPositions);
-                numberOfKeys = keys.length;
-                concatenatedKeys = keys.join(",");
+      _googCsa(
+        "relatedsearch",
+        adSenseConfig,
+        {
+          container: "relatedsearches1",
+          relatedSearches: 5,
+          adLoadedCallback: function (loaded, response, isExperimentVariant, callbackOptions) {
+            if (response) {
+              window.trackEventToPixel("D_C_AC");
+              window.pushEventParamsToGtm("C_AC");
+              const hi_user_source = window.getValueByURLOrCookie("hi_source");
+              if (hi_user_source === "unknown") {
+                window.dataLayer.push({
+                  event: "Detail_D_C_AC_SEO",
+                  SEO_detail: "detail_" + this.id
+                });
               }
+              try {
+                let numberOfKeys = 0;
+                let concatenatedKeys = "miss";
+                if (callbackOptions.termPositions) {
+                  const keys = Object.keys(callbackOptions.termPositions);
+                  numberOfKeys = keys.length;
+                  concatenatedKeys = keys.join(",");
+                }
 
-              const element = document.getElementById("master-1");
-              const height = parseFloat(element.style.height);
-              const result = Math.round(height / 105);
+                const element = document.getElementById("master-1");
+                const height = parseFloat(element.style.height);
+                const result = Math.round(height / 105);
 
-              // eslint-disable-next-line no-undef
-              dataLayer.push({
-                event: "C_AC_IN",
-                queryNum: 10,
-                num: result,
-                key1: numberOfKeys,
-                key2: concatenatedKeys
-              }); // 事件推送到 dataLayer
-            } catch (e) {
-              console.log(e);
+                // eslint-disable-next-line no-undef
+                dataLayer.push({
+                  event: "C_AC_IN",
+                  queryNum: 10,
+                  num: result,
+                  key1: numberOfKeys,
+                  key2: concatenatedKeys
+                });
+              } catch (e) {
+                console.log(e);
+              }
             }
           }
+        },
+        {
+          container: "relatedsearches2",
+          relatedSearches: 5
         }
-      });
+      );
     },
     //处理表格
     handleCreateTableParentDom() {
