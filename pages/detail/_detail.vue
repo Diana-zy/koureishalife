@@ -647,4 +647,49 @@ export default {
   .faq-question { font-size: vw(28); margin-bottom: vw(12); }
   .faq-answer { font-size: vw(26); line-height: vw(40); }
 }
+.right-sider {
+  .right-title {
+    background: $color1;
+    line-height: 45px;
+    margin-bottom: 20px;
+    font-weight: normal;
+    font-size: 20px;
+    display: block;
+    color: #ffffff;
+    padding-left: 16px;
+  }
+  .category-box {
+    width: 100%;
+    margin-bottom: 20px;
+    .category-content {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      .category-item {
+        border: 1px solid rgba(#000, 0.65);
+        padding: 6px 10px;
+        font-size: 12px;
+        color: #000;
+        border-radius: 20px;
+      }
+    }
+  }
+  .new-box {
+    width: 100%;
+    margin-bottom: 20px;
+    .new-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+  .rec-box {
+    width: 100%;
+    .rec-content {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+  }
+}
 </style>
