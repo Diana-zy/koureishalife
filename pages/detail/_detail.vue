@@ -532,39 +532,6 @@ export default {
 }
 .faq-question { font-size: 16px; font-weight: bold; color: $font1; margin: 0 0 8px 0; line-height: 1.5; }
 .faq-answer { font-size: 14px; color: $font5; line-height: 1.6; margin: 0; }
-.right-sider {
-  position: sticky;
-  top: 20px;
-}
-.category-box {
-  margin-bottom: 24px;
-  padding: 16px;
-  border: 1px solid rgba($font3, 0.2);
-  border-radius: 8px;
-}
-.right-title {
-  font-size: 16px;
-  font-weight: bold;
-  color: $font1;
-  margin-bottom: 12px;
-  padding-bottom: 8px;
-  border-bottom: 2px solid #fd9a25;
-}
-.category-content { display: flex; flex-direction: column; gap: 8px; }
-.category-item {
-  font-size: 14px;
-  color: $font5;
-  padding: 6px 0;
-  border-bottom: 1px solid rgba($font3, 0.1);
-  &:hover { color: $color1; }
-}
-.new-box, .rec-box {
-  margin-bottom: 24px;
-  padding: 16px;
-  border: 1px solid rgba($font3, 0.2);
-  border-radius: 8px;
-}
-.new-content, .rec-content { display: flex; flex-direction: column; gap: 12px; }
 .article-summary {
   display: flex;
   align-items: flex-start;
