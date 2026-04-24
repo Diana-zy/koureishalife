@@ -12,8 +12,8 @@ export default {
   },
   generate: {
     crawler: false,
-    concurrency: 10,
-    interval: 100,
+    concurrency: 1,
+    interval: 2000,
     async routes() {
       const pathData = await fetch(
         `${process.env.PROD_API_URL}/api/article/get_all_path_v2?site_id=${process.env.SITE_ID}`
@@ -24,7 +24,7 @@ export default {
         .map((item) => `/category/${item}/`);
       const detailPaths = path.data.detail
         .filter((item) => item && String(item).trim())
-        .map((item) => `/detail/${item}/`);
+        .map((item) => `/${item}/`);
       const urls = [...categoryPaths, ...detailPaths];
       return urls;
     }
@@ -37,8 +37,8 @@ export default {
     trailingSlash: true,
     extendRoutes(routes, resolve) {
       routes.push({
-        name: "detail-category-slug",
-        path: "/detail/:category/:detail",
+        name: "category-detail",
+        path: "/:category/:detail",
         component: resolve(__dirname, "pages/detail/_detail.vue")
       });
     }
@@ -203,9 +203,9 @@ export default {
     whitelistPatterns: [
       /^swiper-container/,
       /^swiper-wrapper/,
-      /::v-deep/, // 添加这些
-      /\/deep\//, // 添加这些
+      /::v-deep/,
+      /\/deep\//,
       />>>/
-    ] // 忽略swiper样式
+    ]
   }
 };
