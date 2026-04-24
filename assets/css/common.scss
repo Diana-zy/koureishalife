@@ -278,3 +278,8 @@ $class-names: ("block", "flex", "grid");
     color: $font3;
   }
 }
+.table-container-parent {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}

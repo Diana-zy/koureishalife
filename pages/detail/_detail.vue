@@ -414,14 +414,14 @@ export default {
       );
     },
     handleCreateTableParentDom() {
-      let dom = document.getElementsByClassName("table-container")?.[0];
-      if (dom) {
-        let newParent = document.createElement("div");
-        newParent.setAttribute("class", "table-container-parent");
-        let parent = dom.parentNode;
-        parent.insertBefore(newParent, dom);
-        newParent.appendChild(dom);
-      }
+      document.querySelectorAll("table.table-container").forEach(dom => {
+        if (!dom.parentNode.classList.contains("table-container-parent")) {
+          const newParent = document.createElement("div");
+          newParent.setAttribute("class", "table-container-parent");
+          dom.parentNode.insertBefore(newParent, dom);
+          newParent.appendChild(dom);
+        }
+      });
     }
   }
 };
