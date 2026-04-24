@@ -5,10 +5,10 @@
       <div class="layout-left">
         <div class="page-layout">
           <breadcrumb :info="newInfo"></breadcrumb>
-          <article class="article">
+          <article class="article" v-if="newInfo">
             <h1 class="article-title" style="">{{ newInfo.name }}</h1>
             <div class="news-author">
-              <div>{{ newInfo.author.name }}</div>
+              <div>{{ newInfo.author?.name }}</div>
               <div>{{ newInfo.updated_at }}</div>
             </div>
             <div class="news-detail first_paragraph">{{ newInfo.first_paragraph }}</div>
@@ -56,7 +56,7 @@
         <right-side-box :rec-news="trendingNews?.list" :trending-news="recNews?.list" />
       </div>
     </main>
-    <footer-seo :info="newInfo" />
+    <footer-seo :info="newInfo || {}" />
   </div>
 </template>
 
@@ -71,68 +71,62 @@ export default {
     const lastDashIndex = path.lastIndexOf("-");
     const id = path.substring(lastDashIndex + 1, path.length);
 
-    const [recNewsResponse, trendingNewsResponse, data, allResponse] = await Promise.all([
-      $axios.$get("/api/article/menu", {
-        params: {
-          site_id: env.SITE_ID,
-          mod_id: "rec"
-        }
-      }),
-      $axios.$get("/api/article/get_all_articles", {
-        params: {
-          site_id: env.SITE_ID,
-          size: 4,
-          page: 1
-        }
-      }),
-      $axios.$get("/api/article/detail", {
-        params: {
-          site_id: env.SITE_ID,
-          article_id: id,
-          related_num: 3
-        }
-      }),
-      $axios.$get("/api/article/menu", {
-        params: {
-          site_id: env.SITE_ID,
-          mod_id: "all",
-          page: 1,
-          size: 20
-        }
-      })
-    ]);
-    data.content = data.content.replace(/font-family:\s*['"]?宋体['"]?;/g, "");
-    data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
-      return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
-    });
+    try {
+      const [recNewsResponse, trendingNewsResponse, data, allResponse] = await Promise.all([
+        $axios.$get("/api/article/menu", {
+          params: { site_id: env.SITE_ID, mod_id: "rec" }
+        }).catch(() => null),
+        $axios.$get("/api/article/get_all_articles", {
+          params: { site_id: env.SITE_ID, size: 4, page: 1 }
+        }).catch(() => null),
+        $axios.$get("/api/article/detail", {
+          params: { site_id: env.SITE_ID, article_id: id, related_num: 3 }
+        }),
+        $axios.$get("/api/article/menu", {
+          params: { site_id: env.SITE_ID, mod_id: "all", page: 1, size: 20 }
+        }).catch(() => null)
+      ]);
 
-    const { toc: flatToc, htmlWithAnchor: rawHtml } = processHtmlWithToc(data.content, [2]);
-    const toc = generateNestedToc(flatToc);
+      if (!data?.content) {
+        return { newInfo: null, all: null, floatArray: [], toc: [], id, htmlWithAnchor: "", recNews: null, trendingNews: null };
+      }
 
-    let htmlWithAnchor = rawHtml;
-    const pEnds = [];
-    const pRegex = /<\/p>/gi;
-    let pMatch;
-    while ((pMatch = pRegex.exec(rawHtml)) !== null) {
-      pEnds.push(pMatch.index + pMatch[0].length);
+      data.content = data.content.replace(/font-family:\s*['"]?宋体['"]?;/g, "");
+      data.content = data.content.replace(/<\/h4><p><br><br>|<br><br><\/p><h4>/g, (match) => {
+        return match.includes("</h4><p>") ? "</h4><p>" : "</p><h4>";
+      });
+
+      const { toc: flatToc, htmlWithAnchor: rawHtml } = processHtmlWithToc(data.content, [2]);
+      const toc = generateNestedToc(flatToc);
+
+      let htmlWithAnchor = rawHtml;
+      const pEnds = [];
+      const pRegex = /<\/p>/gi;
+      let pMatch;
+      while ((pMatch = pRegex.exec(rawHtml)) !== null) {
+        pEnds.push(pMatch.index + pMatch[0].length);
+      }
+      if (pEnds.length > 0) {
+        const midPos = pEnds[Math.floor(pEnds.length / 2)];
+        htmlWithAnchor = rawHtml.slice(0, midPos) + '<div id="relatedsearches2"></div>' + rawHtml.slice(midPos);
+      }
+
+      const mixArray = allResponse?.list?.slice();
+
+      return {
+        newInfo: data,
+        all: allResponse,
+        floatArray: shuffleArray(mixArray || []),
+        toc,
+        id,
+        htmlWithAnchor,
+        recNews: recNewsResponse,
+        trendingNews: trendingNewsResponse
+      };
+    } catch (error) {
+      console.error("Error fetching detail data:", error);
+      return { newInfo: null, all: null, floatArray: [], toc: [], id, htmlWithAnchor: "", recNews: null, trendingNews: null };
     }
-    if (pEnds.length > 0) {
-      const midPos = pEnds[Math.floor(pEnds.length / 2)];
-      htmlWithAnchor = rawHtml.slice(0, midPos) + '<div id="relatedsearches2"></div>' + rawHtml.slice(midPos);
-    }
-
-    const mixArray = allResponse?.list?.slice();
-
-    return {
-      newInfo: data,
-      all: allResponse,
-      floatArray: shuffleArray(mixArray),
-      toc,
-      id,
-      htmlWithAnchor,
-      recNews: recNewsResponse,
-      trendingNews: trendingNewsResponse
-    };
   },
   data() {
     return {
@@ -144,7 +138,7 @@ export default {
       // htmlAttrs: {
       //   lang: this.newInfo.language
       // },
-      title: this.newInfo.name + " - Koureishalife",
+      title: (this.newInfo?.name || "") + " - Koureishalife",
       meta: [
         {
           hid: "description",
