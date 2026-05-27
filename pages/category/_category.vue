@@ -18,7 +18,7 @@
             api-endpoint="/api/article/get_seo_category_page"
             :initial-page="2"
             :page-size="10"
-            :showMore="false"
+            :showMore="true"
             :query="{
               seo_category_id: id
             }"
