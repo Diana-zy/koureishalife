@@ -8,6 +8,7 @@ export default {
   components: { Breadcrumb, CustomLink, ItemModeNew },
   async asyncData({ $axios, params, env }) {
     const path = params.detail;
+    if (!path) return { newInfo: null, all: null, floatArray: [], toc: [], id: null, htmlWithAnchor: "", recNews: [], trendingNews: [], articleFaqs: [] };
     const lastDashIndex = path.lastIndexOf("-");
     const id = path.substring(lastDashIndex + 1, path.length);
     try {

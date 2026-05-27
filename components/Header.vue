@@ -81,7 +81,7 @@ export default {
       showInstallButton: false,
       isSidebarOpen: false,
       showSearch: false,
-      navData: this.$root.$options.navData || this.$navData,
+      navData: this.$root.$options.navData || this.$navData || { list: [] },
       recKeywords: this.$recKeywords // 站点推荐关键字
     };
   },
